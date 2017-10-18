@@ -1,5 +1,6 @@
 package com.baihui.yangxb.mainpage.presenter;
 
+import com.baihui.yangxb.R;
 import com.baihui.yangxb.mainpage.view.MainpageView;
 
 /**
@@ -16,12 +17,12 @@ public class MainpagePresenterImpl implements MainpagePresenter {
 
     @Override
     public void switchNavigation(int id) {
-     /*   switch (id){
-            case R.id.nav_authormanager:
-                mainpageView.selectAuthormanage();
-                break;
+        switch (id){
             case R.id.nav_baihuinews:
                 mainpageView.selectBaihuinews();
+                break;
+    /*        case R.id.nav_authormanager:
+                mainpageView.selectAuthormanage();
                 break;
             case R.id.nav_meipaivideo:
                 mainpageView.selectMeipaivideo();
@@ -43,12 +44,12 @@ public class MainpagePresenterImpl implements MainpagePresenter {
                 break;
             case R.id.nav_aboutauthor:
                 mainpageView.selectAboutauthor();
-                break;
+                break; */
             default:
                 mainpageView.selectBaihuinews();
                 break;
 
-        } */
+        }
 
     }
 }

@@ -19,6 +19,7 @@ import com.baihui.yangxb.mainpage.view.MainpageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.baihui.yangxb.R;
+import com.baihui.yangxb.oknews.activity.ToutiaonewsFragment;
 
 public class MainpageActivity extends AppCompatActivity implements MainpageView {
 
@@ -54,7 +55,7 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         setupDrawerContent(navView);
         mainpagePresenter = new MainpagePresenterImpl(this);
-        //selectBaihuinews();
+        selectBaihuinews();
     }
 
     private void setupDrawerContent(NavigationView navView) {
@@ -70,17 +71,18 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
                 });
     }
 
+    @Override
+    public void selectBaihuinews() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new ToutiaonewsFragment()).commit();
+        toolbar.setTitle(R.string.nav_baihuinews);
+    }
+
 /*    @Override
     public void selectAuthormanage() {
         getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new AuthormanagerFragment()).commit();
         toolbar.setTitle(R.string.nav_authormanager);
     }
 
-    @Override
-    public void selectBaihuinews() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new ToutiaonewsFragment()).commit();
-        toolbar.setTitle(R.string.nav_baihuinews);
-    }
 
     @Override
     public void selectMeipaivideo() {
