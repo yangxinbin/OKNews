@@ -1,3 +1,51 @@
 <resources>
-    <string name="app_name">OKNews</string>
+    <string name="app_name">Baihui</string>
+    <string name="title_activity_news_detail">BaihuinewsDetailActivity</string>
+    <string name="title_activity_meipai_detail">MeipaivideoDetailActivity</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="action_settings">Setting</string>
+    <string name="nav_authormanager">authormanager</string>
+    <string name="nav_baihuinews">baihuinews</string>
+    <string name="nav_meipaivideo">meipaivideo</string>
+    <string name="nav_comicnews">comicnews</string>
+    <string name="nav_baihuimap">baihuimap</string>
+    <string name="nav_weathernews">weathernews</string>
+    <string name="nav_enjoygame">enjoygame</string>
+    <string name="nav_userhelp">userhelp</string>
+    <string name="nav_aboutauthor">aboutauthor</string>
+
+    <string name="tab_topnews">topnews</string>
+    <string name="tab_society">society</string>
+    <string name="tab_domestic">domestic</string>
+    <string name="tab_international">international</string>
+    <string name="tab_entertainment">entertainment</string>
+    <string name="tab_sports">sports</string>
+    <string name="tab_Military">Military</string>
+    <string name="tab_science">science</string>
+    <string name="tab_finance">finance</string>
+    <string name="tab_fashion">fashion</string>
+
+    <string name="load_fail">load fail!</string>
+    <string name="no_more">No more news,Please refresh!</string>
+    <string name="transition_news_img">transition_news_img</string>
+
+    <!-- Startapp -->
+    <string name="login_success">login success</string>
+    <string name="login">LOGIN</string>
+    <string name="Username">Username</string>
+    <string name="Password">Password</string>
+    <string name="forgot_your_password">Forgot your password ?</string>
+    <string name="go">GO</string>
+    <string name="back">BACK</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="finish">FINISH</string>
+    <string name="register">REGISTER</string>
+    <string name="mobilelogin">MOBILE  LOGIN</string>
+    <string name="phonenumber">Phonenumber</string>
+    <string name="checknumber">Checknumber</string>
+    <string name="getchecknumber">GET NUMBER</string>
+
+
+
 </resources>

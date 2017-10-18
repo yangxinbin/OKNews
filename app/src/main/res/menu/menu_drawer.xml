@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".mainpage.windowview.MainpageActivity">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_authormanager"
+            android:icon="@drawable/authormanage"
+            android:title="@string/nav_authormanager" />
+        <item
+            android:checked="true"
+            android:id="@+id/nav_baihuinews"
+            android:icon="@drawable/zhihunews"
+            android:title="@string/nav_baihuinews" />
+        <item
+            android:id="@+id/nav_meipaivideo"
+            android:icon="@drawable/meipaiimage"
+            android:title="@string/nav_meipaivideo" />
+        <item
+            android:id="@+id/nav_comicnews"
+            android:icon="@drawable/comicnews"
+            android:title="@string/nav_comicnews" />
+        <item
+            android:id="@+id/nav_baihuimap"
+            android:icon="@drawable/baihuimap"
+            android:title="@string/nav_baihuimap" />
+        <item
+            android:id="@+id/nav_weathernews"
+            android:icon="@drawable/weathernews"
+            android:title="@string/nav_weathernews" />
+        <item
+            android:id="@+id/nav_enjoygame"
+            android:icon="@drawable/enjoygame"
+            android:title="@string/nav_enjoygame" />
+    </group>
+
+    <item android:title="帮助">
+        <menu>
+            <item
+                android:id="@+id/nav_userhelp"
+                android:icon="@drawable/userhelp"
+                android:title="@string/nav_userhelp" />
+            <item
+                android:id="@+id/nav_aboutauthor"
+                android:icon="@drawable/aboutauthor"
+                android:title="@string/nav_aboutauthor" />
+
+        </menu>
+    </item>
+
+</menu>

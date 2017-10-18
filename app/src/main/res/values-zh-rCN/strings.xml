@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">百汇</string>
+    <string name="title_activity_news_detail">新闻详情</string>
+    <string name="title_activity_meipai_detail">美拍详情</string>
+    <string name="drawer_open">打开</string>
+    <string name="drawer_close">关闭</string>
+    <string name="action_settings">设置</string>
+    <string name="nav_authormanager">个人中心</string>
+    <string name="nav_baihuinews">百汇日报</string>
+    <string name="nav_meipaivideo">美拍视频</string>
+    <string name="nav_comicnews">动漫箩筐</string>
+    <string name="nav_baihuimap">百汇地图</string>
+    <string name="nav_weathernews">天气预报</string>
+    <string name="nav_enjoygame">轻松一刻</string>
+    <string name="nav_userhelp">使用简介</string>
+    <string name="nav_aboutauthor">关于作者</string>
+
+    <string name="tab_topnews">头条</string>
+    <string name="tab_society">社会</string>
+    <string name="tab_domestic">国内</string>
+    <string name="tab_international">国际</string>
+    <string name="tab_entertainment">娱乐</string>
+    <string name="tab_sports">体育</string>
+    <string name="tab_Military">军事</string>
+    <string name="tab_science">科技</string>
+    <string name="tab_finance">财经</string>
+    <string name="tab_fashion">时尚</string>
+    <string name="load_fail">加载数据失败!</string>
+    <string name="no_more">已经到最后了,查看更多内容请刷新!</string>
+    <string name="transition_news_img">图片转变</string>
+
+    <!-- Startapp -->
+    <string name="login_success">登录成功</string>
+    <string name="login">登录</string>
+    <string name="Username">用户名</string>
+    <string name="Password">密  码</string>
+    <string name="forgot_your_password">忘记密码？</string>
+    <string name="go">确定</string>
+    <string name="back">返回</string>
+    <string name="repeat_password">重复密码</string>
+    <string name="finish">完成</string>
+    <string name="register">注册</string>
+    <string name="mobilelogin">手机号码一键登录</string>
+    <string name="phonenumber">手机号码</string>
+    <string name="checknumber">验证码</string>
+    <string name="getchecknumber">获取验证码</string>
+
+
+</resources>
