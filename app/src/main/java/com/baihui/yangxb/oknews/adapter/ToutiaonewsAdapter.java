@@ -148,7 +148,7 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @Override
         public void onClick(View view) {
             if (mOnItemnewsClickListener != null) {
-                mOnItemnewsClickListener.onItemClick(view, this.getPosition());
+                mOnItemnewsClickListener.onItemClick(view, this.getLayoutPosition());
             }
         }
     }
