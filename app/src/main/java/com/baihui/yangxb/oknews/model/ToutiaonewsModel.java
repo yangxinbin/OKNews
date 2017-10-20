@@ -1,5 +1,6 @@
 package com.baihui.yangxb.oknews.model;
 
+import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsDetailListener;
 import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsListListener;
 
 /**
@@ -8,5 +9,5 @@ import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsListListener;
 
 public interface ToutiaonewsModel {
     void loadNews(String url, int type, OnLoadToutiaonewsListListener listener);
-    //void loadNewsDetail(String url, OnLoadToutiaonewsDetailListener listener);
+    void loadNewsDetail(String url, OnLoadToutiaonewsDetailListener listener);
 }

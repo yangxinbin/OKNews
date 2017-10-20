@@ -3,6 +3,7 @@ package com.baihui.yangxb.oknews.model;
 
 
 import com.baihui.yangxb.oknews.entity.ToutiaonewsBean;
+import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsDetailListener;
 import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsListListener;
 import com.baihui.yangxb.oknews.utils.NewsJsonUtils;
 import com.baihui.yangxb.tools.OkHttpUtils;
@@ -37,11 +38,11 @@ public class ToutiaonewsModelImpl implements ToutiaonewsModel {
         OkHttpUtils.get(url, loadNewsCallback);
     }
 
- /*   @Override
+    @Override
     public void loadNewsDetail(String url, OnLoadToutiaonewsDetailListener listener) {
         listener.onSuccess(url);//判断网络加载URL
 
-    } */
+    }
 
 
     /**

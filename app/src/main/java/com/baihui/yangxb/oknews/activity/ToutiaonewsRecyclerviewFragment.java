@@ -1,16 +1,22 @@
 package com.baihui.yangxb.oknews.activity;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -22,6 +28,7 @@ import com.baihui.yangxb.oknews.entity.ToutiaonewsBean;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsPresenter;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsPresenterImpl;
 import com.baihui.yangxb.oknews.view.ToutiaonewsView;
+import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
@@ -70,19 +77,20 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
        //         R.color.colorPrimaryDark);
        // swipeRefreshWidget.setOnRefreshListener(this);
         smartRefreshWidget.setOnRefreshListener(this);
+        //smartRefreshWidget.setRefreshHeader(new MaterialHeader(getActivity()).setShowBezierWave(true));//设置 Header 为 Material风格
         recycleView.setHasFixedSize(true);//固定宽高
         mLayoutManager = new LinearLayoutManager(getActivity());
         recycleView.setLayoutManager(mLayoutManager);
         recycleView.setItemAnimator(new DefaultItemAnimator());//设置默认动画
         adapter = new ToutiaonewsAdapter(getActivity().getApplicationContext());
-        //adapter.setOnItemnewsClickListener(mOnItemClickListener);
+        adapter.setOnItemnewsClickListener(mOnItemClickListener);
         recycleView.setAdapter(adapter);
         recycleView.addOnScrollListener(mOnScrollListener);
         onRefresh(smartRefreshWidget);
         return view;
     }
 
-   /* private ToutiaonewsAdapter.OnItemnewsClickListener mOnItemClickListener = new ToutiaonewsAdapter.OnItemnewsClickListener() {
+    private ToutiaonewsAdapter.OnItemnewsClickListener mOnItemClickListener = new ToutiaonewsAdapter.OnItemnewsClickListener() {
         @Override
         public void onItemClick(View view, int position) {
             if (mData.size() <= 0) {
@@ -99,7 +107,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
                             transitionView, getString(R.string.transition_news_img));
             ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
         }
-    }; */
+    };
     private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
 
         private int lastVisibleItem;
@@ -215,5 +223,26 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
             mData.clear();
         }
         mNewsPresenter.loadNews(mType);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
