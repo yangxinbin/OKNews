@@ -6,14 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baihui.yangxb.R;
 import com.baihui.yangxb.oknews.adapter.ToutiaonewsAdapter;
@@ -21,6 +22,8 @@ import com.baihui.yangxb.oknews.entity.ToutiaonewsBean;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsPresenter;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsPresenterImpl;
 import com.baihui.yangxb.oknews.view.ToutiaonewsView;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +31,12 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ToutiaonewsRecyclerviewFragment extends Fragment implements ToutiaonewsView, SwipeRefreshLayout.OnRefreshListener {
+public class ToutiaonewsRecyclerviewFragment extends Fragment implements ToutiaonewsView,OnRefreshListener {
 
     @Bind(R.id.recycle_view)
     RecyclerView recycleView;
-    @Bind(R.id.swipe_refresh_widget)
-    SwipeRefreshLayout swipeRefreshWidget;
+    @Bind(R.id.smart_refresh_widget)
+    RefreshLayout smartRefreshWidget;
     private ToutiaonewsPresenter mNewsPresenter;
     private int mType = ToutiaonewsFragment.NEWS_TYPE_TOPNEWS;
     private List<ToutiaonewsBean> mDataall;
@@ -62,10 +65,11 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_toutiaonews_recyclerview, null);
         ButterKnife.bind(this, view);
-        swipeRefreshWidget.setColorSchemeResources(R.color.colorPrimary,
-                R.color.colorPrimaryDark, R.color.colorPrimary,
-                R.color.colorPrimaryDark);
-        swipeRefreshWidget.setOnRefreshListener(this);
+       // swipeRefreshWidget.setColorSchemeResources(R.color.colorPrimary,
+       //         R.color.colorPrimaryDark, R.color.colorPrimary,
+       //         R.color.colorPrimaryDark);
+       // swipeRefreshWidget.setOnRefreshListener(this);
+        smartRefreshWidget.setOnRefreshListener(this);
         recycleView.setHasFixedSize(true);//固定宽高
         mLayoutManager = new LinearLayoutManager(getActivity());
         recycleView.setLayoutManager(mLayoutManager);
@@ -74,7 +78,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         //adapter.setOnItemnewsClickListener(mOnItemClickListener);
         recycleView.setAdapter(adapter);
         recycleView.addOnScrollListener(mOnScrollListener);
-        onRefresh();
+        onRefresh(smartRefreshWidget);
         return view;
     }
 
@@ -120,13 +124,14 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
                     if (mDataall == null){
                         break;//一开始断网报空指针的情况
                     }
-                    if (i >= (mDataall.size()-1)){//比如一共30条新闻 这个条件当为29时还是可以把30那条新闻加上去的
+                    Log.v("yxbbbb",i+"--------"+mDataall.size());
+                    if (i >= (mDataall.size())){//比如一共30条新闻 这个条件当为29时还是可以把30那条新闻加上去的
                         noMoreMsg();
                         break;
                     }
-                    adapter.addItem(mDataall.get(i + 1));//addItem里面记得要notifyDataSetChanged 否则第一次加载不会显示数据
+                    adapter.addItem(mDataall.get(i));//addItem里面记得要notifyDataSetChanged 否则第一次加载不会显示数据
                 }
-                if (mDataall !=null && i >= (mDataall.size()-1)){//到最后
+                if (mDataall !=null && i >= (mDataall.size())){//到最后
                     adapter.isFooter(false);
                     noMoreMsg();
                 }
@@ -136,11 +141,16 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
 
     @Override
     public void showProgress() {
-        swipeRefreshWidget.setRefreshing(true);
+        smartRefreshWidget.finishRefresh(true);
     }
 
     @Override
     public void addNews(List<ToutiaonewsBean> newsList) {
+        Log.v("yxbbbb",newsList.size()+"--------");
+        if(newsList.size()==0){
+            Toast.makeText(getActivity(), "服务器坑爹，只能请求100次", Toast.LENGTH_SHORT).show();
+            return;
+        }
         adapter.isShowFooter(true);
         if (mData == null && mDataall == null) {
             mDataall = new ArrayList<ToutiaonewsBean>();
@@ -155,8 +165,8 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
 
     @Override
     public void hideProgress() {
-        if (swipeRefreshWidget != null){
-            swipeRefreshWidget.setRefreshing(false);//报错因为在onDestroy() 使用了ButterKnife.unbind(this) swipeRefreshWidget id找不到;
+        if (smartRefreshWidget != null){
+            smartRefreshWidget.finishRefresh(false);//报错因为在onDestroy() 使用了ButterKnife.unbind(this) swipeRefreshWidget id找不到;
         }
     }
 
@@ -199,7 +209,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
     }
 
     @Override
-    public void onRefresh() {
+    public void onRefresh(RefreshLayout refreshlayout) {
         if (mData != null && mDataall != null) {
             mDataall.clear();//一定要加上否则会报越界异常 不执行代码加载的if判断
             mData.clear();

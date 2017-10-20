@@ -87,6 +87,8 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
             if (((ItemViewHolder) holder) != null && ((ItemViewHolder) holder).mTitle != null) {
                 ((ItemViewHolder) holder).mTitle.setText(news.getResult().getData().get(position).getTitle());
+                ((ItemViewHolder) holder).mnew_from.setText("来自："+news.getResult().getData().get(position).getAuthor_name());
+                ((ItemViewHolder) holder).mnew_time.setText("时间："+news.getResult().getData().get(position).getDate());
                 if (news.getResult().getData().get(position).getThumbnail_pic_s().isEmpty()) {
                     ((ItemViewHolder) holder).mNewsImg.setImageResource(R.drawable.defaultimage);
                 } else {
@@ -137,11 +139,15 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         public TextView mTitle;
         public ImageView mNewsImg;
+        public TextView mnew_from;
+        public TextView mnew_time;
 
         public ItemViewHolder(View v) {
             super(v);
             mTitle = (TextView) v.findViewById(R.id.item_news_title);
             mNewsImg = (ImageView) v.findViewById(R.id.item_news_img);
+            mnew_from = (TextView) v.findViewById(R.id.new_from);
+            mnew_time = (TextView) v.findViewById(R.id.new_time);
             v.setOnClickListener(this);
         }
 
