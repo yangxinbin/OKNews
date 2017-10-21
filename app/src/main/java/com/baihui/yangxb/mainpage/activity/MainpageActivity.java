@@ -1,5 +1,7 @@
 package com.baihui.yangxb.mainpage.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Build;
@@ -9,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,6 +21,8 @@ import com.baihui.yangxb.mainpage.view.MainpageView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.bmob.v3.BmobUser;
+
 import com.baihui.yangxb.R;
 import com.baihui.yangxb.oknews.activity.ToutiaonewsFragment;
 
@@ -139,7 +144,42 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }else if (id == R.id.action_exit){
+            BmobUser.logOut();   //清除缓存用户对象
+            finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK )
+        {
+            // 创建退出对话框
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setIcon(R.drawable.exit);
+            // 设置对话框标题
+            builder.setTitle("系统提示");
+            // 设置对话框消息
+            builder.setMessage("确定要退出吗");
+            //监听下方button点击事件
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            // 显示对话框
+            builder.show();
+
+        }
+
+        return false;
     }
 }

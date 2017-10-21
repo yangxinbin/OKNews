@@ -16,7 +16,7 @@
         <!-- menu字体颜色-->
         <item name="android:actionMenuTextColor">@android:color/black</item>
         <!-- textColor 定义标题文字的颜色 -->
-        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">@color/black</item>
     </style>
     <!-- 左边的箭头指示-->
     <style name="left_Drawer_Arrow_Style" parent="Widget.AppCompat.DrawerArrowToggle">

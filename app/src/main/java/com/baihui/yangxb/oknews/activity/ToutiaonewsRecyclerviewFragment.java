@@ -227,27 +227,4 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         mNewsPresenter.loadNews(mType);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }else if (id == R.id.action_exit){
-            BmobUser.logOut();   //清除缓存用户对象
-            getActivity().finish();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

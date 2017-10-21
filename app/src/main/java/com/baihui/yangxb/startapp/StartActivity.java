@@ -159,6 +159,7 @@ public class StartActivity extends AppCompatActivity {
                 break;
             case R.id.checknumber_get:
                 //手机号码
+                Log.i("smile", "===================");//用于后续的查询本次短信发送状态
                 phoneNum = phoneUsername.getText().toString();
                 BmobSMS.requestSMSCode(phoneNum,"template", new QueryListener<Integer>() {
                     @Override
@@ -191,6 +192,8 @@ public class StartActivity extends AppCompatActivity {
                                     }
                                 }
                             });
+                        }else {
+                            showToast("错误描述："+ex);
                         }
                     }
                 });
