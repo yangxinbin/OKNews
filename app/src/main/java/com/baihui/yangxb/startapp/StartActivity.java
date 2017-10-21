@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -164,6 +165,17 @@ public class StartActivity extends AppCompatActivity {
                     public void done(final Integer smsId, BmobException ex) {
                         if(ex==null){//验证码发送成功
                             Log.i("smile", "短信id："+smsId);//用于后续的查询本次短信发送状态
+                            new CountDownTimer(60000,1000){
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+                                    checknumberGet.setText(millisUntilFinished / 1000 + "秒");
+                                }
+                                @Override
+                                public void onFinish() {
+                                    checknumberGet.setClickable(true);
+                                    checknumberGet.setText("重新发送");
+                                }
+                            }.start();
                             final BmobUser bu = new BmobUser();
                             bu.setUsername(phoneNum);
                             bu.setPassword(smsId.toString());
@@ -186,11 +198,23 @@ public class StartActivity extends AppCompatActivity {
             case R.id.phone_go:
                 phoneCode = phonePassword.getText().toString();
                 phoneNum = phoneUsername.getText().toString();
-                BmobUser.loginBySMSCode(phoneNum, phoneCode, new LogInListener<User>() {
+                Log.v("yxbbb","----------"+phoneCode+"=========="+phoneNum);
+                BmobUser.signOrLoginByMobilePhone(phoneNum, phoneCode, new LogInListener<User>() {
                     @Override
                     public void done(User user, BmobException e) {
                         if(user!=null){
+                            if (TextUtils.isEmpty(phoneNum)) {
+                                showToast("手机号码不能为空");
+                                return;
+                            }
+                            if (TextUtils.isEmpty(phoneCode)) {
+                                showToast("验证码不能为空");
+                                return;
+                            }
+                            startActivity(new Intent(StartActivity.this,MainpageActivity.class));
                             showToast("用户登陆成功"+phoneNum+"----"+phoneCode);
+                        }else {
+                            showToast("错误描述："+e);
                         }
                     }
                 });
