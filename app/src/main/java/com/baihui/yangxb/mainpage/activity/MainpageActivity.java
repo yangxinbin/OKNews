@@ -146,7 +146,7 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
             return true;
         }else if (id == R.id.action_exit){
             BmobUser.logOut();   //清除缓存用户对象
-            finish();
+            exitDialog();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -155,31 +155,34 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK )
         {
-            // 创建退出对话框
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setIcon(R.drawable.exit);
-            // 设置对话框标题
-            builder.setTitle("系统提示");
-            // 设置对话框消息
-            builder.setMessage("确定要退出吗");
-            //监听下方button点击事件
-            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            });
-            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            });
-            // 显示对话框
-            builder.show();
-
+            exitDialog();
         }
 
         return false;
+    }
+
+    private void exitDialog() {
+        // 创建退出对话框
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.exit);
+        // 设置对话框标题
+        builder.setTitle("系统提示");
+        // 设置对话框消息
+        builder.setMessage("确定要退出吗");
+        //监听下方button点击事件
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        // 显示对话框
+        builder.show();
     }
 }
