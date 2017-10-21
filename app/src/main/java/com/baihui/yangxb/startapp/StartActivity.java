@@ -27,9 +27,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.LogInListener;
+import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.SaveListener;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -58,7 +61,8 @@ public class StartActivity extends AppCompatActivity {
     @Bind(R.id.phone_cv)
     CardView phoneCv;
     private String uname;
-
+    private String phoneNum;
+    private String phoneCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +94,7 @@ public class StartActivity extends AppCompatActivity {
                     showToast("密码不能为空");
                     return;
                 }
+                Log.v("yxbbbb",username+"--------"+password);
                 BmobUser.loginByAccount(username, password, new LogInListener<User>() {
                     @Override
                     public void done(User o, BmobException e) {
@@ -152,8 +157,44 @@ public class StartActivity extends AppCompatActivity {
                 phoneCv.setVisibility(View.VISIBLE);
                 break;
             case R.id.checknumber_get:
+                //手机号码
+                phoneNum = phoneUsername.getText().toString();
+                BmobSMS.requestSMSCode(phoneNum,"template", new QueryListener<Integer>() {
+                    @Override
+                    public void done(final Integer smsId, BmobException ex) {
+                        if(ex==null){//验证码发送成功
+                            Log.i("smile", "短信id："+smsId);//用于后续的查询本次短信发送状态
+                            final BmobUser bu = new BmobUser();
+                            bu.setUsername(phoneNum);
+                            bu.setPassword(smsId.toString());
+                            final String v = smsId.toString();
+                            bu.signUp(new SaveListener<User>() {
+                                @Override
+                                public void done(User user, BmobException e) {
+                                    if (e == null){
+                                        Log.v("yxbbb","----------"+v);
+                                        showToast("用户名："+bu.getUsername()+"\n"+"密码：验证码");
+                                    }else {
+                                        showToast("注册失败："+e);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
                 break;
             case R.id.phone_go:
+                phoneCode = phonePassword.getText().toString();
+                phoneNum = phoneUsername.getText().toString();
+                BmobUser.loginBySMSCode(phoneNum, phoneCode, new LogInListener<User>() {
+                    @Override
+                    public void done(User user, BmobException e) {
+                        if(user!=null){
+                            showToast("用户登陆成功"+phoneNum+"----"+phoneCode);
+                        }
+                    }
+                });
+
                 break;
             case R.id.phone_back:
                 cv.setVisibility(View.VISIBLE);

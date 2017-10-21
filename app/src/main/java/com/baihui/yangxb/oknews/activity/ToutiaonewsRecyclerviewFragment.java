@@ -37,6 +37,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.bmob.v3.BmobUser;
 
 public class ToutiaonewsRecyclerviewFragment extends Fragment implements ToutiaonewsView,OnRefreshListener {
 
@@ -127,6 +128,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
                 //加载更多
                 //mNewsPresenter.loadNews(mType);//加载最后报错
                 int count = adapter.getItemCount();
+                Log.v("yxbbbb","--------"+count);
                 int i;
                 for (i = count; i < count + 5; i++) {
                     if (mDataall == null){
@@ -241,6 +243,9 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }else if (id == R.id.action_exit){
+            BmobUser.logOut();   //清除缓存用户对象
+            getActivity().finish();
         }
 
         return super.onOptionsItemSelected(item);

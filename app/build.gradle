@@ -49,6 +49,8 @@ dependencies {
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.3'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
     compile project(':swipeback')
-    compile 'cn.bmob.android:bmob-sdk:3.5.0'
+    compile ('cn.bmob.android:bmob-sdk:3.5.0'){
+        exclude group: 'com.google.code.gson',module: 'gson'
+    }
     compile 'cn.bmob.android:http-legacy:1.0'
 }

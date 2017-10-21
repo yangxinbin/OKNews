@@ -5,6 +5,7 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="action_settings">Setting</string>
+    <string name="action_exit">EXIT</string>
     <string name="nav_authormanager">authormanager</string>
     <string name="nav_baihuinews">baihuinews</string>
     <string name="nav_meipaivideo">meipaivideo</string>
