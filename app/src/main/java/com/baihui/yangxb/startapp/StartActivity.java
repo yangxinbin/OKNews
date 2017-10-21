@@ -106,9 +106,9 @@ public class StartActivity extends AppCompatActivity {
                             explode.setDuration(500);
                             getWindow().setExitTransition(explode);
                             getWindow().setEnterTransition(explode);
-                            ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(StartActivity.this);
+                            ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(StartActivity.this);//去掉动画效果不好
                             Intent i2 = new Intent(StartActivity.this, MainpageActivity.class);
-                            startActivity(i2, oc2.toBundle());
+                            startActivity(i2);
                             finish();
                         } else {
                             showToast("登录失败：code=" + e.getErrorCode() + "，错误描述：" + e.getLocalizedMessage());
