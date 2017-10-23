@@ -101,20 +101,16 @@ public class StartActivity extends AppCompatActivity {
         String ok = isOk.getString("isOk", "no");// 用户名
         String strUserName = settings.getString("userNameText", "");// 用户名
         String strPassword = settings.getString("passwordText", "");// 密码
-        Log.v("yxbbb","---------"+strJudge);
         if (strJudge.equals("yes")) {
-            Log.v("yxbbb","yyyyyyyyyy");
             checkBoxPassword.setChecked(true);
             etUsername.setText(strUserName);
             etPassword.setText(strPassword);
         } else {
-            Log.v("yxbbb","nnnnnnnn");
             checkBoxPassword.setChecked(false);
             etUsername.setText("");
             etPassword.setText("");
         }
         if (loginstrJudge.equals("yes")) {
-            Log.v("yxbbbb","----------");
             etUsername.setText(strUserName);
             etPassword.setText(strPassword);
             checkBoxLogin.setChecked(true);
@@ -123,7 +119,6 @@ public class StartActivity extends AppCompatActivity {
                 finish();
             }
         } else {
-            Log.v("yxbbb","eeeeeeeeeee");
             checkBoxLogin.setChecked(false);
         }
     }
@@ -136,7 +131,6 @@ public class StartActivity extends AppCompatActivity {
                 SharedPreferences settings = getSharedPreferences("Re_password", MODE_PRIVATE);
                 Log.v("yxbbb","---------"+!(etUsername.getText().toString().isEmpty())+"===="+!(etPassword.getText().toString().isEmpty()));
                 if (arg1 == true) {//勾选时，存入EditText中的用户名密码
-                    Log.v("yxbbb","--------lll");
                     if (!(etUsername.getText().toString().isEmpty()) && !(etPassword.getText().toString().isEmpty())) {
                         settings.edit().putString("judgeText", "yes")
                                 .putString("userNameText", etUsername.getText().toString())
@@ -144,7 +138,6 @@ public class StartActivity extends AppCompatActivity {
                                 .commit();
                     }
                 }else {//不勾选，存入空String对象
-                    Log.v("yxbbb","bbbbbbbbbbb");
                     settings.edit().putString("judgeText", "no")
                             .commit();
                 }
@@ -156,13 +149,11 @@ public class StartActivity extends AppCompatActivity {
                 // TODO Auto-generated method stub
                 SharedPreferences loginsettings = getSharedPreferences("Re_login", MODE_PRIVATE);
                 if (arg1 == true) {//勾选时，存入EditText中的用户名密码
-                    Log.v("yxbbb","lo----");
                     checkBoxPassword.setChecked(true);
                     checkBoxPassword.setClickable(false);
                     loginsettings.edit().putString("loginjudgeText", "yes")
                             .commit();
                 }else {//不勾选，存入空String对象
-                    Log.v("yxbbb","gggggggggg");
                     //checkBoxPassword.setChecked(false);
                     checkBoxPassword.setClickable(true);
                     loginsettings.edit().putString("loginjudgeText", "no")
