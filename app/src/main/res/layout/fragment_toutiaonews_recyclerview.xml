@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.scwang.smartrefresh.layout.SmartRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/smart_refresh_widget"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <pl.droidsonroids.gif.GifImageView
+    android:layout_height="match_parent"
+    app:srlHeaderMaxDragRate="2.5"
+    app:srlPrimaryColor="@color/colorPrimary"
+    app:srlAccentColor="@android:color/white"
+    app:srlEnableLoadmore="false">
+<!--    <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
         android:layout_height="73dp"
         android:scaleType="centerCrop"
-        android:src="@mipmap/lastnew"/>
+        android:src="@mipmap/lastnew"/>  -->
+    <com.scwang.smartrefresh.header.PhoenixHeader
+        android:layout_width="match_parent"
+        android:layout_height="80dp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_view"
