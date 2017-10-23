@@ -1,7 +1,9 @@
 package com.baihui.yangxb.startapp;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -15,11 +17,12 @@ import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.baihui.yangxb.R;
 import com.baihui.yangxb.mainpage.activity.MainpageActivity;
@@ -61,9 +64,15 @@ public class StartActivity extends AppCompatActivity {
     Button phoneBack;
     @Bind(R.id.phone_cv)
     CardView phoneCv;
+    @Bind(R.id.checkBox_password)
+    CheckBox checkBoxPassword;
+    @Bind(R.id.checkBox_login)
+    CheckBox checkBoxLogin;
     private String uname;
     private String phoneNum;
     private String phoneCode;
+    private SharedPreferences isOk;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,10 +86,94 @@ public class StartActivity extends AppCompatActivity {
         Intent intent = getIntent();
         uname = intent.getStringExtra("username");
         etUsername.setText(uname);
+        checkListen();
+        chectFun();
+    }
+
+    private void chectFun() {
+        //从配置文件中取用户名密码的键值对
+        //若第一运行，则取出的键值对为所设置的默认值
+        SharedPreferences settings = getSharedPreferences("Re_password",MODE_PRIVATE);
+        String strJudge = settings.getString("judgeText", "no");// 选中状态
+        SharedPreferences loginsettings = getSharedPreferences("Re_login",MODE_PRIVATE);
+        String loginstrJudge = loginsettings.getString("loginjudgeText", "no");// 选中状态
+        SharedPreferences isOk = getSharedPreferences("isOk",MODE_PRIVATE);
+        String ok = isOk.getString("isOk", "no");// 用户名
+        String strUserName = settings.getString("userNameText", "");// 用户名
+        String strPassword = settings.getString("passwordText", "");// 密码
+        Log.v("yxbbb","---------"+strJudge);
+        if (strJudge.equals("yes")) {
+            Log.v("yxbbb","yyyyyyyyyy");
+            checkBoxPassword.setChecked(true);
+            etUsername.setText(strUserName);
+            etPassword.setText(strPassword);
+        } else {
+            Log.v("yxbbb","nnnnnnnn");
+            checkBoxPassword.setChecked(false);
+            etUsername.setText("");
+            etPassword.setText("");
+        }
+        if (loginstrJudge.equals("yes")) {
+            Log.v("yxbbbb","----------");
+            etUsername.setText(strUserName);
+            etPassword.setText(strPassword);
+            checkBoxLogin.setChecked(true);
+            if(ok.equals("yes")) {
+                startActivity(new Intent(StartActivity.this, MainpageActivity.class));
+                finish();
+            }
+        } else {
+            Log.v("yxbbb","eeeeeeeeeee");
+            checkBoxLogin.setChecked(false);
+        }
+    }
+
+    private void checkListen() {
+        checkBoxPassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+                // TODO Auto-generated method stub
+                SharedPreferences settings = getSharedPreferences("Re_password", MODE_PRIVATE);
+                Log.v("yxbbb","---------"+!(etUsername.getText().toString().isEmpty())+"===="+!(etPassword.getText().toString().isEmpty()));
+                if (arg1 == true) {//勾选时，存入EditText中的用户名密码
+                    Log.v("yxbbb","--------lll");
+                    if (!(etUsername.getText().toString().isEmpty()) && !(etPassword.getText().toString().isEmpty())) {
+                        settings.edit().putString("judgeText", "yes")
+                                .putString("userNameText", etUsername.getText().toString())
+                                .putString("passwordText", etPassword.getText().toString())
+                                .commit();
+                    }
+                }else {//不勾选，存入空String对象
+                    Log.v("yxbbb","bbbbbbbbbbb");
+                    settings.edit().putString("judgeText", "no")
+                            .commit();
+                }
+            }
+        });
+        checkBoxLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+                // TODO Auto-generated method stub
+                SharedPreferences loginsettings = getSharedPreferences("Re_login", MODE_PRIVATE);
+                if (arg1 == true) {//勾选时，存入EditText中的用户名密码
+                    Log.v("yxbbb","lo----");
+                    checkBoxPassword.setChecked(true);
+                    checkBoxPassword.setClickable(false);
+                    loginsettings.edit().putString("loginjudgeText", "yes")
+                            .commit();
+                }else {//不勾选，存入空String对象
+                    Log.v("yxbbb","gggggggggg");
+                    //checkBoxPassword.setChecked(false);
+                    checkBoxPassword.setClickable(true);
+                    loginsettings.edit().putString("loginjudgeText", "no")
+                            .commit();
+                }
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @OnClick({R.id.bt_go, R.id.fab,R.id.mobilelogin, R.id.checknumber_get, R.id.phone_go, R.id.phone_back})
+    @OnClick({R.id.bt_go, R.id.fab, R.id.mobilelogin, R.id.checknumber_get, R.id.phone_go, R.id.phone_back})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_go:
@@ -95,11 +188,14 @@ public class StartActivity extends AppCompatActivity {
                     showToast("密码不能为空");
                     return;
                 }
-                Log.v("yxbbbb",username+"--------"+password);
+                Log.v("yxbbbb", username + "--------" + password);
                 BmobUser.loginByAccount(username, password, new LogInListener<User>() {
                     @Override
                     public void done(User o, BmobException e) {
-                       // Log.v("yxbbbb",username+"--------"+password);
+                        // Log.v("yxbbbb",username+"--------"+password);
+                        isOk = getSharedPreferences("isOk", MODE_PRIVATE);
+                        isOk.edit().putString("isOk", "yes")
+                                .commit();
                         if (e == null) {
                             showToast("登录成功---用户名：" + username);
                             Explode explode = new Explode();
@@ -151,9 +247,9 @@ public class StartActivity extends AppCompatActivity {
                 break;
             case R.id.mobilelogin:
                 cv.setVisibility(View.GONE);
-                RelativeLayout.LayoutParams params_phone_cv = (RelativeLayout.LayoutParams)fab.getLayoutParams();
-                params_phone_cv.addRule(RelativeLayout.ALIGN_TOP,R.id.phone_cv);
-                params_phone_cv.addRule(RelativeLayout.ALIGN_END,R.id.phone_cv);//动态修改fab的布局 fab使用了RelativeLayout 布局导致
+                RelativeLayout.LayoutParams params_phone_cv = (RelativeLayout.LayoutParams) fab.getLayoutParams();
+                params_phone_cv.addRule(RelativeLayout.ALIGN_TOP, R.id.phone_cv);
+                params_phone_cv.addRule(RelativeLayout.ALIGN_END, R.id.phone_cv);//动态修改fab的布局 fab使用了RelativeLayout 布局导致
                 fab.setLayoutParams(params_phone_cv); //使layout更新
                 phoneCv.setVisibility(View.VISIBLE);
                 break;
@@ -161,16 +257,17 @@ public class StartActivity extends AppCompatActivity {
                 //手机号码
                 Log.i("smile", "===================");//用于后续的查询本次短信发送状态
                 phoneNum = phoneUsername.getText().toString();
-                BmobSMS.requestSMSCode(phoneNum,"template", new QueryListener<Integer>() {
+                BmobSMS.requestSMSCode(phoneNum, "template", new QueryListener<Integer>() {
                     @Override
                     public void done(final Integer smsId, BmobException ex) {
-                        if(ex==null){//验证码发送成功
-                            Log.i("smile", "短信id："+smsId);//用于后续的查询本次短信发送状态
-                            new CountDownTimer(60000,1000){
+                        if (ex == null) {//验证码发送成功
+                            Log.i("smile", "短信id：" + smsId);//用于后续的查询本次短信发送状态
+                            new CountDownTimer(60000, 1000) {
                                 @Override
                                 public void onTick(long millisUntilFinished) {
                                     checknumberGet.setText(millisUntilFinished / 1000 + "秒");
                                 }
+
                                 @Override
                                 public void onFinish() {
                                     checknumberGet.setClickable(true);
@@ -184,16 +281,16 @@ public class StartActivity extends AppCompatActivity {
                             bu.signUp(new SaveListener<User>() {
                                 @Override
                                 public void done(User user, BmobException e) {
-                                    if (e == null){
-                                        Log.v("yxbbb","----------"+v);
-                                        showToast("用户名："+bu.getUsername()+"\n"+"密码：验证码");
-                                    }else {
-                                        showToast("注册失败："+e);
+                                    if (e == null) {
+                                        Log.v("yxbbb", "----------" + v);
+                                        showToast("用户名：" + bu.getUsername() + "\n" + "密码：验证码");
+                                    } else {
+                                        showToast("注册失败：" + e);
                                     }
                                 }
                             });
-                        }else {
-                            showToast("错误描述："+ex);
+                        } else {
+                            showToast("错误描述：" + ex);
                         }
                     }
                 });
@@ -201,11 +298,11 @@ public class StartActivity extends AppCompatActivity {
             case R.id.phone_go:
                 phoneCode = phonePassword.getText().toString();
                 phoneNum = phoneUsername.getText().toString();
-                Log.v("yxbbb","----------"+phoneCode+"=========="+phoneNum);
+                Log.v("yxbbb", "----------" + phoneCode + "==========" + phoneNum);
                 BmobUser.signOrLoginByMobilePhone(phoneNum, phoneCode, new LogInListener<User>() {
                     @Override
                     public void done(User user, BmobException e) {
-                        if(user!=null){
+                        if (user != null) {
                             if (TextUtils.isEmpty(phoneNum)) {
                                 showToast("手机号码不能为空");
                                 return;
@@ -214,10 +311,10 @@ public class StartActivity extends AppCompatActivity {
                                 showToast("验证码不能为空");
                                 return;
                             }
-                            startActivity(new Intent(StartActivity.this,MainpageActivity.class));
-                            showToast("用户登陆成功"+phoneNum+"----"+phoneCode);
-                        }else {
-                            showToast("错误描述："+e);
+                            startActivity(new Intent(StartActivity.this, MainpageActivity.class));
+                            showToast("用户登陆成功" + phoneNum + "----" + phoneCode);
+                        } else {
+                            showToast("错误描述：" + e);
                         }
                     }
                 });
@@ -225,9 +322,9 @@ public class StartActivity extends AppCompatActivity {
                 break;
             case R.id.phone_back:
                 cv.setVisibility(View.VISIBLE);
-                RelativeLayout.LayoutParams params_cv = (RelativeLayout.LayoutParams)fab.getLayoutParams();
-                params_cv.addRule(RelativeLayout.ALIGN_TOP,R.id.cv);
-                params_cv.addRule(RelativeLayout.ALIGN_END,R.id.cv);
+                RelativeLayout.LayoutParams params_cv = (RelativeLayout.LayoutParams) fab.getLayoutParams();
+                params_cv.addRule(RelativeLayout.ALIGN_TOP, R.id.cv);
+                params_cv.addRule(RelativeLayout.ALIGN_END, R.id.cv);
                 fab.setLayoutParams(params_cv); //使layout更新
                 phoneCv.setVisibility(View.GONE);
                 break;

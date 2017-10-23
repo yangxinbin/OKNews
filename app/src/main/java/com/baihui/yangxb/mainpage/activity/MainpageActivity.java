@@ -2,6 +2,7 @@ package com.baihui.yangxb.mainpage.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Build;
@@ -146,6 +147,9 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
             return true;
         }else if (id == R.id.action_exit){
             BmobUser.logOut();   //清除缓存用户对象
+            SharedPreferences isOk = getSharedPreferences("isOk",MODE_PRIVATE);
+            isOk.edit().putString("isOk", "no")
+                    .commit();
             exitDialog();
         }
         return super.onOptionsItemSelected(item);
