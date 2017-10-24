@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    </android.support.design.widget.AppBarLayout>
+    <FrameLayout
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:id="@+id/root_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@drawable/wbg">
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="center"/>
+
+        <LinearLayout
+            android:id="@+id/weather_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="2dp"
+            android:gravity="center_horizontal" >
+
+
+            <TextView
+                android:id="@+id/city"
+                android:padding="5dp"
+                style="@style/weacher_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="深圳" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:orientation="horizontal" >
+                <TextView
+                    android:id="@+id/today"
+                    style="@style/weacher_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2015年12月22日" />
+                <TextView
+                    android:paddingLeft="10dp"
+                    android:id="@+id/todayweek"
+                    style="@style/weacher_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="星期二" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="2dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/weatherImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/weather_qing" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/wind"
+                            style="@style/weacher_temp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:text="微风" />
+                        <TextView
+                            android:id="@+id/windpower"
+                            style="@style/weacher_temp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="二级" />
+
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/weather"
+                        style="@style/weacher_temp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:text="阵雨转阴" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.baihui.yangxb.weathernews.utils.TempControlView
+                android:id="@+id/temp_control"
+                android:layout_width="250dp"
+                android:layout_height="250dp" />
+
+            <HorizontalScrollView
+                android:layout_width="350dp"
+                android:layout_height="match_parent" >
+                <LinearLayout
+                    android:layout_marginRight="50dp"
+                    android:id="@+id/weather_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+    </FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

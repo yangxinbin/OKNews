@@ -50,4 +50,20 @@
         <item name="colorControlActivated">#FFCC00</item>
     </style>
 
+    <style name="weacher_title">
+        <item name="android:textSize">25.0sp</item>
+        <item name="android:textColor">@color/weather</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="weacher_temp">
+        <item name="android:textSize">18.0sp</item>
+        <item name="android:textColor">@color/weather</item>
+    </style>
+
+    <style name="weacher_weather">
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textColor">@color/weather</item>
+    </style>
+
 </resources>
