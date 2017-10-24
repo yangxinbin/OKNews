@@ -12,9 +12,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.baihui.yangxb.mainpage.presenter.MainpagePresenter;
 import com.baihui.yangxb.mainpage.presenter.MainpagePresenterImpl;
@@ -35,7 +37,6 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
     NavigationView navView;
     @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
-
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private MainpagePresenter mainpagePresenter;
     private ColorStateList csl;
@@ -45,6 +46,9 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainpage);
         ButterKnife.bind(this);
+        TextView tName = (TextView) navView.getHeaderView(0).findViewById(R.id.autorName);
+        //TextView tName = (TextView) findViewById(R.id.autorName);
+        tName.setText(BmobUser.getCurrentUser().getUsername());
         /*start DrawLayout item 选中字体颜色变化*/
         Resources resource=getBaseContext().getResources();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//版本问题控制 API23以上
@@ -80,6 +84,7 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
     @Override
     public void selectBaihuinews() {
         getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new ToutiaonewsFragment()).commit();
+        Log.v("yxbbbb","===========b");
         toolbar.setTitle(R.string.nav_baihuinews);
     }
 
