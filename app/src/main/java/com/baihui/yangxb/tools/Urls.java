@@ -28,11 +28,4 @@ public class Urls {
     public static final String WEATHER_CITYNAME = "?cityname=";
     public static final String WEATHER_END = "&dtype=&key=3198ddb3e2701c280f50612cf02a01d7";
 
-    /* http://api.map.baidu.com/geocoder/v2/?ak=SauFB1KDFiV9Q75Uc06kBGqDGMBNUyuY&mcode=F1:FF:CC:5C:76:5D:5A:C3:D5:F4:50:86:E5:AD:7C:06:49:06:E0:27;
-     com.yxb.baihui.baihui.weathernews.model&callback=renderReverse&location=39.984578,116.451345&output=json&pois=1    *///定位
-    public static final String INTERFACE_LOCATION = "http://api.map.baidu.com/geocoder/v2/?ak=SauFB1KDFiV9Q75Uc06kBGqDGMBNUyuY&mcode=F1:FF:CC:5C:76:5D:5A:C3:D5:F4:50:86:E5:AD:7C:06:49:06:E0:27;\n" +
-            "     com.baihui.yangxb.weathernews.model&callback=renderReverse&location=";
-    public static final String INTERFACE_LOCATION_END = "&output=json&pois=1";
-
-
 }
