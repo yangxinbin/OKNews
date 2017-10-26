@@ -6,4 +6,10 @@
     <dimen name="min_textSize">12dp</dimen>
     <dimen name="text_caption">13sp</dimen>
     <dimen name="text_title">21sp</dimen>
+
+    <!-- select city -->
+    <dimen name="side_letter_bar_letter_size">12sp</dimen>
+    <dimen name="side_letter_bar_width">36dp</dimen>
+    <dimen name="city_text_size">16sp</dimen>
+    <!-- select city -->
 </resources>

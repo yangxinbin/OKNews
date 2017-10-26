@@ -31,21 +31,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="2dp"
+            android:padding="1dp"
             android:gravity="center_horizontal" >
 
 
             <TextView
                 android:id="@+id/city"
-                android:padding="5dp"
+                android:padding="2dp"
                 style="@style/weacher_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="深圳" />
+            <TextView
+                android:id="@+id/selectcity"
+                android:padding="1dp"
+                style="@style/weacher_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="[切换]" />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
+                android:padding="1dp"
                 android:orientation="horizontal" >
                 <TextView
                     android:id="@+id/today"
@@ -95,7 +102,7 @@
                             style="@style/weacher_temp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="8dp"
+                            android:padding="4dp"
                             android:text="二级" />
 
                     </LinearLayout>
@@ -113,8 +120,8 @@
 
             <com.baihui.yangxb.weathernews.utils.TempControlView
                 android:id="@+id/temp_control"
-                android:layout_width="250dp"
-                android:layout_height="250dp" />
+                android:layout_width="240dp"
+                android:layout_height="240dp" />
 
             <HorizontalScrollView
                 android:layout_width="350dp"

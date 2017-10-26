@@ -1,5 +1,6 @@
 package com.baihui.yangxb.weathernews.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.baihui.yangxb.R;
 import com.baihui.yangxb.weathernews.entity.WeathernewsBean;
 import com.baihui.yangxb.weathernews.presenter.WeathernewsPresenter;
 import com.baihui.yangxb.weathernews.presenter.WeathernewsPresenterImpl;
+import com.baihui.yangxb.weathernews.selectcity.activity.SelectCityMainActivity;
 import com.baihui.yangxb.weathernews.utils.TempControlView;
 import com.baihui.yangxb.weathernews.view.WeathernewsView;
 
@@ -27,6 +29,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2016/11/22 0022.
@@ -58,6 +61,8 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
     LinearLayout weatherLayout;
     @Bind(R.id.root_layout)
     FrameLayout rootLayout;
+    @Bind(R.id.selectcity)
+    TextView selectcity;
     private WeathernewsPresenter mWeatherPresenter;
 
     @Override
@@ -86,7 +91,7 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
 
     @Override
     public void hideProgress() {
-        if (progress != null){
+        if (progress != null) {
             progress.setVisibility(View.GONE);
         }
     }
@@ -117,7 +122,7 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
 
     @Override
     public void setTemperature(String temperature) {
-        tempControl.setTemp(10, 30, Integer.parseInt(temperature), "更新于" + nowtime);
+        tempControl.setTemp(0, 40, Integer.parseInt(temperature), "更新于" + nowtime);
 
     }
 
@@ -154,7 +159,7 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
         List<View> adapterList = new ArrayList<View>();
 
         List<WeathernewsBean.ResultBean.DataBean.WeatherBeanX> listfuture = lists.get(0).getResult().getData().getWeather();
-        for (int i = 1;i < listfuture.size();i++) {
+        for (int i = 1; i < listfuture.size(); i++) {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_weather, null, false);
             TextView dateTV = (TextView) view.findViewById(R.id.date);
             ImageView todayWeatherImage = (ImageView) view.findViewById(R.id.weatherImage);
@@ -162,9 +167,9 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
             TextView todayWindTV = (TextView) view.findViewById(R.id.wind);
             TextView todayWeatherTV = (TextView) view.findViewById(R.id.weather);
 
-            dateTV.setText("星期"+listfuture.get(i).getWeek());
-            todayTemperatureTV.setText(listfuture.get(i).getInfo().getDay().get(2)+"°C");
-            Log.v("jjjjjjj","-----------"+listfuture.get(i).getInfo().getDay().get(4)+"======"+listfuture.get(i).getInfo().getDay().get(1));
+            dateTV.setText("星期" + listfuture.get(i).getWeek());
+            todayTemperatureTV.setText(listfuture.get(i).getInfo().getDay().get(2) + "°C");
+            Log.v("jjjjjjj", "-----------" + listfuture.get(i).getInfo().getDay().get(4) + "======" + listfuture.get(i).getInfo().getDay().get(1));
             todayWindTV.setText(listfuture.get(i).getInfo().getDay().get(4));
             todayWeatherTV.setText(listfuture.get(i).getInfo().getDay().get(1));
             todayWeatherImage.setImageResource(getImagID(listfuture.get(i).getInfo().getDay().get(1)));
@@ -239,4 +244,9 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
         }
     }
 
+    @OnClick(R.id.selectcity)
+    public void onViewClicked() {
+        Intent intentSelectCity = new Intent(getActivity(), SelectCityMainActivity.class);
+        getActivity().startActivity(intentSelectCity);
+    }
 }
