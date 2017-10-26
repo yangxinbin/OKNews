@@ -28,6 +28,7 @@ import cn.bmob.v3.BmobUser;
 
 import com.baihui.yangxb.R;
 import com.baihui.yangxb.oknews.activity.ToutiaonewsFragment;
+import com.baihui.yangxb.weathernews.activity.WeathernewsFragment;
 
 public class MainpageActivity extends AppCompatActivity implements MainpageView {
 
@@ -65,7 +66,7 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         setupDrawerContent(navView);
         mainpagePresenter = new MainpagePresenterImpl(this);
-        selectBaihuinews();
+        selectWeathernews();
     }
 
     private void setupDrawerContent(NavigationView navView) {
@@ -84,8 +85,12 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
     @Override
     public void selectBaihuinews() {
         getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new ToutiaonewsFragment()).commit();
-        Log.v("yxbbbb","===========b");
         toolbar.setTitle(R.string.nav_baihuinews);
+    }
+    @Override
+    public void selectWeathernews() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new WeathernewsFragment()).commit();
+        toolbar.setTitle(R.string.nav_weathernews);
     }
 
 /*    @Override
@@ -113,11 +118,6 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
         toolbar.setTitle(R.string.nav_baihuimap);
     }
 
-    @Override
-    public void selectWeathernews() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new WeathernewsFragment()).commit();
-        toolbar.setTitle(R.string.nav_weathernews);
-    }
 
     @Override
     public void selectEnjoygame() {

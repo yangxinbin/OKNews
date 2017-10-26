@@ -6,11 +6,11 @@ package com.baihui.yangxb.mainpage.view;
 
 public interface MainpageView {
     void selectBaihuinews();
+    void selectWeathernews();
   /*  void selectAuthormanage();
     void selectMeipaivideo();
     void selectComicnews();
     void selectBaihuimap();
-    void selectWeathernews();
     void selectEnjoygame();
     void selectUserhelp();
     void selectAboutauthor(); */
