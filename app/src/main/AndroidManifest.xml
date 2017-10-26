@@ -28,6 +28,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="GtGRSLVhTgwITK8wtZfgYLgKi8axtf9k" >
+        </meta-data>
+
+        <service android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote">
+        </service>
+
         <activity android:name=".mainpage.activity.MainpageActivity"
             android:label="@string/app_name">
         </activity>
