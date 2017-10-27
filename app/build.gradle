@@ -58,4 +58,5 @@ dependencies {
         exclude group: 'com.google.code.gson',module: 'gson'
     }
     compile 'cn.bmob.android:http-legacy:1.0'
+    compile files('libs/BaiduLBS_Android.jar')
 }
