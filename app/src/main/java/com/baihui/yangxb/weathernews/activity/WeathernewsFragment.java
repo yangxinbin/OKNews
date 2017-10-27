@@ -1,5 +1,6 @@
 package com.baihui.yangxb.weathernews.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -76,11 +77,10 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_weather, null);
-        mWeatherPresenter.loadWeatherData();
+        mWeatherPresenter.loadWeatherData("深圳");//默认城市
         ButterKnife.bind(this, view);
         return view;
     }
-
 
     @Override
     public void showProgress() {
@@ -148,7 +148,6 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
         this.todayweek.setText("星期" + week);
     }
 
-
     @Override
     public void setWeatherImage(String res) {
         weatherImage.setImageResource(getImagID(res));
@@ -156,8 +155,7 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
 
     @Override
     public void setfutureWeatherData(List<WeathernewsBean> lists) {
-        List<View> adapterList = new ArrayList<View>();
-
+        weatherContent.removeAllViews();//先清空再添加
         List<WeathernewsBean.ResultBean.DataBean.WeatherBeanX> listfuture = lists.get(0).getResult().getData().getWeather();
         for (int i = 1; i < listfuture.size(); i++) {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_weather, null, false);
@@ -166,7 +164,6 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
             TextView todayTemperatureTV = (TextView) view.findViewById(R.id.weatherTemp);
             TextView todayWindTV = (TextView) view.findViewById(R.id.wind);
             TextView todayWeatherTV = (TextView) view.findViewById(R.id.weather);
-
             dateTV.setText("星期" + listfuture.get(i).getWeek());
             todayTemperatureTV.setText(listfuture.get(i).getInfo().getDay().get(2) + "°C");
             Log.v("jjjjjjj", "-----------" + listfuture.get(i).getInfo().getDay().get(4) + "======" + listfuture.get(i).getInfo().getDay().get(1));
@@ -174,9 +171,7 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
             todayWeatherTV.setText(listfuture.get(i).getInfo().getDay().get(1));
             todayWeatherImage.setImageResource(getImagID(listfuture.get(i).getInfo().getDay().get(1)));
             weatherContent.addView(view);
-            adapterList.add(view);
         }
-
     }
 
     @Override
@@ -247,6 +242,18 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
     @OnClick(R.id.selectcity)
     public void onViewClicked() {
         Intent intentSelectCity = new Intent(getActivity(), SelectCityMainActivity.class);
-        getActivity().startActivity(intentSelectCity);
+        startActivityForResult(intentSelectCity,0);//前面不加getActivity().  要不拿不到结果。
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 0){ // 对应启动时那个代号0
+            if(resultCode == Activity.RESULT_OK){ // 对应B里面的标志为成功
+                String  cityName= data.getStringExtra("CityName"); // 拿到B中存储的数据
+                mWeatherPresenter.loadWeatherData(cityName);
+                setCity(cityName);
+            }
+        }
     }
 }

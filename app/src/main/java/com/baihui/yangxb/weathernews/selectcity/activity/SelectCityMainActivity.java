@@ -1,5 +1,6 @@
 package com.baihui.yangxb.weathernews.selectcity.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -176,7 +177,11 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
     }
 
     private void back(String city) {
-
+     ///Toast.makeText(this,city,Toast.LENGTH_LONG).show();
+        Intent i = new Intent();
+        i.putExtra("CityName",city);
+        setResult(RESULT_OK,i);
+        finish();
     }
     @Override
     protected void onDestroy() {

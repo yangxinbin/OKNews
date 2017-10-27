@@ -52,8 +52,6 @@ public class WeathernewsModelImpl implements WeathernewsModel {
     @Override
     public void loadLocation(Context context, final LoadLocationListener listener) {
 
-        listener.onSuccess("");
-        listener.onFailure("",null);
     }
 
     public interface LoadWeatherListener {

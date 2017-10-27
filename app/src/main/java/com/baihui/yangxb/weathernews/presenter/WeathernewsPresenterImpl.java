@@ -16,7 +16,7 @@ import java.util.List;
  * Created by Administrator on 2016/12/21 0021.
  */
 
-public class WeathernewsPresenterImpl implements WeathernewsPresenter, WeathernewsModelImpl.LoadWeatherListener {
+public class WeathernewsPresenterImpl implements WeathernewsPresenter {
 
     private WeathernewsView mWeatherView;
     private WeathernewsModel mWeatherModel;
@@ -30,7 +30,7 @@ public class WeathernewsPresenterImpl implements WeathernewsPresenter, Weatherne
     }
 
     @Override
-    public void loadWeatherData() {
+    public void loadWeatherData(String cityName) {
         mWeatherView.showProgress();
         if (!isNetworkAvailable(mContext)) {
             mWeatherView.hideProgress();
@@ -38,12 +38,50 @@ public class WeathernewsPresenterImpl implements WeathernewsPresenter, Weatherne
             Log.v("jjjjjjjj", "-------------isNetworkAvailable-----");
             return;
         }
-        WeathernewsModelImpl.LoadLocationListener listener = new WeathernewsModelImpl.LoadLocationListener() {
+        WeathernewsModelImpl.LoadWeatherListener listenerWeatherData = new WeathernewsModelImpl.LoadWeatherListener() {
+            @Override
+            public void onSuccess(List<WeathernewsBean> list) {
+
+                Log.v("jjjjjjjj", "-------onSuccess-----");
+                if (list.size() != 0) {
+                    todayWeather = list.get(0);
+                }else {
+                    Log.v("jjjjjjjj", "-------null-----");
+                    return;
+                }
+                mWeatherView.setToday(todayWeather.getResult().getData().getRealtime().getDate());
+                mWeatherView.setTime(todayWeather.getResult().getData().getRealtime().getTime());
+                mWeatherView.setTemperature(todayWeather.getResult().getData().getRealtime().getWeather().getTemperature());
+                mWeatherView.setWeather(todayWeather.getResult().getData().getRealtime().getWeather().getInfo());
+                mWeatherView.setWeek(todayWeather.getResult().getData().getWeather().get(0).getWeek());
+                mWeatherView.setWind(todayWeather.getResult().getData().getRealtime().getWind().getDirect());
+                mWeatherView.setWindPower(todayWeather.getResult().getData().getRealtime().getWind().getPower());
+                mWeatherView.setWeatherImage(todayWeather.getResult().getData().getRealtime().getWeather().getImg());
+
+                mWeatherView.setfutureWeatherData(list);
+                Log.v("jjjjjjjj", "-------showWeatherLayout------onSuccess-----");
+                mWeatherView.hideProgress();
+                mWeatherView.showWeatherLayout();
+
+            }
+
+            @Override
+            public void onFailure(String msg, Exception e) {
+                mWeatherView.hideProgress();
+                mWeatherView.showErrorToast("获取天气数据失败");
+            }
+        };
+        mWeatherModel.loadWeatherData(cityName, listenerWeatherData);
+    }
+
+    @Override
+    public void loadLocatData() {
+        WeathernewsModelImpl.LoadLocationListener listenerLocat = new WeathernewsModelImpl.LoadLocationListener() {
             @Override
             public void onSuccess(String cityName) {
                 //定位成功，获取定位城市天气预报
                 mWeatherView.setCity(cityName);
-                mWeatherModel.loadWeatherData(cityName, WeathernewsPresenterImpl.this);
+                mWeatherModel.loadWeatherData(cityName, (WeathernewsModelImpl.LoadWeatherListener) WeathernewsPresenterImpl.this);
             }
 
             @Override
@@ -51,44 +89,11 @@ public class WeathernewsPresenterImpl implements WeathernewsPresenter, Weatherne
                 mWeatherView.showErrorToast("定位失败");
                 mWeatherView.setCity("深圳");
                 Log.v("jjjjjjjj", "-------------深圳-----");
-                mWeatherModel.loadWeatherData("深圳", WeathernewsPresenterImpl.this);
+                mWeatherModel.loadWeatherData("深圳", (WeathernewsModelImpl.LoadWeatherListener) WeathernewsPresenterImpl.this);
             }
         };
         //获取定位信息
-        mWeatherModel.loadLocation(mContext, listener);
-
-    }
-
-    @Override
-    public void onSuccess(List<WeathernewsBean> list) {
-
-        Log.v("jjjjjjjj", "-------onSuccess-----");
-        if (list.size() != 0) {
-            todayWeather = list.get(0);
-        }else {
-            Log.v("jjjjjjjj", "-------null-----");
-            return;
-        }
-        mWeatherView.setToday(todayWeather.getResult().getData().getRealtime().getDate());
-        mWeatherView.setTime(todayWeather.getResult().getData().getRealtime().getTime());
-        mWeatherView.setTemperature(todayWeather.getResult().getData().getRealtime().getWeather().getTemperature());
-        mWeatherView.setWeather(todayWeather.getResult().getData().getRealtime().getWeather().getInfo());
-        mWeatherView.setWeek(todayWeather.getResult().getData().getWeather().get(0).getWeek());
-        mWeatherView.setWind(todayWeather.getResult().getData().getRealtime().getWind().getDirect());
-        mWeatherView.setWindPower(todayWeather.getResult().getData().getRealtime().getWind().getPower());
-        mWeatherView.setWeatherImage(todayWeather.getResult().getData().getRealtime().getWeather().getImg());
-
-        mWeatherView.setfutureWeatherData(list);
-        Log.v("jjjjjjjj", "-------showWeatherLayout------onSuccess-----");
-        mWeatherView.hideProgress();
-        mWeatherView.showWeatherLayout();
-
-    }
-
-    @Override
-    public void onFailure(String msg, Exception e) {
-        mWeatherView.hideProgress();
-        mWeatherView.showErrorToast("获取天气数据失败");
+        mWeatherModel.loadLocation(mContext, listenerLocat);
     }
 
     /**

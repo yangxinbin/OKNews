@@ -5,5 +5,6 @@ package com.baihui.yangxb.weathernews.presenter;
  */
 
 public interface WeathernewsPresenter {
-    void loadWeatherData();
+    void loadWeatherData(String cityName);
+    void loadLocatData();
 }
