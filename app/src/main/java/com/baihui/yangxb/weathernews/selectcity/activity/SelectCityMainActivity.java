@@ -11,9 +11,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 
 import com.baihui.yangxb.R;
@@ -45,6 +46,11 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
     private ResultListAdapter mResultAdapter;
     private List<City> mAllCities;
     private DBManager dbManager;
+    private LinearLayout activitymain;
+    //屏幕高度
+    private int screenHeight = 0;
+    //软件盘弹起后所占高度阀值
+    private int keyHeight = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +61,11 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
 
     }
 
-
-
     private void initData() {
+        //获取屏幕高度
+        screenHeight = this.getWindowManager().getDefaultDisplay().getHeight();
+        //阀值设置为屏幕高度的1/3
+        keyHeight = screenHeight/3;
         dbManager = new DBManager(this);
         dbManager.copyDBFile();
         mAllCities = dbManager.getAllCities();
@@ -79,6 +87,7 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
     }
 
     private void initView() {
+        activitymain = (LinearLayout) findViewById(R.id.activity_main);//为了监听软键盘弹出与隐藏
         mListview = (ListView) findViewById(R.id.listview_all_city);
         mListview.setAdapter(mCityAdapter);
 
@@ -94,6 +103,18 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
         });
         emptyView = (ViewGroup) findViewById(R.id.empty_view);
         searchBox = (EditText) findViewById(R.id.et_search);
+        /*监听软键盘弹出与隐藏*/
+        activitymain.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                //现在认为只要控件将Activity向上推的高度超过了1/3屏幕高，就认为软键盘弹起
+                if(oldBottom != 0 && bottom != 0 &&(oldBottom - bottom > keyHeight)){
+                    mLetterBar.setVisibility(View.GONE);
+                }else if(oldBottom != 0 && bottom != 0 &&(bottom - oldBottom > keyHeight)){
+                    mLetterBar.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         searchBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -123,8 +144,6 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
                 }
             }
         });
-
-
         mResultListView = (ListView) findViewById(R.id.listview_search_result);
         mResultListView.setAdapter(mResultAdapter);
         mResultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
