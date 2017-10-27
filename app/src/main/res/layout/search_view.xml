@@ -8,6 +8,8 @@
     android:layout_marginRight="16dp"
     android:layout_marginTop="8dp"
     android:gravity="center_vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:background="@drawable/search_box_bg">
 
     <ImageView
@@ -29,7 +31,6 @@
         android:hint="@string/hint_search_box"
         android:textColorHint="@color/deep_blue"
         android:inputType="text"
-        android:singleLine="true"
         android:textColor="@color/deep_blue"
         android:textSize="14sp"
         tools:ignore="RtlHardcoded" />
