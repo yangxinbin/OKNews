@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +27,6 @@ import com.baihui.yangxb.weathernews.selectcity.activity.SelectCityMainActivity;
 import com.baihui.yangxb.weathernews.utils.TempControlView;
 import com.baihui.yangxb.weathernews.view.WeathernewsView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -64,6 +65,8 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
     FrameLayout rootLayout;
     @Bind(R.id.selectcity)
     TextView selectcity;
+    @Bind(R.id.wea_toolbar)
+    Toolbar weaToolbar;
     private WeathernewsPresenter mWeatherPresenter;
 
     @Override
@@ -79,6 +82,7 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
         View view = inflater.inflate(R.layout.fragment_weather, null);
         mWeatherPresenter.loadWeatherData("深圳");//默认城市
         ButterKnife.bind(this, view);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(weaToolbar);
         return view;
     }
 
@@ -242,15 +246,15 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
     @OnClick(R.id.selectcity)
     public void onViewClicked() {
         Intent intentSelectCity = new Intent(getActivity(), SelectCityMainActivity.class);
-        startActivityForResult(intentSelectCity,0);//前面不加getActivity().  要不拿不到结果。
+        startActivityForResult(intentSelectCity, 0);//前面不加getActivity().  要不拿不到结果。
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 0){ // 对应启动时那个代号0
-            if(resultCode == Activity.RESULT_OK){ // 对应B里面的标志为成功
-                String  cityName= data.getStringExtra("CityName"); // 拿到B中存储的数据
+        if (requestCode == 0) { // 对应启动时那个代号0
+            if (resultCode == Activity.RESULT_OK) { // 对应B里面的标志为成功
+                String cityName = data.getStringExtra("CityName"); // 拿到B中存储的数据
                 mWeatherPresenter.loadWeatherData(cityName);
                 setCity(cityName);
             }

@@ -32,13 +32,10 @@ import com.baihui.yangxb.weathernews.activity.WeathernewsFragment;
 
 public class MainpageActivity extends AppCompatActivity implements MainpageView {
 
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
     @Bind(R.id.nav_view)
     NavigationView navView;
     @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
     private MainpagePresenter mainpagePresenter;
     private ColorStateList csl;
 
@@ -60,10 +57,6 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
         navView.setItemTextColor(csl);
         /*end*/
         navView.setItemIconTintList(null);//传入一个null参数，这样原本的彩色图标就可以显示出来了
-        setSupportActionBar(toolbar);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.drawer_open,R.string.drawer_close);
-        actionBarDrawerToggle.syncState();
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
         setupDrawerContent(navView);
         mainpagePresenter = new MainpagePresenterImpl(this);
         selectWeathernews();
@@ -85,12 +78,10 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
     @Override
     public void selectBaihuinews() {
         getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new ToutiaonewsFragment()).commit();
-        toolbar.setTitle(R.string.nav_baihuinews);
     }
     @Override
     public void selectWeathernews() {
         getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new WeathernewsFragment()).commit();
-        toolbar.setTitle(R.string.nav_weathernews);
     }
 
 /*    @Override

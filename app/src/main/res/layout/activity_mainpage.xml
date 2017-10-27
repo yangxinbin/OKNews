@@ -12,11 +12,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <include
-            layout="@layout/include_toolbar"
-            android:id="@+id/bar"
-            />
-
         <FrameLayout
             android:id="@+id/main_content"
             android:layout_below="@+id/bar"
