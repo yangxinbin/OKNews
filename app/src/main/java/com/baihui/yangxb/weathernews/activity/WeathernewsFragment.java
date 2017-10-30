@@ -1,16 +1,24 @@
 package com.baihui.yangxb.weathernews.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -20,6 +28,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.baihui.yangxb.R;
+import com.baihui.yangxb.mainpage.activity.MainpageActivity;
 import com.baihui.yangxb.weathernews.entity.WeathernewsBean;
 import com.baihui.yangxb.weathernews.presenter.WeathernewsPresenter;
 import com.baihui.yangxb.weathernews.presenter.WeathernewsPresenterImpl;
@@ -32,6 +41,9 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobUser;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Administrator on 2016/11/22 0022.
@@ -68,6 +80,8 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
     @Bind(R.id.wea_toolbar)
     Toolbar weaToolbar;
     private WeathernewsPresenter mWeatherPresenter;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,6 +97,12 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
         mWeatherPresenter.loadWeatherData("深圳");//默认城市
         ButterKnife.bind(this, view);
         weaToolbar.setTitle(R.string.nav_weathernews);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(weaToolbar);//不加这句 toolbar menu 不显示。
+        DrawerLayout drawerLayout =(DrawerLayout)getActivity().findViewById(R.id.drawer_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(),drawerLayout,weaToolbar,R.string.drawer_open,R.string.drawer_close);
+        actionBarDrawerToggle.syncState();
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);//增加抽屉监听
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -114,7 +134,9 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
 
     @Override
     public void setToday(String data) {
-        today.setText(data);
+        if (today != null){
+            today.setText(data);
+        }
     }
 
     private String nowtime;
@@ -259,5 +281,50 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
                 setCity(cityName);
             }
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_weather, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_exit){
+            BmobUser.logOut();   //清除缓存用户对象
+            SharedPreferences isOk = getActivity().getSharedPreferences("isOk",MODE_PRIVATE);
+            isOk.edit().putString("isOk", "no")
+                    .commit();
+            exitDialog();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void exitDialog() {
+        // 创建退出对话框
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setIcon(R.drawable.exit);
+        // 设置对话框标题
+        builder.setTitle("系统提示");
+        // 设置对话框消息
+        builder.setMessage("确定要退出吗");
+        //监听下方button点击事件
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                getActivity().finish();
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        // 显示对话框
+        builder.show();
     }
 }

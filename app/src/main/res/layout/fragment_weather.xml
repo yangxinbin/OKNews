@@ -7,6 +7,7 @@
     android:orientation="vertical"
     >
     <android.support.v7.widget.Toolbar
+        app:titleTextColor="@color/white"
         android:background="@color/colorPrimary"
         android:id="@+id/wea_toolbar"
         android:layout_width="match_parent"

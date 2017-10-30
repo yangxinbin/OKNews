@@ -1,5 +1,8 @@
 package com.baihui.yangxb.oknews.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -7,9 +10,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,6 +28,9 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.bmob.v3.BmobUser;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -44,6 +55,7 @@ public class ToutiaonewsFragment extends Fragment {
     public static final int NEWS_TYPE_FASHION = 9;
     @Bind(R.id.new_toolbar)
     Toolbar newToolbar;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Nullable
     @Override
@@ -51,6 +63,11 @@ public class ToutiaonewsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_toutiaonews, null);
         ButterKnife.bind(this, view);
         newToolbar.setTitle(R.string.nav_baihuinews);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(newToolbar);//不加这句 toolbar menu 不显示。
+        DrawerLayout drawerLayout =(DrawerLayout)getActivity().findViewById(R.id.drawer_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(),drawerLayout,newToolbar,R.string.drawer_open,R.string.drawer_close);
+        actionBarDrawerToggle.syncState();
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);//增加抽屉监听
         viewpager.setOffscreenPageLimit(2);
         setupViewPager(viewpager);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_topnews));
@@ -70,6 +87,7 @@ public class ToutiaonewsFragment extends Fragment {
 //            }
 //        });
         tabLayout.setupWithViewPager(viewpager);
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -92,6 +110,53 @@ public class ToutiaonewsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_new, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }else if (id == R.id.action_exit){
+            BmobUser.logOut();   //清除缓存用户对象
+            SharedPreferences isOk = getActivity().getSharedPreferences("isOk",MODE_PRIVATE);
+            isOk.edit().putString("isOk", "no")
+                    .commit();
+            exitDialog();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void exitDialog() {
+        // 创建退出对话框
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setIcon(R.drawable.exit);
+        // 设置对话框标题
+        builder.setTitle("系统提示");
+        // 设置对话框消息
+        builder.setMessage("确定要退出吗");
+        //监听下方button点击事件
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                getActivity().finish();
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        // 显示对话框
+        builder.show();
     }
 
     private class ToutiaonewsPagerAdapter extends FragmentPagerAdapter {

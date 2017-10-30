@@ -134,27 +134,6 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
     }
     */
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }else if (id == R.id.action_exit){
-            BmobUser.logOut();   //清除缓存用户对象
-            SharedPreferences isOk = getSharedPreferences("isOk",MODE_PRIVATE);
-            isOk.edit().putString("isOk", "no")
-                    .commit();
-            exitDialog();
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -165,7 +144,6 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
 
         return false;
     }
-
     private void exitDialog() {
         // 创建退出对话框
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

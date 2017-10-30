@@ -93,7 +93,7 @@ public class TempControlView extends View {
 
         arcPaint = new Paint();
         arcPaint.setAntiAlias(true);
-        arcPaint.setColor(Color.parseColor("#3CB7EA"));
+        arcPaint.setColor(Color.parseColor("#ffd1b6"));
         arcPaint.setStrokeWidth(dp2px(2));
         arcPaint.setStyle(Paint.Style.STROKE);
 
@@ -151,7 +151,7 @@ public class TempControlView extends View {
         canvas.translate(getWidth() / 2, getHeight() / 2);
         // 逆时针旋转135-2度
         canvas.rotate(-133);
-        dialPaint.setColor(Color.parseColor("#3CB7EA"));
+        dialPaint.setColor(Color.parseColor("#ffd1b6"));
         for (int i = 0; i < 60; i++) {
             canvas.drawLine(0, -dialRadius, 0, -dialRadius + scaleHeight, dialPaint);
             canvas.rotate(4.5f);
