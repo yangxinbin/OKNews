@@ -82,7 +82,7 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
         View view = inflater.inflate(R.layout.fragment_weather, null);
         mWeatherPresenter.loadWeatherData("深圳");//默认城市
         ButterKnife.bind(this, view);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(weaToolbar);
+        weaToolbar.setTitle(R.string.nav_weathernews);
         return view;
     }
 

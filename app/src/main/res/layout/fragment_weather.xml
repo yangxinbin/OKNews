@@ -124,11 +124,12 @@
 
             <com.baihui.yangxb.weathernews.utils.TempControlView
                 android:id="@+id/temp_control"
-                android:layout_width="240dp"
-                android:layout_height="240dp" />
+                android:layout_width="280dp"
+                android:layout_height="280dp" />
 
             <HorizontalScrollView
                 android:layout_width="350dp"
+                android:scrollbars="none"
                 android:layout_height="match_parent" >
                 <LinearLayout
                     android:layout_marginRight="50dp"

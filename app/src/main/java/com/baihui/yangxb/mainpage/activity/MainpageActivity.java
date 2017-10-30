@@ -1,6 +1,7 @@
 package com.baihui.yangxb.mainpage.activity;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -8,6 +9,7 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.baihui.yangxb.mainpage.presenter.MainpagePresenter;
@@ -44,7 +47,9 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainpage);
         ButterKnife.bind(this);
-        TextView tName = (TextView) navView.getHeaderView(0).findViewById(R.id.autorName);
+        View headerLayout = navView.inflateHeaderView(R.layout.nav_header);
+        TextView tName = (TextView) headerLayout.findViewById(R.id.autorName);
+        //TextView tName = (TextView) navView.getHeaderView(0).findViewById(R.id.autorName);
         //TextView tName = (TextView) findViewById(R.id.autorName);
         tName.setText(BmobUser.getCurrentUser().getUsername());
         /*start DrawLayout item 选中字体颜色变化*/
@@ -77,11 +82,11 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
 
     @Override
     public void selectBaihuinews() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new ToutiaonewsFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new ToutiaonewsFragment()).commitAllowingStateLoss();
     }
     @Override
     public void selectWeathernews() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new WeathernewsFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new WeathernewsFragment()).commitAllowingStateLoss();
     }
 
 /*    @Override
