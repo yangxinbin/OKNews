@@ -35,7 +35,7 @@ public class CityListAdapter extends BaseAdapter {
     private HashMap<String, Integer> letterIndexes;
     private String[] sections;
     private OnCityClickListener onCityClickListener;
-    private int locateState = LocateState.LOCATING;
+    private int locateState = LocateState.STARTLOCATING;
     private String locatedCity;
 
     public CityListAdapter(Context mContext, List<City> mCities) {
@@ -117,6 +117,9 @@ public class CityListAdapter extends BaseAdapter {
                 ViewGroup container = (ViewGroup) view.findViewById(R.id.layout_locate);
                 TextView state = (TextView) view.findViewById(R.id.tv_located_city);
                 switch (locateState){
+                    case LocateState.STARTLOCATING:
+                        state.setText(mContext.getString(R.string.startlocat));
+                        break;
                     case LocateState.LOCATING:
                         state.setText(mContext.getString(R.string.locating));
                         break;
@@ -193,6 +196,11 @@ public class CityListAdapter extends BaseAdapter {
                 break;
         }
         return view;
+    }
+
+    public void updateLocateTest(String locating) {
+        this.locatedCity = locating;
+        notifyDataSetChanged();
     }
 
     public static class CityViewHolder{

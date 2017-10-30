@@ -18,6 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.baihui.yangxb.R;
 import com.baihui.yangxb.weathernews.selectcity.adapter.CityListAdapter;
 import com.baihui.yangxb.weathernews.selectcity.adapter.ResultListAdapter;
@@ -52,16 +56,31 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
     private int screenHeight = 0;
     //软件盘弹起后所占高度阀值
     private int keyHeight = 0;
+    public LocationClient mLocationClient = null;
+    private MyLocationListener myListener = new MyLocationListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initLocation();
         initData();
         initView();
-
     }
 
+    private void initLocation() {
+        mLocationClient = new LocationClient(getApplicationContext());
+        //声明LocationClient类
+        mLocationClient.registerLocationListener(myListener);
+        //注册监听函数
+        LocationClientOption option = new LocationClientOption();
+        option.setIsNeedAddress(true);
+        //可选，是否需要地址信息，默认为不需要，即参数为false
+        //如果开发者需要获得当前点的地址信息，此处必须为true
+        mLocationClient.setLocOption(option);
+        //mLocationClient为第二步初始化过的LocationClient对象
+        //需将配置好的LocationClientOption对象，通过setLocOption方法传递给LocationClient对象使用
+    }
     private void initData() {
         //获取屏幕高度
         screenHeight = this.getWindowManager().getDefaultDisplay().getHeight();
@@ -81,6 +100,7 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
             public void onLocateClick() {
                 Log.e("onLocateClick", "重新定位...");
                 mCityAdapter.updateLocateState(LocateState.LOCATING, null);
+                mLocationClient.start();
             }
         });
 
@@ -160,9 +180,15 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
         clearBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
     }
-
+    boolean f = true; //开始执行一次
     @Override
     public void onClick(View v) {
+        if((v.getId() == R.id.layout_locate) && f){
+            Log.v("yxbbbb","ttttttttttt");
+            f=false;
+            mCityAdapter.updateLocateTest(getString(R.string.locating));
+            mLocationClient.start();
+        }
         switch (v.getId()) {
             case R.id.iv_search_clear:
                 searchBox.setText("");
@@ -186,5 +212,23 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    private class MyLocationListener extends BDAbstractLocationListener {
+
+        @Override
+        public void onReceiveLocation(BDLocation bdLocation) {
+            //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
+            //以下只列举部分获取地址相关的结果信息
+            //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
+            //String addr = bdLocation.getAddrStr();    //获取详细地址信息
+            //String country = bdLocation.getCountry();    //获取国家
+            //String province = bdLocation.getProvince();    //获取省份
+            String city = bdLocation.getCity();    //获取城市
+            String district = bdLocation.getDistrict();    //获取区县
+            //String street = bdLocation.getStreet();    //获取街道信息
+            String locationcity = StringUtils.extractLocation(city, district);
+            mCityAdapter.updateLocateState(LocateState.SUCCESS, locationcity);
+        }
     }
 }

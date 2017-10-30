@@ -3,10 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="210dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/nv_bg"
-    android:orientation="horizontal"
-    android:padding="16dp">
-
+    android:orientation="vertical">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="3"
+    android:layout_marginLeft="22dp"
+    android:orientation="horizontal">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="72dp"
@@ -26,5 +31,29 @@
         android:layout_height="wrap_content"
         android:text="用户名"
         />
+</LinearLayout>
+    <LinearLayout
+        android:id="@+id/nv_layout_locate"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="20dp"
+        android:gravity="center"
+        android:layout_marginTop="20dp">
 
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@mipmap/ic_locate"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/located_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="@string/startlocat"
+            android:textSize="15sp"
+            android:textColor="@color/white"/>
+    </LinearLayout>
 </LinearLayout>

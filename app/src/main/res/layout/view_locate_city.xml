@@ -24,6 +24,7 @@
             android:minWidth="96dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
+            android:onClick="onClick"
             android:gravity="center"
             android:clickable="true"
             android:background="@drawable/overlay_bg">
@@ -39,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:text="@string/locating"
+                android:text="@string/startlocat"
                 android:textSize="16sp"
                 android:textColor="@color/white"/>
         </LinearLayout>
