@@ -7,6 +7,7 @@
     android:background="@drawable/nv_bg"
     android:orientation="vertical">
 <LinearLayout
+    android:paddingTop="40dp"
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_weight="3"
@@ -37,13 +38,13 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="10dp"
         android:gravity="center"
-        android:layout_marginTop="20dp">
+        android:paddingTop="20dp">
 
         <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
             android:src="@mipmap/ic_locate"
             tools:ignore="ContentDescription" />
 
@@ -53,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:text="@string/startlocat"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:textColor="@color/white"/>
     </LinearLayout>
 </LinearLayout>

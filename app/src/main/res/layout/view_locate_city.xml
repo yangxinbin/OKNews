@@ -24,7 +24,6 @@
             android:minWidth="96dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:onClick="onClick"
             android:gravity="center"
             android:clickable="true"
             android:background="@drawable/overlay_bg">
@@ -36,6 +35,7 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
+                android:onClick="onClick"
                 android:id="@+id/tv_located_city"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

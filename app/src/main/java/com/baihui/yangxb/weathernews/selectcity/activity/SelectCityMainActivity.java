@@ -58,6 +58,7 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
     private int keyHeight = 0;
     public LocationClient mLocationClient = null;
     private MyLocationListener myListener = new MyLocationListener();
+    private String city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,7 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
             @Override
             public void onLocateClick() {
                 Log.e("onLocateClick", "重新定位...");
+                Log.v("yxbbbb","------------onLocateClick FAILED");
                 mCityAdapter.updateLocateState(LocateState.LOCATING, null);
                 mLocationClient.start();
             }
@@ -183,12 +185,8 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
     boolean f = true; //开始执行一次
     @Override
     public void onClick(View v) {
-        if((v.getId() == R.id.layout_locate) && f){
-            Log.v("yxbbbb","ttttttttttt");
-            f=false;
-            mCityAdapter.updateLocateTest(getString(R.string.locating));
-            mLocationClient.start();
-        }
+      //  if((v.getId() == R.id.layout_locate) && f){
+      // }
         switch (v.getId()) {
             case R.id.iv_search_clear:
                 searchBox.setText("");
@@ -196,6 +194,13 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
                 emptyView.setVisibility(View.GONE);
                 mResultListView.setVisibility(View.GONE);
                 break;
+            case R.id.tv_located_city:
+                if (f) {
+                    mCityAdapter.updateLocateState(LocateState.LOCATING, null);
+                    mLocationClient.start();
+                    f = false;
+                break;
+                }
             case R.id.back:
                 finish();
                 break;
@@ -204,7 +209,11 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
 
     private void back(String city) {
      ///Toast.makeText(this,city,Toast.LENGTH_LONG).show();
+        Log.v("yxbbb","-------back----"+city);
         Intent i = new Intent();
+        if (city == null){
+            return;
+        }
         i.putExtra("CityName",city);
         setResult(RESULT_OK,i);
         finish();
@@ -218,13 +227,19 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
 
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
+            if (bdLocation.getLocType() == BDLocation.TypeServerError) {
+                //定位失败
+                f = true;
+                mCityAdapter.updateLocateState(LocateState.FAILED, null);
+            }
             //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
             //以下只列举部分获取地址相关的结果信息
             //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
             //String addr = bdLocation.getAddrStr();    //获取详细地址信息
             //String country = bdLocation.getCountry();    //获取国家
             //String province = bdLocation.getProvince();    //获取省份
-            String city = bdLocation.getCity();    //获取城市
+            //获取城市
+            city = bdLocation.getCity();
             String district = bdLocation.getDistrict();    //获取区县
             //String street = bdLocation.getStreet();    //获取街道信息
             String locationcity = StringUtils.extractLocation(city, district);

@@ -8,6 +8,8 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
@@ -21,6 +23,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.baihui.yangxb.mainpage.presenter.MainpagePresenter;
 import com.baihui.yangxb.mainpage.presenter.MainpagePresenterImpl;
 import com.baihui.yangxb.mainpage.view.MainpageView;
@@ -41,6 +47,10 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
     DrawerLayout drawerLayout;
     private MainpagePresenter mainpagePresenter;
     private ColorStateList csl;
+    public LocationClient mLocationClient = null;
+    private MyLocationListener myListener = new MyLocationListener();
+    private String addr;
+    private TextView locatName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +59,10 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
         ButterKnife.bind(this);
         View headerLayout = navView.inflateHeaderView(R.layout.nav_header);
         TextView tName = (TextView) headerLayout.findViewById(R.id.autorName);
+        locatName = (TextView) headerLayout.findViewById(R.id.located_city);
         //TextView tName = (TextView) navView.getHeaderView(0).findViewById(R.id.autorName);
         //TextView tName = (TextView) findViewById(R.id.autorName);
-        tName.setText(BmobUser.getCurrentUser().getUsername());
+        tName.setText(BmobUser.getCurrentUser().getUsername());//获得当前用户名
         /*start DrawLayout item 选中字体颜色变化*/
         Resources resource=getBaseContext().getResources();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//版本问题控制 API23以上
@@ -62,9 +73,40 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
         navView.setItemTextColor(csl);
         /*end*/
         navView.setItemIconTintList(null);//传入一个null参数，这样原本的彩色图标就可以显示出来了
+        setLocatInNavHeader();
         setupDrawerContent(navView);
         mainpagePresenter = new MainpagePresenterImpl(this);
         selectWeathernews();
+    }
+    Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    //完成主界面更新,拿到数据
+                    locatName.setText(addr);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+    private void setLocatInNavHeader() {
+        mLocationClient = new LocationClient(getApplicationContext());
+        //声明LocationClient类
+        mLocationClient.registerLocationListener(myListener);
+        //注册监听函数
+        LocationClientOption option = new LocationClientOption();
+        option.setIsNeedAddress(true);
+        //可选，是否需要地址信息，默认为不需要，即参数为false
+        //如果开发者需要获得当前点的地址信息，此处必须为true
+        mLocationClient.setLocOption(option);
+        //mLocationClient为第二步初始化过的LocationClient对象
+        //需将配置好的LocationClientOption对象，通过setLocOption方法传递给LocationClient对象使用
+        //更多LocationClientOption的配置，请参照类参考中LocationClientOption类的详细说明
+        mLocationClient.start();
     }
 
     private void setupDrawerContent(NavigationView navView) {
@@ -167,5 +209,18 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
         });
         // 显示对话框
         builder.show();
+    }
+
+    public class MyLocationListener extends BDAbstractLocationListener {
+        @Override
+        public void onReceiveLocation(BDLocation location){
+            //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
+            //以下只列举部分获取地址相关的结果信息
+            //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
+            //获取详细地址信息
+            addr = location.getAddrStr();
+            Log.v("yxbbbb","-----Listener-------"+addr);
+            mHandler.sendEmptyMessage(0);
+        }
     }
 }

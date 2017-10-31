@@ -2,6 +2,7 @@ package com.baihui.yangxb.weathernews.selectcity.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,11 +135,13 @@ public class CityListAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         if (locateState == LocateState.FAILED){
+                            Log.v("yxbbb","----------f");
                             //重新定位
                             if (onCityClickListener != null){
                                 onCityClickListener.onLocateClick();
                             }
                         }else if (locateState == LocateState.SUCCESS){
+                            Log.v("yxbbb","----------s");
                             //返回定位城市
                             if (onCityClickListener != null){
                                 onCityClickListener.onCityClick(locatedCity);
