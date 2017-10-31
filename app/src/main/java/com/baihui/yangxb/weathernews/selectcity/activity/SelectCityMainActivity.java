@@ -81,6 +81,7 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
         mLocationClient.setLocOption(option);
         //mLocationClient为第二步初始化过的LocationClient对象
         //需将配置好的LocationClientOption对象，通过setLocOption方法传递给LocationClient对象使用
+        mLocationClient.start();
     }
     private void initData() {
         //获取屏幕高度
@@ -182,7 +183,6 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
         clearBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
     }
-    boolean f = true; //开始执行一次
     @Override
     public void onClick(View v) {
       //  if((v.getId() == R.id.layout_locate) && f){
@@ -194,13 +194,6 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
                 emptyView.setVisibility(View.GONE);
                 mResultListView.setVisibility(View.GONE);
                 break;
-            case R.id.tv_located_city:
-                if (f) {
-                    mCityAdapter.updateLocateState(LocateState.LOCATING, null);
-                    mLocationClient.start();
-                    f = false;
-                break;
-                }
             case R.id.back:
                 finish();
                 break;
@@ -229,7 +222,6 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
         public void onReceiveLocation(BDLocation bdLocation) {
             if (bdLocation.getLocType() == BDLocation.TypeServerError) {
                 //定位失败
-                f = true;
                 mCityAdapter.updateLocateState(LocateState.FAILED, null);
             }
             //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果

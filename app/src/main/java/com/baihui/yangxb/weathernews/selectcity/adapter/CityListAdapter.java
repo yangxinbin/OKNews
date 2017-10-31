@@ -36,7 +36,7 @@ public class CityListAdapter extends BaseAdapter {
     private HashMap<String, Integer> letterIndexes;
     private String[] sections;
     private OnCityClickListener onCityClickListener;
-    private int locateState = LocateState.STARTLOCATING;
+    private int locateState = LocateState.LOCATING;
     private String locatedCity;
 
     public CityListAdapter(Context mContext, List<City> mCities) {
@@ -118,9 +118,6 @@ public class CityListAdapter extends BaseAdapter {
                 ViewGroup container = (ViewGroup) view.findViewById(R.id.layout_locate);
                 TextView state = (TextView) view.findViewById(R.id.tv_located_city);
                 switch (locateState){
-                    case LocateState.STARTLOCATING:
-                        state.setText(mContext.getString(R.string.startlocat));
-                        break;
                     case LocateState.LOCATING:
                         state.setText(mContext.getString(R.string.locating));
                         break;
