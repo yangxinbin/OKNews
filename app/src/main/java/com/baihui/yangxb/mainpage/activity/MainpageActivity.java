@@ -62,7 +62,9 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
         locatName = (TextView) headerLayout.findViewById(R.id.located_city);
         //TextView tName = (TextView) navView.getHeaderView(0).findViewById(R.id.autorName);
         //TextView tName = (TextView) findViewById(R.id.autorName);
-        tName.setText(BmobUser.getCurrentUser().getUsername());//获得当前用户名
+        if (tName != null) {
+            tName.setText(BmobUser.getCurrentUser().getUsername());//获得当前用户名
+        }
         /*start DrawLayout item 选中字体颜色变化*/
         Resources resource=getBaseContext().getResources();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//版本问题控制 API23以上
