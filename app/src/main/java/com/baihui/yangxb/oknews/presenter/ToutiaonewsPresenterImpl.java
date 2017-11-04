@@ -2,13 +2,19 @@ package com.baihui.yangxb.oknews.presenter;
 
 
 
+import android.content.Context;
+import android.util.Log;
+
 import com.baihui.yangxb.oknews.activity.ToutiaonewsFragment;
+import com.baihui.yangxb.oknews.cacher.ACache;
 import com.baihui.yangxb.oknews.entity.ToutiaonewsBean;
 import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsListListener;
 import com.baihui.yangxb.oknews.model.ToutiaonewsModel;
 import com.baihui.yangxb.oknews.model.ToutiaonewsModelImpl;
 import com.baihui.yangxb.oknews.utils.Urls;
 import com.baihui.yangxb.oknews.view.ToutiaonewsView;
+
+import org.json.JSONArray;
 
 import java.util.List;
 
@@ -27,10 +33,19 @@ public class ToutiaonewsPresenterImpl implements ToutiaonewsPresenter,OnLoadTout
     }
 
     @Override
-    public void loadNews(int type) {
+    public void loadNews(int type, Context context) {
         String url = getUrl(type);
         //刷新的时候才显示刷新进度条
         //toutiaonewsView.showProgress();
+        ACache mCache = ACache.get(context);
+        JSONArray newJsonArray = mCache.getAsJSONArray(""+type);
+        if (newJsonArray == null) {
+            return;
+        }
+        if (newJsonArray != null){
+            return;
+        }
+        Log.v("yxbbbb",""+type+"---------"+newJsonArray.toString());
         toutiaonewsModel.loadNews(url, type, this);
     }
 
@@ -77,6 +92,7 @@ public class ToutiaonewsPresenterImpl implements ToutiaonewsPresenter,OnLoadTout
 
     @Override
     public void onSuccess(List<ToutiaonewsBean> list) {
+
         toutiaonewsView.hideProgress();
         toutiaonewsView.addNews(list);
     }

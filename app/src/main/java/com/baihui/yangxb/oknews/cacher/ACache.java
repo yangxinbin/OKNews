@@ -23,6 +23,8 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import com.google.gson.JsonArray;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -60,7 +62,7 @@ public class ACache {
 	private static final int MAX_SIZE = 1000 * 1000 * 50; // 50 mb
 	private static final int MAX_COUNT = Integer.MAX_VALUE; // 不限制存放数据的数量
 	private static Map<String, ACache> mInstanceMap = new HashMap<String, ACache>();
-	private ACacheManager mCache;
+	private static ACacheManager mCache;
 
 	public static ACache get(Context ctx) {
 		return get(ctx, "ACache");
@@ -135,7 +137,7 @@ public class ACache {
 	 * @param value
 	 *            保存的String数据
 	 */
-	public void put(String key, String value) {
+	public static void put(String key, String value) {
 		File file = mCache.newFile(key);
 		BufferedWriter out = null;
 		try {
@@ -176,7 +178,7 @@ public class ACache {
 	 * @param key
 	 * @return String 数据
 	 */
-	public String getAsString(String key) {
+	public static String getAsString(String key) {
 		File file = mCache.get(key);
 		if (!file.exists())
 			return null;
@@ -262,13 +264,11 @@ public class ACache {
 	// =======================================
 	/**
 	 * 保存 JSONArray数据 到 缓存中
-	 * 
-	 * @param key
+	 *  @param key
 	 *            保存的key
 	 * @param value
-	 *            保存的JSONArray数据
 	 */
-	public void put(String key, JSONArray value) {
+	public static void put(String key, JsonArray value) {
 		put(key, value.toString());
 	}
 
@@ -292,7 +292,7 @@ public class ACache {
 	 * @param key
 	 * @return JSONArray数据
 	 */
-	public JSONArray getAsJSONArray(String key) {
+	public static JSONArray getAsJSONArray(String key) {
 		String JSONString = getAsString(key);
 		try {
 			JSONArray obj = new JSONArray(JSONString);
@@ -604,7 +604,7 @@ public class ACache {
 	 * @param key
 	 * @return 是否移除成功
 	 */
-	public boolean remove(String key) {
+	public static boolean remove(String key) {
 		return mCache.remove(key);
 	}
 

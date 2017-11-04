@@ -2,6 +2,8 @@ package com.baihui.yangxb.oknews.model;
 
 
 
+import android.util.Log;
+
 import com.baihui.yangxb.oknews.entity.ToutiaonewsBean;
 import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsDetailListener;
 import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsListListener;
@@ -23,10 +25,11 @@ public class ToutiaonewsModelImpl implements ToutiaonewsModel {
      */
     @Override
     public void loadNews(String url, final int type, final OnLoadToutiaonewsListListener listener) {
+        Log.v("yxbbb","llllllllllllllllll");
         OkHttpUtils.ResultCallback<String> loadNewsCallback = new OkHttpUtils.ResultCallback<String>() {
             @Override
             public void onSuccess(String response) {
-                List<ToutiaonewsBean> newsBeanList = NewsJsonUtils.readJsonNewsBeans(response, "data");//data是json字段获得data的值即对象数组
+                List<ToutiaonewsBean> newsBeanList = NewsJsonUtils.readJsonNewsBeans(response, "data",type);//data是json字段获得data的值即对象数组
                 listener.onSuccess(newsBeanList);
             }
 

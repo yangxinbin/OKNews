@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.baihui.yangxb.R;
 import com.baihui.yangxb.oknews.adapter.ToutiaonewsAdapter;
+import com.baihui.yangxb.oknews.cacher.ACache;
 import com.baihui.yangxb.oknews.entity.ToutiaonewsBean;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsPresenter;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsPresenterImpl;
@@ -31,6 +32,8 @@ import com.baihui.yangxb.oknews.view.ToutiaonewsView;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +54,6 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
     private List<ToutiaonewsBean> mData;
     private LinearLayoutManager mLayoutManager;
     private ToutiaonewsAdapter adapter;
-
 
     public static ToutiaonewsRecyclerviewFragment newInstance(int type) {
         Bundle bundle = new Bundle();
@@ -224,7 +226,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
             mDataall.clear();//一定要加上否则会报越界异常 不执行代码加载的if判断
             mData.clear();
         }
-        mNewsPresenter.loadNews(mType);
+        mNewsPresenter.loadNews(mType,getActivity());
     }
 
 }
