@@ -1,5 +1,7 @@
 package com.baihui.yangxb.oknews.model;
 
+import android.content.Context;
+
 import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsDetailListener;
 import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsListListener;
 
@@ -8,6 +10,6 @@ import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsListListener;
  */
 
 public interface ToutiaonewsModel {
-    void loadNews(String url, int type, OnLoadToutiaonewsListListener listener);
+    void loadNews(Boolean isRefresh,Context context,String url, int type, OnLoadToutiaonewsListListener listener);//isRefresh 刷新重新写入缓存
     void loadNewsDetail(String url, OnLoadToutiaonewsDetailListener listener);
 }

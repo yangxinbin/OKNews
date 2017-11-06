@@ -7,5 +7,5 @@ import android.content.Context;
  */
 
 public interface ToutiaonewsPresenter {
-    void loadNews(int type, Context context);
+    void loadNews(int type,Context context,boolean isRefresh);//刷新动作加载新闻数据
 }

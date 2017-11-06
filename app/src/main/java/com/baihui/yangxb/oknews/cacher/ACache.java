@@ -15,19 +15,6 @@
  */
 package com.baihui.yangxb.oknews.cacher;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-
-import com.google.gson.JsonArray;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -53,6 +40,17 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+
 /**
  * @author Michael Yang（www.yangfuhai.com） update at 2013.08.07
  */
@@ -62,7 +60,7 @@ public class ACache {
 	private static final int MAX_SIZE = 1000 * 1000 * 50; // 50 mb
 	private static final int MAX_COUNT = Integer.MAX_VALUE; // 不限制存放数据的数量
 	private static Map<String, ACache> mInstanceMap = new HashMap<String, ACache>();
-	private static ACacheManager mCache;
+	private ACacheManager mCache;
 
 	public static ACache get(Context ctx) {
 		return get(ctx, "ACache");
@@ -106,7 +104,7 @@ public class ACache {
 	 * Provides a means to save a cached file before the data are available.
 	 * Since writing about the file is complete, and its close method is called,
 	 * its contents will be registered in the cache. Example of use:
-	 * 
+	 *
 	 * ACache cache = new ACache(this) try { OutputStream stream =
 	 * cache.put("myFileName") stream.write("some bytes".getBytes()); // now
 	 * update cache! stream.close(); } catch(FileNotFoundException e){
@@ -131,13 +129,13 @@ public class ACache {
 	// =======================================
 	/**
 	 * 保存 String数据 到 缓存中
-	 * 
+	 *
 	 * @param key
 	 *            保存的key
 	 * @param value
 	 *            保存的String数据
 	 */
-	public static void put(String key, String value) {
+	public void put(String key, String value) {
 		File file = mCache.newFile(key);
 		BufferedWriter out = null;
 		try {
@@ -160,7 +158,7 @@ public class ACache {
 
 	/**
 	 * 保存 String数据 到 缓存中
-	 * 
+	 *
 	 * @param key
 	 *            保存的key
 	 * @param value
@@ -174,11 +172,11 @@ public class ACache {
 
 	/**
 	 * 读取 String数据
-	 * 
+	 *
 	 * @param key
 	 * @return String 数据
 	 */
-	public static String getAsString(String key) {
+	public String getAsString(String key) {
 		File file = mCache.get(key);
 		if (!file.exists())
 			return null;
@@ -218,7 +216,7 @@ public class ACache {
 	// =======================================
 	/**
 	 * 保存 JSONObject数据 到 缓存中
-	 * 
+	 *
 	 * @param key
 	 *            保存的key
 	 * @param value
@@ -230,7 +228,7 @@ public class ACache {
 
 	/**
 	 * 保存 JSONObject数据 到 缓存中
-	 * 
+	 *
 	 * @param key
 	 *            保存的key
 	 * @param value
@@ -244,7 +242,7 @@ public class ACache {
 
 	/**
 	 * 读取JSONObject数据
-	 * 
+	 *
 	 * @param key
 	 * @return JSONObject数据
 	 */
@@ -264,17 +262,19 @@ public class ACache {
 	// =======================================
 	/**
 	 * 保存 JSONArray数据 到 缓存中
-	 *  @param key
+	 *
+	 * @param key
 	 *            保存的key
 	 * @param value
+	 *            保存的JSONArray数据
 	 */
-	public static void put(String key, JsonArray value) {
+	public void put(String key, JSONArray value) {
 		put(key, value.toString());
 	}
 
 	/**
 	 * 保存 JSONArray数据 到 缓存中
-	 * 
+	 *
 	 * @param key
 	 *            保存的key
 	 * @param value
@@ -288,11 +288,11 @@ public class ACache {
 
 	/**
 	 * 读取JSONArray数据
-	 * 
+	 *
 	 * @param key
 	 * @return JSONArray数据
 	 */
-	public static JSONArray getAsJSONArray(String key) {
+	public JSONArray getAsJSONArray(String key) {
 		String JSONString = getAsString(key);
 		try {
 			JSONArray obj = new JSONArray(JSONString);
@@ -308,7 +308,7 @@ public class ACache {
 	// =======================================
 	/**
 	 * 保存 byte数据 到 缓存中
-	 * 
+	 *
 	 * @param key
 	 *            保存的key
 	 * @param value
@@ -337,7 +337,7 @@ public class ACache {
 
 	/**
 	 * Cache for a stream
-	 * 
+	 *
 	 * @param key
 	 *            the file name.
 	 * @return OutputStream stream for writing data.
@@ -349,7 +349,7 @@ public class ACache {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param key
 	 *            the file name.
 	 * @return (InputStream or null) stream previously saved in cache.
@@ -365,7 +365,7 @@ public class ACache {
 
 	/**
 	 * 保存 byte数据 到 缓存中
-	 * 
+	 *
 	 * @param key
 	 *            保存的key
 	 * @param value
@@ -379,7 +379,7 @@ public class ACache {
 
 	/**
 	 * 获取 byte 数据
-	 * 
+	 *
 	 * @param key
 	 * @return byte 数据
 	 */
@@ -420,7 +420,7 @@ public class ACache {
 	// =======================================
 	/**
 	 * 保存 Serializable数据 到 缓存中
-	 * 
+	 *
 	 * @param key
 	 *            保存的key
 	 * @param value
@@ -432,7 +432,7 @@ public class ACache {
 
 	/**
 	 * 保存 Serializable数据到 缓存中
-	 * 
+	 *
 	 * @param key
 	 *            保存的key
 	 * @param value
@@ -465,7 +465,7 @@ public class ACache {
 
 	/**
 	 * 读取 Serializable数据
-	 * 
+	 *
 	 * @param key
 	 * @return Serializable 数据
 	 */
@@ -506,7 +506,7 @@ public class ACache {
 	// =======================================
 	/**
 	 * 保存 bitmap 到 缓存中
-	 * 
+	 *
 	 * @param key
 	 *            保存的key
 	 * @param value
@@ -518,7 +518,7 @@ public class ACache {
 
 	/**
 	 * 保存 bitmap 到 缓存中
-	 * 
+	 *
 	 * @param key
 	 *            保存的key
 	 * @param value
@@ -532,7 +532,7 @@ public class ACache {
 
 	/**
 	 * 读取 bitmap 数据
-	 * 
+	 *
 	 * @param key
 	 * @return bitmap 数据
 	 */
@@ -548,7 +548,7 @@ public class ACache {
 	// =======================================
 	/**
 	 * 保存 drawable 到 缓存中
-	 * 
+	 *
 	 * @param key
 	 *            保存的key
 	 * @param value
@@ -560,7 +560,7 @@ public class ACache {
 
 	/**
 	 * 保存 drawable 到 缓存中
-	 * 
+	 *
 	 * @param key
 	 *            保存的key
 	 * @param value
@@ -574,7 +574,7 @@ public class ACache {
 
 	/**
 	 * 读取 Drawable 数据
-	 * 
+	 *
 	 * @param key
 	 * @return Drawable 数据
 	 */
@@ -587,7 +587,7 @@ public class ACache {
 
 	/**
 	 * 获取缓存文件
-	 * 
+	 *
 	 * @param key
 	 * @return value 缓存的文件
 	 */
@@ -600,11 +600,11 @@ public class ACache {
 
 	/**
 	 * 移除某个key
-	 * 
+	 *
 	 * @param key
 	 * @return 是否移除成功
 	 */
-	public static boolean remove(String key) {
+	public boolean remove(String key) {
 		return mCache.remove(key);
 	}
 
@@ -714,7 +714,7 @@ public class ACache {
 
 		/**
 		 * 移除旧的文件
-		 * 
+		 *
 		 * @return
 		 */
 		private long removeNext() {
@@ -761,7 +761,7 @@ public class ACache {
 
 		/**
 		 * 判断缓存的String数据是否到期
-		 * 
+		 *
 		 * @param str
 		 * @return true：到期了 false：还没有到期
 		 */
@@ -771,7 +771,7 @@ public class ACache {
 
 		/**
 		 * 判断缓存的byte数据是否到期
-		 * 
+		 *
 		 * @param data
 		 * @return true：到期了 false：还没有到期
 		 */

@@ -47,6 +47,8 @@
     <string name="checknumber">Checknumber</string>
     <string name="getchecknumber">GET NUMBER</string>
 
+    <string name="net_fail">Network connection error!</string>
+
     <!-- select city -->
     <string name="select_city">选择城市</string>
     <string name="hot_city">热门城市</string>

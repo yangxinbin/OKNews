@@ -4,11 +4,13 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -21,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -198,7 +201,8 @@ public class StartActivity extends AppCompatActivity {
                             startActivity(i2);
                             finish();
                         } else {
-                            showToast("登录失败：code=" + e.getErrorCode() + "，错误描述：" + e.getLocalizedMessage());
+                            showErrorMsg(e.getErrorCode());
+                            //showToast("登录失败：code=" + e.getErrorCode() + "，错误描述：" + e.getLocalizedMessage());
                         }
                     }
                 });
@@ -334,6 +338,23 @@ public class StartActivity extends AppCompatActivity {
             }
             mToast.show();
         }
+    }
+
+    public void showErrorMsg(int e) {
+        Snackbar snackbar = null;
+            View view =getWindow().getDecorView();
+            switch (e){
+                case 9016:
+                    snackbar = Snackbar.make(view, getResources().getString(R.string.net_fail), Snackbar.LENGTH_LONG);
+                    break;
+                default:
+                    break;
+            }
+            View snackbarview = snackbar.getView();
+            snackbarview.setBackgroundColor(getResources().getColor(R.color.snackbar));
+            TextView tvSnackbarText = (TextView) snackbarview.findViewById(android.support.design.R.id.snackbar_text);
+            tvSnackbarText.setTextColor(Color.WHITE);
+            snackbar.show();
     }
 
 }

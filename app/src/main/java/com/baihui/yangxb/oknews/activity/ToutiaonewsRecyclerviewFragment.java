@@ -89,7 +89,8 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         adapter.setOnItemnewsClickListener(mOnItemClickListener);
         recycleView.setAdapter(adapter);
         recycleView.addOnScrollListener(mOnScrollListener);
-        onRefresh(smartRefreshWidget);
+        //onRefresh(smartRefreshWidget);
+        mNewsPresenter.loadNews(mType,getActivity(),true);//if is true 从缓存都数据 如果有
         return view;
     }
 
@@ -226,7 +227,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
             mDataall.clear();//一定要加上否则会报越界异常 不执行代码加载的if判断
             mData.clear();
         }
-        mNewsPresenter.loadNews(mType,getActivity());
+        mNewsPresenter.loadNews(mType,getActivity(),false);//刷新缓存重新写入
     }
 
 }

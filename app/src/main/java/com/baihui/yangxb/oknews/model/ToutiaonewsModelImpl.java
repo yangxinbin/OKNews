@@ -2,13 +2,17 @@ package com.baihui.yangxb.oknews.model;
 
 
 
+import android.content.Context;
 import android.util.Log;
 
+import com.baihui.yangxb.oknews.cacher.ACache;
 import com.baihui.yangxb.oknews.entity.ToutiaonewsBean;
 import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsDetailListener;
 import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsListListener;
 import com.baihui.yangxb.oknews.utils.NewsJsonUtils;
 import com.baihui.yangxb.tools.OkHttpUtils;
+
+import org.json.JSONArray;
 
 import java.util.List;
 
@@ -24,11 +28,25 @@ public class ToutiaonewsModelImpl implements ToutiaonewsModel {
      * @param listener
      */
     @Override
-    public void loadNews(String url, final int type, final OnLoadToutiaonewsListListener listener) {
-        Log.v("yxbbb","llllllllllllllllll");
-        OkHttpUtils.ResultCallback<String> loadNewsCallback = new OkHttpUtils.ResultCallback<String>() {
+    public void loadNews(Boolean isRefresh, Context context, String url, final int type, final OnLoadToutiaonewsListListener listener) {
+        final ACache mCache = ACache.get(context);
+        if (isRefresh){//刷新不读取缓存数据
+            String newString = mCache.getAsString(""+type);
+            if (newString != null) {
+                Log.v("yxbbbb", "" + type + "-----re----" + newString);
+                List<ToutiaonewsBean> newsBeanList = NewsJsonUtils.readJsonNewsBeans(newString, "data", type);//data是json字段获得data的值即对象数组
+                listener.onSuccess(newsBeanList);
+                return;
+            }
+        }else {
+            mCache.remove(""+type);//刷新之后缓存也更新过来
+        }
+        final OkHttpUtils.ResultCallback<String> loadNewsCallback = new OkHttpUtils.ResultCallback<String>() {
             @Override
             public void onSuccess(String response) {
+                mCache.put("" + type, response);
+                Log.v("yxbbbb",""+type+"----re-----"+response);
+                Log.v("yxbbb","llllllllrellllllllll");
                 List<ToutiaonewsBean> newsBeanList = NewsJsonUtils.readJsonNewsBeans(response, "data",type);//data是json字段获得data的值即对象数组
                 listener.onSuccess(newsBeanList);
             }

@@ -32,22 +32,15 @@ public class ToutiaonewsPresenterImpl implements ToutiaonewsPresenter,OnLoadTout
         this.toutiaonewsModel = new ToutiaonewsModelImpl();
     }
 
+
     @Override
-    public void loadNews(int type, Context context) {
+    public void loadNews(int type, Context context, boolean isRefresh) {
         String url = getUrl(type);
         //刷新的时候才显示刷新进度条
         //toutiaonewsView.showProgress();
-        ACache mCache = ACache.get(context);
-        JSONArray newJsonArray = mCache.getAsJSONArray(""+type);
-        if (newJsonArray == null) {
-            return;
-        }
-        if (newJsonArray != null){
-            return;
-        }
-        Log.v("yxbbbb",""+type+"---------"+newJsonArray.toString());
-        toutiaonewsModel.loadNews(url, type, this);
+        toutiaonewsModel.loadNews(isRefresh,context,url, type, this);
     }
+
 
     private String getUrl(int type) {
         StringBuffer sburl = new StringBuffer();
