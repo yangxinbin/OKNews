@@ -3,15 +3,21 @@ package com.baihui.yangxb.mainpage.activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.FileProvider;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +27,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.location.BDAbstractLocationListener;
@@ -39,7 +46,9 @@ import com.baihui.yangxb.R;
 import com.baihui.yangxb.oknews.activity.ToutiaonewsFragment;
 import com.baihui.yangxb.weathernews.activity.WeathernewsFragment;
 
-public class MainpageActivity extends AppCompatActivity implements MainpageView {
+import java.io.File;
+
+public class MainpageActivity extends AppCompatActivity implements MainpageView,View.OnClickListener {
 
     @Bind(R.id.nav_view)
     NavigationView navView;
@@ -51,6 +60,16 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
     private MyLocationListener myListener = new MyLocationListener();
     private String addr;
     private TextView locatName;
+    //相册请求码
+    private static final int ALBUM_REQUEST_CODE = 1;
+    //相机请求码
+    private static final int CAMERA_REQUEST_CODE = 2;
+    //剪裁请求码
+    private static final int CROP_REQUEST_CODE = 3;
+
+    //调用照相机返回图片文件
+    private File tempFile;
+    private ImageView mHeader_iv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +79,8 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
         View headerLayout = navView.inflateHeaderView(R.layout.nav_header);
         TextView tName = (TextView) headerLayout.findViewById(R.id.autorName);
         locatName = (TextView) headerLayout.findViewById(R.id.located_city);
+        mHeader_iv = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        mHeader_iv.setOnClickListener(this);
         //TextView tName = (TextView) navView.getHeaderView(0).findViewById(R.id.autorName);
         //TextView tName = (TextView) findViewById(R.id.autorName);
         if (tName != null) {
@@ -177,7 +198,20 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
         toolbar.setTitle(R.string.nav_aboutauthor);
     }
     */
-
+    @Override
+    public void onClick(View view) {
+    switch (view.getId()) {
+        case R.id.profile_image:
+            //getPicFromCamera();
+            getPicFromAlbm();
+            break;
+/*        case R.id.mGoAlbm_btn:
+            getPicFromAlbm();
+            break;*/
+        default:
+            break;
+        }
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -225,4 +259,87 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView 
             mHandler.sendEmptyMessage(0);
         }
     }
+
+    /**
+     * 从相机获取图片
+     */
+    private void getPicFromCamera() {
+        //用于保存调用相机拍照后所生成的文件
+        tempFile = new File(Environment.getExternalStorageDirectory().getPath(), System.currentTimeMillis() + ".jpg");
+        //跳转到调用系统相机
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //判断版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {   //如果在Android7.0以上,使用FileProvider获取Uri
+            intent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            Uri contentUri = FileProvider.getUriForFile(MainpageActivity.this, "com.baihui.yangxb", tempFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
+        } else {    //否则使用Uri.fromFile(file)方法获取Uri
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
+        }
+        startActivityForResult(intent, CAMERA_REQUEST_CODE);
+    }
+
+    /**
+     * 从相册获取图片
+     */
+    private void getPicFromAlbm() {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, ALBUM_REQUEST_CODE);
+    }
+
+    /**
+     * 裁剪图片
+     */
+    private void cropPhoto(Uri uri) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+
+        intent.putExtra("outputX", 300);
+        intent.putExtra("outputY", 300);
+        intent.putExtra("return-data", true);
+
+        startActivityForResult(intent, CROP_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);//一定要加 否则fragment 里面的无效
+        switch (requestCode) {
+            case CAMERA_REQUEST_CODE:   //调用相机后返回
+                if (resultCode == RESULT_OK) {
+                    //用相机返回的照片去调用剪裁也需要对Uri进行处理
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Uri contentUri = FileProvider.getUriForFile(MainpageActivity.this, "com.baihui.yangxb", tempFile);
+                        cropPhoto(contentUri);
+                    } else {
+                        cropPhoto(Uri.fromFile(tempFile));
+                    }
+                }
+                break;
+            case ALBUM_REQUEST_CODE:    //调用相册后返回
+                if (resultCode == RESULT_OK) {
+                    Uri uri = intent.getData();
+                    cropPhoto(uri);
+                }
+                break;
+            case CROP_REQUEST_CODE:     //调用剪裁后返回
+                Bundle bundle = intent.getExtras();
+                if (bundle != null) {
+                    //在这里获得了剪裁后的Bitmap对象，可以用于上传
+                    Bitmap image = bundle.getParcelable("data");
+                    //设置到ImageView上
+                    mHeader_iv.setImageBitmap(image);
+                    //也可以进行一些保存、压缩等操作后上传
+//                    String path = saveImage("crop", image);
+                }
+                break;
+        }
+    }
+
 }
