@@ -1,5 +1,6 @@
 package com.baihui.yangxb.oknews.utils;
 
+import com.baihui.yangxb.oknews.cacher.ACache;
 import com.baihui.yangxb.oknews.entity.ToutiaonewsBean;
 import com.baihui.yangxb.tools.JsonUtils;
 import com.google.gson.JsonArray;
@@ -27,16 +28,16 @@ public class NewsJsonUtils {
      * @param value
      * @return
      */
-    public static List<ToutiaonewsBean> readJsonNewsBeans(String res, String value) {
+    public static List<ToutiaonewsBean> readJsonNewsBeans(String res, String value,int type) {
         List<ToutiaonewsBean> beans = new ArrayList<ToutiaonewsBean>();
         try {
             JsonParser parser = new JsonParser();
             JsonObject jsonObj = parser.parse(res).getAsJsonObject();
             JsonObject jsonObjresult = jsonObj.getAsJsonObject("result");
             JsonArray jsonArray = jsonObjresult.getAsJsonArray(value);
-            for (int i = 0; i <= jsonArray.size(); i++){
-                    ToutiaonewsBean news = JsonUtils.deserialize(jsonObj, ToutiaonewsBean.class);
-                    beans.add(news);//这里会将所有的json对象转换为bean对象
+            for (int i = 0; i <= jsonArray.size()-1; i++){ //防止越界  本来31条现30条 5的倍数 优化加载显示 否则可能会报错
+                ToutiaonewsBean news = JsonUtils.deserialize(jsonObj, ToutiaonewsBean.class);
+                beans.add(news);//这里会将所有的json对象转换为bean对象
             }
         } catch (Exception e) {
         }

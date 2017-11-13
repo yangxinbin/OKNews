@@ -54,6 +54,8 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
     private List<ToutiaonewsBean> mData;
     private LinearLayoutManager mLayoutManager;
     private ToutiaonewsAdapter adapter;
+    private int newSize;
+    private int lastVisibleItem;
 
     public static ToutiaonewsRecyclerviewFragment newInstance(int type) {
         Bundle bundle = new Bundle();
@@ -79,6 +81,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
        //         R.color.colorPrimaryDark, R.color.colorPrimary,
        //         R.color.colorPrimaryDark);
        // swipeRefreshWidget.setOnRefreshListener(this);
+        Log.v("yxb","------onCreateView------");
         smartRefreshWidget.setOnRefreshListener(this);
         //smartRefreshWidget.setRefreshHeader(new MaterialHeader(getActivity()).setShowBezierWave(true));//设置 Header 为 Material风格
         recycleView.setHasFixedSize(true);//固定宽高
@@ -87,9 +90,15 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         recycleView.setItemAnimator(new DefaultItemAnimator());//设置默认动画
         adapter = new ToutiaonewsAdapter(getActivity().getApplicationContext());
         adapter.setOnItemnewsClickListener(mOnItemClickListener);
+        recycleView.removeAllViews();
         recycleView.setAdapter(adapter);
         recycleView.addOnScrollListener(mOnScrollListener);
-        //onRefresh(smartRefreshWidget);
+        if (lastVisibleItem == (newSize - 2)){//-2 多了footview
+            mData.clear();
+            mDataall.clear();//显示最新缓存里面最新消息
+            //onRefresh(smartRefreshWidget);
+            Log.v("yxb","----clear------");//防止加了缓存越界报错
+        }
         mNewsPresenter.loadNews(mType,getActivity(),true);//if is true 从缓存都数据 如果有
         return view;
     }
@@ -114,12 +123,11 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
     };
     private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
 
-        private int lastVisibleItem;
-
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
             lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();//可见的最后一个item
+            Log.v("yxb","------lastVisibleItem--------"+lastVisibleItem);
         }
 
         @Override
@@ -131,22 +139,21 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
                 //加载更多
                 //mNewsPresenter.loadNews(mType);//加载最后报错
                 int count = adapter.getItemCount();
-                Log.v("yxbbbb","--------"+count);
                 int i;
                 for (i = count; i < count + 5; i++) {
+                    if (mDataall !=null && i >= newSize){//到最后
+                        adapter.isFooter(false);
+                        noMoreMsg();
+                        break;
+                    }
                     if (mDataall == null){
                         break;//一开始断网报空指针的情况
                     }
-                    Log.v("yxbbbb",i+"--------"+mDataall.size());
-                    if (i >= (mDataall.size())){//比如一共30条新闻 这个条件当为29时还是可以把30那条新闻加上去的
+                    if (i >= newSize){//比如一共30条新闻 这个条件当为29时还是可以把30那条新闻加上去的
                         noMoreMsg();
                         break;
                     }
                     adapter.addItem(mDataall.get(i));//addItem里面记得要notifyDataSetChanged 否则第一次加载不会显示数据
-                }
-                if (mDataall !=null && i >= (mDataall.size())){//到最后
-                    adapter.isFooter(false);
-                    noMoreMsg();
                 }
             }
         }
@@ -159,21 +166,26 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
 
     @Override
     public void addNews(List<ToutiaonewsBean> newsList) {
-        Log.v("yxbbbb",newsList.size()+"--------");
+        Log.v("yxb","-----addNews------");
+        newSize = newsList.size();
+        Log.v("yxb","------newSize-------"+newSize+"***"+lastVisibleItem);
         if(newsList.size()==0){
             Toast.makeText(getActivity(), "服务器坑爹，只能请求100次", Toast.LENGTH_SHORT).show();
             return;
         }
-        adapter.isShowFooter(true);
+        adapter.isShowFooter(true);//不能屏蔽 滑动监听条件，加载使用
         if (mData == null && mDataall == null) {
             mDataall = new ArrayList<ToutiaonewsBean>();
             mData = new ArrayList<ToutiaonewsBean>();
         }
-        mDataall.addAll(newsList);//一次加载所有  给后面的加载用
-        for (int i= 0 ;i<5;i++){
+            mDataall.addAll(newsList);//一次加载所有  给后面的加载用
+        for (int i = 0; i < 5; i++) {
             mData.add(mDataall.get(i));
         }
-        adapter.setmDate(mData);
+        if ((lastVisibleItem != (newSize - 2))||(lastVisibleItem != (newSize - 1))){
+            Log.v("yxb","-------!=------");
+            adapter.setmDate(mData);//防止加了缓存越界报错
+        }
     }
 
     @Override

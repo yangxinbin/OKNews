@@ -13,6 +13,7 @@ import com.baihui.yangxb.oknews.entity.ToutiaonewsBean;
 import com.squareup.picasso.Picasso;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +34,12 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public void setmDate(List<ToutiaonewsBean> data) {
         this.mData = data;
+        this.notifyDataSetChanged();
+    }
+    public void reMove(){
+        List<ToutiaonewsBean> m = new ArrayList<ToutiaonewsBean>();
+        this.mData = m;
+
         this.notifyDataSetChanged();
     }
 
