@@ -39,13 +39,13 @@ public class MainpagePresenterImpl implements MainpagePresenter {
 
             case R.id.nav_enjoygame:
                 mainpageView.selectEnjoygame();
-                break;
+                break;*/
             case R.id.nav_userhelp:
                 mainpageView.selectUserhelp();
                 break;
             case R.id.nav_aboutauthor:
                 mainpageView.selectAboutauthor();
-                break; */
+                break;
             default:
                 mainpageView.selectWeathernews();
                 break;

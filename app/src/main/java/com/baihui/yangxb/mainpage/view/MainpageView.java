@@ -11,7 +11,7 @@ public interface MainpageView {
     void selectMeipaivideo();
     void selectComicnews();
     void selectBaihuimap();
-    void selectEnjoygame();
+    void selectEnjoygame(); */
     void selectUserhelp();
-    void selectAboutauthor(); */
+    void selectAboutauthor();
 }

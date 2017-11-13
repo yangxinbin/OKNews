@@ -34,6 +34,8 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.baihui.yangxb.aboutauthor.AboutAuthor;
+import com.baihui.yangxb.howtouser.HowToUser;
 import com.baihui.yangxb.mainpage.presenter.MainpagePresenter;
 import com.baihui.yangxb.mainpage.presenter.MainpagePresenterImpl;
 import com.baihui.yangxb.mainpage.view.MainpageView;
@@ -184,20 +186,18 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
     public void selectEnjoygame() {
         getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new EnjoygameFragment()).commit();
         toolbar.setTitle(R.string.nav_enjoygame);
-    }
+    }    */
 
     @Override
     public void selectUserhelp() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new UserhelpFragment()).commit();
-        toolbar.setTitle(R.string.nav_userhelp);
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new AboutAuthor()).commitAllowingStateLoss();
     }
 
     @Override
     public void selectAboutauthor() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new AboutauthorFragment()).commit();
-        toolbar.setTitle(R.string.nav_aboutauthor);
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new HowToUser()).commitAllowingStateLoss();
     }
-    */
+
     @Override
     public void onClick(View view) {
     switch (view.getId()) {
