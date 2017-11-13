@@ -101,7 +101,7 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
         setLocatInNavHeader();
         setupDrawerContent(navView);
         mainpagePresenter = new MainpagePresenterImpl(this);
-        selectWeathernews();
+        selectBaihuinews();
     }
     Handler mHandler = new Handler() {
 
