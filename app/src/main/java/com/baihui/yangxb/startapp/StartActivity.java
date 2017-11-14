@@ -345,6 +345,7 @@ public class StartActivity extends AppCompatActivity {
     public void showErrorMsg(int e) {
         Snackbar snackbar = null;
             View view =getWindow().getDecorView();
+            View snackbarview = null;
             switch (e){
                 case 9016:
                     snackbar = Snackbar.make(view, getResources().getString(R.string.net_fail), Snackbar.LENGTH_LONG);
@@ -355,7 +356,9 @@ public class StartActivity extends AppCompatActivity {
                 default:
                     break;
             }
-            View snackbarview = snackbar.getView();
+            if (snackbar != null){
+                snackbarview = snackbar.getView();
+            }
             snackbarview.setBackgroundColor(getResources().getColor(R.color.snackbar));
             TextView tvSnackbarText = (TextView) snackbarview.findViewById(android.support.design.R.id.snackbar_text);
             tvSnackbarText.setTextColor(Color.WHITE);
