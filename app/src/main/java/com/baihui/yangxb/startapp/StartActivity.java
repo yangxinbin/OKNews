@@ -187,10 +187,10 @@ public class StartActivity extends AppCompatActivity {
                     @Override
                     public void done(User o, BmobException e) {
                         // Log.v("yxbbbb",username+"--------"+password);
-                        isOk = getSharedPreferences("isOk", MODE_PRIVATE);
-                        isOk.edit().putString("isOk", "yes")
-                                .commit();
                         if (e == null) {
+                            isOk = getSharedPreferences("isOk", MODE_PRIVATE);
+                            isOk.edit().putString("isOk", "yes")
+                                    .commit();
                             showToast("登录成功---用户名：" + username);
                             Explode explode = new Explode();
                             explode.setDuration(500);
@@ -201,6 +201,8 @@ public class StartActivity extends AppCompatActivity {
                             startActivity(i2);
                             finish();
                         } else {
+//                            isOk.edit().putString("isOk", "no")
+//                                    .commit();
                             showErrorMsg(e.getErrorCode());
                             //showToast("登录失败：code=" + e.getErrorCode() + "，错误描述：" + e.getLocalizedMessage());
                         }
@@ -346,6 +348,9 @@ public class StartActivity extends AppCompatActivity {
             switch (e){
                 case 9016:
                     snackbar = Snackbar.make(view, getResources().getString(R.string.net_fail), Snackbar.LENGTH_LONG);
+                    break;
+                case 101:
+                    snackbar = Snackbar.make(view, getResources().getString(R.string.name_fail), Snackbar.LENGTH_LONG);
                     break;
                 default:
                     break;

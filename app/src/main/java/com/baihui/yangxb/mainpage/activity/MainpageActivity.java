@@ -85,7 +85,7 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
         mHeader_iv.setOnClickListener(this);
         //TextView tName = (TextView) navView.getHeaderView(0).findViewById(R.id.autorName);
         //TextView tName = (TextView) findViewById(R.id.autorName);
-        if (tName != null) {
+        if (tName != null && BmobUser.getCurrentUser() != null) {
             tName.setText(BmobUser.getCurrentUser().getUsername());//获得当前用户名
         }
         /*start DrawLayout item 选中字体颜色变化*/
@@ -112,6 +112,10 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
                 case 0:
                     //完成主界面更新,拿到数据
                     locatName.setText(addr);
+                    break;
+                case 1:
+                    //完成主界面更新,拿到数据
+                    locatName.setText("定位失败");
                     break;
                 default:
                     break;
@@ -224,7 +228,7 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
     }
     private void exitDialog() {
         // 创建退出对话框
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setIcon(R.drawable.exit);
         // 设置对话框标题
         builder.setTitle("系统提示");
@@ -240,7 +244,6 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
             }
         });
         // 显示对话框
@@ -249,14 +252,25 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
 
     public class MyLocationListener extends BDAbstractLocationListener {
         @Override
-        public void onReceiveLocation(BDLocation location){
+        public void onReceiveLocation(final BDLocation location){
             //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
             //以下只列举部分获取地址相关的结果信息
             //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
             //获取详细地址信息
-            addr = location.getAddrStr();
-            Log.v("yxbbbb","-----Listener-------"+addr);
-            mHandler.sendEmptyMessage(0);
+            new Thread(){
+                @Override
+                public void run() {
+                    super.run();
+                    addr = location.getAddrStr();
+                    Log.v("yxbbbb","-----Listener-------"+addr);
+                    if (addr != null){
+                        mHandler.sendEmptyMessage(0);
+
+                    }else {
+                        mHandler.sendEmptyMessage(1);
+                    }
+                }
+            }.start();
         }
     }
 

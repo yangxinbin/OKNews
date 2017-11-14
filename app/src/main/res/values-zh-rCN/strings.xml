@@ -59,6 +59,7 @@
     <!-- select city -->
 
     <string name="net_fail">网络连接错误!</string>
+    <string name="name_fail">用户名密码错误!</string>
     <string name="about">一个综合类APP，兴趣使然！</string>
     <string name="authotname">作者：杨鑫斌</string>
     <string name="contact_way">QQ:609758690</string>
