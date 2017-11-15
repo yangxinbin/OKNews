@@ -15,6 +15,7 @@
     <color name="secondary_text">#494949</color>
     <color name="snackbar">#07deff</color>
     <color name="weather">#ffffff</color>
+    <color name="blue">#95dafc</color>
 
 
     <!-- select city -->

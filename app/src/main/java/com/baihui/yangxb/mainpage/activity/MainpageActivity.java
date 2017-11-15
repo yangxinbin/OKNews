@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ProviderInfo;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -28,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDAbstractLocationListener;
@@ -35,6 +37,7 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baihui.yangxb.aboutauthor.AboutAuthor;
+import com.baihui.yangxb.authorMessage.Author;
 import com.baihui.yangxb.howtouser.HowToUser;
 import com.baihui.yangxb.mainpage.presenter.MainpagePresenter;
 import com.baihui.yangxb.mainpage.presenter.MainpagePresenterImpl;
@@ -47,6 +50,7 @@ import cn.bmob.v3.BmobUser;
 import com.baihui.yangxb.R;
 import com.baihui.yangxb.oknews.activity.ToutiaonewsFragment;
 import com.baihui.yangxb.weathernews.activity.WeathernewsFragment;
+import com.baihui.yangxb.weathernews.selectcity.activity.SelectCityMainActivity;
 
 import java.io.File;
 
@@ -72,6 +76,9 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
     //调用照相机返回图片文件
     private File tempFile;
     private ImageView mHeader_iv;
+    private LinearLayout linearLayoutAuthor;
+    private Bitmap image;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,12 +88,14 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
         View headerLayout = navView.inflateHeaderView(R.layout.nav_header);
         TextView tName = (TextView) headerLayout.findViewById(R.id.autorName);
         locatName = (TextView) headerLayout.findViewById(R.id.located_city);
+        linearLayoutAuthor = (LinearLayout) headerLayout.findViewById(R.id.author_message);
+        linearLayoutAuthor.setOnClickListener(this);
         mHeader_iv = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        mHeader_iv.setOnClickListener(this);
         //TextView tName = (TextView) navView.getHeaderView(0).findViewById(R.id.autorName);
         //TextView tName = (TextView) findViewById(R.id.autorName);
         if (tName != null && BmobUser.getCurrentUser() != null) {
-            tName.setText(BmobUser.getCurrentUser().getUsername());//获得当前用户名
+            userName = BmobUser.getCurrentUser().getUsername();
+            tName.setText(userName);//获得当前用户名
         }
         /*start DrawLayout item 选中字体颜色变化*/
         Resources resource=getBaseContext().getResources();
@@ -116,6 +125,14 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
                 case 1:
                     //完成主界面更新,拿到数据
                     locatName.setText("定位失败");
+                    break;
+                case 2:
+                    mHeader_iv.setImageBitmap(image);
+                    //也可以进行一些保存、压缩等操作后上传
+//                    String path = saveImage("crop", image);
+
+                    break;
+                case 3:
                     break;
                 default:
                     break;
@@ -205,8 +222,10 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
     @Override
     public void onClick(View view) {
     switch (view.getId()) {
-        case R.id.profile_image:
-            showTypeDialog();
+        case R.id.author_message:
+            Intent intentAuthor = new Intent(MainpageActivity.this, Author.class);
+            startActivityForResult(intentAuthor, 0);//前面不加getActivity().  要不拿不到结果。
+            drawerLayout.closeDrawers();
             break;
         default:
             break;
@@ -342,11 +361,20 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
                 Bundle bundle = intent.getExtras();
                 if (bundle != null) {
                     //在这里获得了剪裁后的Bitmap对象，可以用于上传
-                    Bitmap image = bundle.getParcelable("data");
+                    image = bundle.getParcelable("data");
                     //设置到ImageView上
-                    mHeader_iv.setImageBitmap(image);
-                    //也可以进行一些保存、压缩等操作后上传
-//                    String path = saveImage("crop", image);
+                    new Thread(){
+                        @Override
+                        public void run() {
+                            super.run();
+                            if (userName != null){
+                                mHandler.sendEmptyMessage(2);
+                            }else {
+                                mHandler.sendEmptyMessage(3);
+                            }
+                        }
+                    }.start();
+
                 }
                 break;
         }
