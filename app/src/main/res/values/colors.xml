@@ -28,5 +28,6 @@
     <color name="light_blue">#2793DC</color>
     <color name="deep_blue">#305395</color>
     <color name="orange">#F15A24</color>
+    <color name="green">#2ea67f</color>
     <!-- select city -->
 </resources>

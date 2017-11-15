@@ -50,17 +50,19 @@
     <string name="net_fail">Network connection error!</string>
     <string name="name_fail">Username or password incorrect!</string>
     <!-- select city -->
-    <string name="select_city">选择城市</string>
-    <string name="hot_city">热门城市</string>
-    <string name="located_city">定位城市</string>
-    <string name="hint_search_box">请输入城市名或拼音</string>
-    <string name="nothing_found">没有搜索结果~</string>
-    <string name="startlocat">开始定位</string>
-    <string name="locating">正在定位…</string>
-    <string name="located_failed">定位失败</string>
+    <string name="select_city">Choose city</string>
+    <string name="hot_city">Hot City</string>
+    <string name="located_city">Location city</string>
+    <string name="hint_search_box">Please enter the city name or Pinyin</string>
+    <string name="nothing_found">No search results~</string>
+    <string name="startlocat">Start positioning</string>
+    <string name="locating">Positioning…</string>
+    <string name="located_failed">Seek failed</string>
     <string name="about">一个综合类APP，兴趣使然！</string>
     <string name="authotname">作者：杨鑫斌</string>
     <string name="contact_way">QQ:609758690</string>
     <string name="how_to_user">简单</string>
+    <string name="select_gallery">Gallery selection</string>
+    <string name="select_camera">Camera shooting</string>
     <!-- select city -->
 </resources>

@@ -206,12 +206,8 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
     public void onClick(View view) {
     switch (view.getId()) {
         case R.id.profile_image:
-            //getPicFromCamera();
-            getPicFromAlbm();
+            showTypeDialog();
             break;
-/*        case R.id.mGoAlbm_btn:
-            getPicFromAlbm();
-            break;*/
         default:
             break;
         }
@@ -354,6 +350,29 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
                 }
                 break;
         }
+    }
+    private void showTypeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog dialog = builder.create();
+        View view = View.inflate(this, R.layout.dialog_select_photo, null);
+        TextView tv_select_gallery = (TextView) view.findViewById(R.id.tv_select_gallery);
+        TextView tv_select_camera = (TextView) view.findViewById(R.id.tv_select_camera);
+        tv_select_gallery.setOnClickListener(new View.OnClickListener() {// 在相册中选取
+            @Override
+            public void onClick(View v) {
+                getPicFromAlbm();
+                dialog.dismiss();
+            }
+        });
+        tv_select_camera.setOnClickListener(new View.OnClickListener() {// 调用照相机
+            @Override
+            public void onClick(View v) {
+                getPicFromCamera();
+                dialog.dismiss();
+            }
+        });
+        dialog.setView(view);
+        dialog.show();
     }
 
 }
