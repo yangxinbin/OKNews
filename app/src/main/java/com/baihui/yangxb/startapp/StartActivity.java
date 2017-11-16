@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -86,9 +87,6 @@ public class StartActivity extends AppCompatActivity {
         getSupportActionBar().hide();//隐藏掉整个ActionBar，包括下面的Tabs
         //第一：默认初始化
         Bmob.initialize(this, "0004b86d65ce3ae4ffbbd043bb3ca832");
-        Intent intent = getIntent();
-        uname = intent.getStringExtra("username");
-        etUsername.setText(uname);
         checkListen();
         chectFun();
     }
@@ -201,34 +199,10 @@ public class StartActivity extends AppCompatActivity {
                             startActivity(i2);
                             finish();
                         } else {
-//                            isOk.edit().putString("isOk", "no")
-//                                    .commit();
                             showErrorMsg(e.getErrorCode());
-                            //showToast("登录失败：code=" + e.getErrorCode() + "，错误描述：" + e.getLocalizedMessage());
                         }
                     }
                 });
-               /* bu2.setUsername(username);
-                bu2.setPassword(password);
-                bu2.login(this, new SaveListener() {
-                    @Override
-                    public void onSuccess() {
-                        showToast("登录成功");
-                        Explode explode = new Explode();
-                        explode.setDuration(500);
-                        getWindow().setExitTransition(explode);
-                        getWindow().setEnterTransition(explode);
-                        ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(StartActivity.this);
-                        Intent i2 = new Intent(StartActivity.this, MainpageActivity.class);
-                        startActivity(i2, oc2.toBundle());
-                    }
-
-                    @Override
-                    public void onFailure(int i, String s) {
-                        showToast("登录失败：code="+i+"，错误描述："+s);
-                    }
-                });*/
-
                 break;
             case R.id.fab:
                 getWindow().setExitTransition(null);
@@ -237,9 +211,10 @@ public class StartActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     ActivityOptions options =
                             ActivityOptions.makeSceneTransitionAnimation(this, fab, fab.getTransitionName());
-                    startActivity(new Intent(this, RegisterActivity.class), options.toBundle());
+                    startActivityForResult(new Intent(this, RegisterActivity.class),0, options.toBundle());
                 } else {
-                    startActivity(new Intent(this, RegisterActivity.class));
+                    //startActivity(new Intent(this, RegisterActivity.class));
+                    startActivityForResult(new Intent(this, RegisterActivity.class),0);
                 }
                 break;
             case R.id.mobilelogin:
@@ -363,6 +338,17 @@ public class StartActivity extends AppCompatActivity {
             TextView tvSnackbarText = (TextView) snackbarview.findViewById(android.support.design.R.id.snackbar_text);
             tvSnackbarText.setTextColor(Color.WHITE);
             snackbar.show();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);//
+        switch (requestCode) {
+            case 0:   //调用个人中心后返回
+                if (resultCode == RESULT_OK) {
+                    uname = intent.getStringExtra("username");
+                    etUsername.setText(uname);
+                }
+        }
     }
 
 }

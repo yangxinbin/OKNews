@@ -172,10 +172,10 @@ public class RegisterActivity extends AppCompatActivity {
             public void done(User user, BmobException e) {
                 if (e == null){
                     showToast("注册成功---用户名："+bu.getUsername());
-                    Intent intent = new Intent(RegisterActivity.this,StartActivity.class);
+                    Intent intent = new Intent();
                     intent.putExtra("username",username);
                     intent.putExtra("passwork",password);
-                    startActivity(intent);
+                    setResult(RESULT_OK,intent);
                     animateRevealClose();
                     finish();
                 }else {
