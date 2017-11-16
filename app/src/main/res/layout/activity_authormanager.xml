@@ -17,18 +17,20 @@
         android:background="@color/colorPrimary">
         <ImageView
             android:id="@+id/title_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:src="@mipmap/ic_back"/>
         <TextView
             android:id="@+id/title_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:textColor="@color/white"
             android:text="@string/nav_authormanager"/>
         <TextView
+            android:textStyle="bold"
+            android:textSize="16dp"
             android:id="@+id/title_rightTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

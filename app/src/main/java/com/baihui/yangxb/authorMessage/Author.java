@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,6 +58,7 @@ public class Author extends AppCompatActivity {
     //剪裁请求码
     private static final int CROP_REQUEST_CODE = 3;
     private Bitmap image;
+    private String uName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +67,10 @@ public class Author extends AppCompatActivity {
         ButterKnife.bind(this);
         Intent intent=getIntent();
         Bundle b=intent.getExtras();
-        imageView.setImageBitmap((Bitmap) b.getParcelable("authorimg"));
-        user.setText(b.getCharSequence("authorname","yxb"));
+        image = (Bitmap) b.getParcelable("authorimg");
+        imageView.setImageBitmap(image);
+        uName = (String) b.getCharSequence("authorname","yxb");
+        user.setText(uName);
     }
     Handler mHandler = new Handler() {
 
@@ -192,6 +196,7 @@ public class Author extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
+                finish();
                 break;
             case R.id.title_rightTv:
                 Intent i = new Intent();
@@ -206,6 +211,7 @@ public class Author extends AppCompatActivity {
                 break;
         }
     }
+
     private void showTypeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final AlertDialog dialog = builder.create();

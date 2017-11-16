@@ -216,6 +216,7 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
         case R.id.author_message:
             Intent intentAuthor = new Intent(MainpageActivity.this, Author.class);
             Bundle b = new Bundle();
+            Log.v("yxb","-------image------"+image);
             b.putParcelable("authorimg", image);
             b.putCharSequence("authorname", userName);
             intentAuthor.putExtras(b);
