@@ -35,6 +35,7 @@ import java.io.IOException;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
@@ -70,21 +71,23 @@ public class Author extends AppCompatActivity {
     private static final int CROP_REQUEST_CODE = 3;
     private Bitmap image;
     private User bmobUser;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authormanager);
         ButterKnife.bind(this);
-        Intent intent=getIntent();
-        Bundle b=intent.getExtras();
-        bmobUser = (User) b.getSerializable("bmobuser");
-        getImageFromBmob();
-        user.setText(bmobUser.getUsername());
+        getImageAndNameFromBmob();
     }
-    private void getImageFromBmob() {
-        if (user != null && bmobUser != null && bmobUser.getAvatar() !=null){
-            Log.v("yxb","------user.getAvatar()-----"+bmobUser.getAvatar().toString());
+    private void getImageAndNameFromBmob() {
+        bmobUser = BmobUser.getCurrentUser(User.class);
+        if (bmobUser != null) {
+            userName = bmobUser.getUsername();
+            Log.v("yxb","------userName----Author---"+userName);
+            user.setText(userName);//获得当前用户名
+        }
+        if (bmobUser != null && userName != null && bmobUser.getAvatar() !=null){
             Picasso.with(this).load(bmobUser.getAvatar().getFileUrl()).into(imageView);
         }else {
             //默认图片
@@ -98,6 +101,7 @@ public class Author extends AppCompatActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0:
+                    titleRightTv.setVisibility(View.VISIBLE);
                     imageView.setImageBitmap(image);
                     break;
                 case 1:
@@ -198,8 +202,6 @@ public class Author extends AppCompatActivity {
                             super.run();
                             if (user != null) {
                                 mHandler.sendEmptyMessage(0);
-                                //也可以进行一些保存、压缩等操作后上传
-                                //String path = saveImage("crop", image);
                             } else {
                                 mHandler.sendEmptyMessage(1);
                             }

@@ -66,6 +66,7 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
     private String userName;
     private Bitmap image;
     private User user;
+    private TextView tName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
         setContentView(R.layout.activity_mainpage);
         ButterKnife.bind(this);
         View headerLayout = navView.inflateHeaderView(R.layout.nav_header);
-        TextView tName = (TextView) headerLayout.findViewById(R.id.autorName);
+        tName = (TextView) headerLayout.findViewById(R.id.autorName);
         locatName = (TextView) headerLayout.findViewById(R.id.located_city);
         linearLayoutAuthor = (LinearLayout) headerLayout.findViewById(R.id.author_message);
         linearLayoutAuthor.setOnClickListener(this);
@@ -81,11 +82,6 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
         Resources resource=getBaseContext().getResources();
         image = BitmapFactory.decodeResource(resource, R.drawable.picture);//drawable转为Bitmap
         //传说中的泛形
-        user = BmobUser.getCurrentUser(User.class);
-        if (tName != null && user != null) {
-            userName = BmobUser.getCurrentUser().getUsername();
-            tName.setText(userName);//获得当前用户名
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//版本问题控制 API23以上  兼容高低版本
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)//动态获取SD卡权限 Author.java 存储路径用
                     != PackageManager.PERMISSION_GRANTED) {
@@ -106,12 +102,16 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
         setupDrawerContent(navView);
         mainpagePresenter = new MainpagePresenterImpl(this);
         selectBaihuinews();
-        getImageFromBmob();//绑定用户名
+        getImageAndNameFromBmob();//绑定用户名
     }
 
-    private void getImageFromBmob() {
+    private void getImageAndNameFromBmob() {
+        user = BmobUser.getCurrentUser(User.class);
+        if (tName != null && user != null) {
+            userName = user.getUsername();
+            tName.setText(userName);//获得当前用户名
+        }
         if (user != null && userName != null && user.getAvatar() !=null){
-            Log.v("yxb","------user.getAvatar()-----"+user.getAvatar().toString());
             Picasso.with(this).load(user.getAvatar().getFileUrl()).into(mHeader_iv);
         }else {
             //默认图片
@@ -135,9 +135,6 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
                     break;
                 case 2:
                     mHeader_iv.setImageBitmap(image);
-                    //也可以进行一些保存、压缩等操作后上传
-//                    String path = saveImage("crop", image);
-
                     break;
                 case 3:
                     mHeader_iv.setImageResource(R.drawable.picture);
@@ -225,9 +222,6 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
     switch (view.getId()) {
         case R.id.author_message:
             Intent intentAuthor = new Intent(MainpageActivity.this, Author.class);
-            Bundle b = new Bundle();
-            b.putSerializable("bmobuser", user);
-            intentAuthor.putExtras(b);
             startActivityForResult(intentAuthor, 0);
             drawerLayout.closeDrawers();
             break;
