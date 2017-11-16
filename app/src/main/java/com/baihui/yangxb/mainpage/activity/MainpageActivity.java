@@ -84,10 +84,6 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
         linearLayoutAuthor = (LinearLayout) headerLayout.findViewById(R.id.author_message);
         linearLayoutAuthor.setOnClickListener(this);
         mHeader_iv = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        //默认图片
-        Resources res=getResources();
-        image= BitmapFactory.decodeResource(res, R.drawable.picture);//drawable转为Bitmap
-        mHeader_iv.setImageBitmap(image);
         //TextView tName = (TextView) navView.getHeaderView(0).findViewById(R.id.autorName);
         //TextView tName = (TextView) findViewById(R.id.autorName);
         if (tName != null && BmobUser.getCurrentUser() != null) {
@@ -202,12 +198,12 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
 
     @Override
     public void selectUserhelp() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new AboutAuthor()).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new HowToUser()).commitAllowingStateLoss();
     }
 
     @Override
     public void selectAboutauthor() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new HowToUser()).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, new AboutAuthor()).commitAllowingStateLoss();
     }
 
     @Override
