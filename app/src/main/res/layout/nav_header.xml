@@ -20,7 +20,6 @@
         android:layout_height="72dp"
         android:layout_marginLeft="10dp"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/picture"
         app:border_color="@color/circlerange"
         app:border_width="2dp" />
 
