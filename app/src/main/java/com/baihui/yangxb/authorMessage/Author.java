@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,12 +24,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baihui.yangxb.R;
+import com.baihui.yangxb.startapp.User;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.v3.listener.UploadFileListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Author extends AppCompatActivity {
@@ -58,7 +68,7 @@ public class Author extends AppCompatActivity {
     //剪裁请求码
     private static final int CROP_REQUEST_CODE = 3;
     private Bitmap image;
-    private String uName;
+    private User bmobUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +79,8 @@ public class Author extends AppCompatActivity {
         Bundle b=intent.getExtras();
         image = (Bitmap) b.getParcelable("authorimg");
         imageView.setImageBitmap(image);
-        uName = (String) b.getCharSequence("authorname","yxb");
-        user.setText(uName);
+        bmobUser = (User) b.getSerializable("bmobuser");
+        user.setText(bmobUser.getUsername());
     }
     Handler mHandler = new Handler() {
 
@@ -203,6 +213,7 @@ public class Author extends AppCompatActivity {
                 Bundle b = new Bundle();
                 b.putParcelable("backauthorimg", image);
                 i.putExtras(b);
+                saveImageToBmob();//绑定用户名
                 setResult(RESULT_OK,i);
                 finish();
                 break;
@@ -210,6 +221,45 @@ public class Author extends AppCompatActivity {
                 showTypeDialog();
                 break;
         }
+    }
+
+    private void saveImageToBmob() {
+        // 假设已知头像文件的本地存储路径如下
+        Uri uri = BitMap(image);
+        Log.v("yxb","======picPath========="+uri);
+        String picPath = "storage/emulated/0/Bmobavatar.png";
+        // 创建一个BmobFile对象作为用户头像属性
+        final BmobFile avatarFile = new BmobFile(new File(picPath));
+        avatarFile.uploadblock(new UploadFileListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    // 头像成功上传到Bmob服务器中，这个时候可以从avatarFile对象中getFileUrl得到服务器中头像的存储地址
+                    //String imgString = avatarFile.getFileUrl();//--返回的上传文件的完整地址（带域名）
+                    // 头像上传成功后，可以进行用户注册操作了。
+                    Log.v("yxb","======getUsername========="+bmobUser.getUsername());
+                    bmobUser.setAvatar(avatarFile);
+                    bmobUser.update(bmobUser.getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if(e==null){
+                                showMsg(1);
+                            }else{
+                                showMsg(0);
+                            }
+                        }
+                    });
+                }else {
+                    showMsg(0);
+                }
+            }
+            @Override
+            public void onProgress(Integer value) {
+                // TODO Auto-generated method stub
+                // 返回的上传进度（百分比）
+            }
+        });
+
     }
 
     private void showTypeDialog() {
@@ -234,5 +284,53 @@ public class Author extends AppCompatActivity {
         });
         dialog.setView(view);
         dialog.show();
+    }
+
+    public void showMsg(int e) {
+        Snackbar snackbar = null;
+        View view =getWindow().getDecorView();
+        View snackbarview = null;
+        switch (e){
+            case 0:
+                snackbar = Snackbar.make(view, getResources().getString(R.string.upload_fail), Snackbar.LENGTH_LONG);
+                break;
+            case 1:
+                snackbar = Snackbar.make(view, getResources().getString(R.string.upload_success), Snackbar.LENGTH_LONG);
+                break;
+            case 101:
+                break;
+            default:
+                break;
+        }
+        if (snackbar != null){
+            snackbarview = snackbar.getView();
+        }
+        snackbarview.setBackgroundColor(getResources().getColor(R.color.snackbar));
+        TextView tvSnackbarText = (TextView) snackbarview.findViewById(android.support.design.R.id.snackbar_text);
+        tvSnackbarText.setTextColor(Color.WHITE);
+        snackbar.show();
+    }
+
+    //存放图片的地址，可以改动
+    private Uri BitMap(Bitmap bitmap){
+        File tmpDir=new File(Environment.getExternalStorageDirectory()+"/Bmob");    //保存地址及命名
+        if (!tmpDir.exists()){
+            tmpDir.mkdir(); //生成目录进行保存
+        }
+        File img=new File(tmpDir.getAbsolutePath()+"avatar.png");
+        try {
+            FileOutputStream fos=new FileOutputStream(img);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 85, fos);  //参:压缩的格式，图片质量85，输出流
+            fos.flush();
+            fos.close();
+            Log.v("yxb","-----fromFile-----"+Uri.fromFile(img));
+            return Uri.fromFile(img);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

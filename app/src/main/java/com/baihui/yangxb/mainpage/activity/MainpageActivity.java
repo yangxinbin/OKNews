@@ -1,32 +1,25 @@
 package com.baihui.yangxb.mainpage.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.ProviderInfo;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.FileProvider;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -50,10 +43,10 @@ import cn.bmob.v3.BmobUser;
 
 import com.baihui.yangxb.R;
 import com.baihui.yangxb.oknews.activity.ToutiaonewsFragment;
+import com.baihui.yangxb.oknews.adapter.ToutiaonewsAdapter;
+import com.baihui.yangxb.startapp.User;
 import com.baihui.yangxb.weathernews.activity.WeathernewsFragment;
-import com.baihui.yangxb.weathernews.selectcity.activity.SelectCityMainActivity;
-
-import java.io.File;
+import com.squareup.picasso.Picasso;
 
 public class MainpageActivity extends AppCompatActivity implements MainpageView,View.OnClickListener {
 
@@ -72,6 +65,7 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
     private LinearLayout linearLayoutAuthor;
     private String userName;
     private Bitmap image;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,14 +78,20 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
         linearLayoutAuthor = (LinearLayout) headerLayout.findViewById(R.id.author_message);
         linearLayoutAuthor.setOnClickListener(this);
         mHeader_iv = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        //TextView tName = (TextView) navView.getHeaderView(0).findViewById(R.id.autorName);
-        //TextView tName = (TextView) findViewById(R.id.autorName);
-        if (tName != null && BmobUser.getCurrentUser() != null) {
+        Resources resource=getBaseContext().getResources();
+        image = BitmapFactory.decodeResource(resource, R.drawable.picture);//drawable转为Bitmap
+        //传说中的泛形
+        user = BmobUser.getCurrentUser(User.class);
+        if (tName != null && user != null) {
             userName = BmobUser.getCurrentUser().getUsername();
             tName.setText(userName);//获得当前用户名
         }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)//动态获取SD卡权限 Author.java 存储路径用
+                != PackageManager.PERMISSION_GRANTED) {
+            //申请WRITE_EXTERNAL_STORAGE权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        }
         /*start DrawLayout item 选中字体颜色变化*/
-        Resources resource=getBaseContext().getResources();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//版本问题控制 API23以上
             csl = resource.getColorStateList(R.color.navigation_menu_item_color, null);
         }else {
@@ -104,7 +104,19 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
         setupDrawerContent(navView);
         mainpagePresenter = new MainpagePresenterImpl(this);
         selectBaihuinews();
+        getImageFromBmob();//绑定用户名
     }
+
+    private void getImageFromBmob() {
+        if (user != null && userName != null && user.getAvatar() !=null){
+            Log.v("yxb","------user.getAvatar()-----"+user.getAvatar().toString());
+            Picasso.with(this).load(user.getAvatar().getFileUrl()).into(mHeader_iv);
+        }else {
+            //默认图片
+            mHeader_iv.setImageResource(R.drawable.picture);
+        }
+    }
+
     Handler mHandler = new Handler() {
 
         @Override
@@ -214,9 +226,9 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
             Bundle b = new Bundle();
             Log.v("yxb","-------image------"+image);
             b.putParcelable("authorimg", image);
-            b.putCharSequence("authorname", userName);
+            b.putSerializable("bmobuser", user);
             intentAuthor.putExtras(b);
-            startActivityForResult(intentAuthor, 0);//前面不加getActivity().  要不拿不到结果。
+            startActivityForResult(intentAuthor, 0);
             drawerLayout.closeDrawers();
             break;
         default:
@@ -228,19 +240,23 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK )
         {
-            exitDialog();
+            exitDialog(true);
         }
 
         return false;
     }
-    private void exitDialog() {
+    private void exitDialog(boolean b) {
         // 创建退出对话框
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setIcon(R.drawable.exit);
         // 设置对话框标题
         builder.setTitle("系统提示");
         // 设置对话框消息
-        builder.setMessage("确定要退出吗");
+        if (b){
+            builder.setMessage("确定要退出吗?");
+        }else {
+            builder.setMessage("确定要退出登录吗?");
+        }
         //监听下方button点击事件
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
@@ -272,7 +288,6 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
                     Log.v("yxbbbb","-----Listener-------"+addr);
                     if (addr != null){
                         mHandler.sendEmptyMessage(0);
-
                     }else {
                         mHandler.sendEmptyMessage(1);
                     }

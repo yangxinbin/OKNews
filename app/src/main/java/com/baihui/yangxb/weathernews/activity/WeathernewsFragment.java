@@ -298,19 +298,23 @@ public class WeathernewsFragment extends Fragment implements WeathernewsView {
             SharedPreferences isOk = getActivity().getSharedPreferences("isOk",MODE_PRIVATE);
             isOk.edit().putString("isOk", "no")
                     .commit();
-            exitDialog();
+            exitDialog(false);
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void exitDialog() {
+    private void exitDialog(boolean b) {
         // 创建退出对话框
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setIcon(R.drawable.exit);
         // 设置对话框标题
         builder.setTitle("系统提示");
         // 设置对话框消息
-        builder.setMessage("确定要退出吗");
+        if (b){
+            builder.setMessage("确定要退出吗?");
+        }else {
+            builder.setMessage("确定要退出登录吗?");
+        }
         //监听下方button点击事件
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override

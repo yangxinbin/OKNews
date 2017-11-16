@@ -68,4 +68,6 @@
     <string name="select_camera">拍照</string>
     <string name="select">选择获取图片方式</string>
     <string name="save">保存</string>
+    <string name="upload_fail">上传失败！</string>
+    <string name="upload_success">上传成功!</string>
 </resources>

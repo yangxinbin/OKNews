@@ -69,5 +69,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="select">Select the way to get pictures</string>
     <string name="save">SAVE</string>
+    <string name="upload_fail">Upload failure!</string>
+    <string name="upload_success">Upload successfully!</string>
     <!-- select city -->
 </resources>
