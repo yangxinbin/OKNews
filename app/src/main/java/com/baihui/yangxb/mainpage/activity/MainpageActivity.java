@@ -86,10 +86,12 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
             userName = BmobUser.getCurrentUser().getUsername();
             tName.setText(userName);//获得当前用户名
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)//动态获取SD卡权限 Author.java 存储路径用
-                != PackageManager.PERMISSION_GRANTED) {
-            //申请WRITE_EXTERNAL_STORAGE权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//版本问题控制 API23以上  兼容高低版本
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)//动态获取SD卡权限 Author.java 存储路径用
+                    != PackageManager.PERMISSION_GRANTED) {
+                //申请WRITE_EXTERNAL_STORAGE权限
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+            }
         }
         /*start DrawLayout item 选中字体颜色变化*/
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//版本问题控制 API23以上
@@ -224,8 +226,6 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
         case R.id.author_message:
             Intent intentAuthor = new Intent(MainpageActivity.this, Author.class);
             Bundle b = new Bundle();
-            Log.v("yxb","-------image------"+image);
-            b.putParcelable("authorimg", image);
             b.putSerializable("bmobuser", user);
             intentAuthor.putExtras(b);
             startActivityForResult(intentAuthor, 0);

@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.baihui.yangxb.R;
 import com.baihui.yangxb.startapp.User;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -77,10 +78,18 @@ public class Author extends AppCompatActivity {
         ButterKnife.bind(this);
         Intent intent=getIntent();
         Bundle b=intent.getExtras();
-        image = (Bitmap) b.getParcelable("authorimg");
-        imageView.setImageBitmap(image);
         bmobUser = (User) b.getSerializable("bmobuser");
+        getImageFromBmob();
         user.setText(bmobUser.getUsername());
+    }
+    private void getImageFromBmob() {
+        if (user != null && bmobUser != null && bmobUser.getAvatar() !=null){
+            Log.v("yxb","------user.getAvatar()-----"+bmobUser.getAvatar().toString());
+            Picasso.with(this).load(bmobUser.getAvatar().getFileUrl()).into(imageView);
+        }else {
+            //默认图片
+            imageView.setImageResource(R.drawable.picture);
+        }
     }
     Handler mHandler = new Handler() {
 
