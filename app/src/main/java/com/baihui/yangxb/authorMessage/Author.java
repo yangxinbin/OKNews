@@ -248,12 +248,12 @@ public class Author extends AppCompatActivity {
                     // 头像成功上传到Bmob服务器中，这个时候可以从avatarFile对象中getFileUrl得到服务器中头像的存储地址
                     //String imgString = avatarFile.getFileUrl();//--返回的上传文件的完整地址（带域名）
                     // 头像上传成功后，可以进行用户注册操作了。
-                    Log.v("yxb","======getUsername========="+bmobUser.getUsername());
                     bmobUser.setAvatar(avatarFile);
                     bmobUser.update(bmobUser.getObjectId(), new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
                             if(e==null){
+                                Log.v("yxb","======getUsername========="+bmobUser.getUsername());
                                 showMsg(1);
                             }else{
                                 showMsg(0);

@@ -6,7 +6,8 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/appBarLayout">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing"
@@ -40,23 +41,27 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <ProgressBar
-                android:id="@+id/progress"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/nestedScrollView">
             <WebView
                 android:id="@+id/web_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-        </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:clickable="true"
+        android:layout_marginRight="30dp"
+        android:src="@mipmap/ic_book_list"
+        app:layout_anchor="@+id/nestedScrollView"
+        app:layout_anchorGravity="bottom|right"
+        android:layout_marginBottom="30dp"
+        app:layout_behavior="com.baihui.yangxb.oknews.utils.BehaviorDefault" />
+
 
 </android.support.design.widget.CoordinatorLayout>
 

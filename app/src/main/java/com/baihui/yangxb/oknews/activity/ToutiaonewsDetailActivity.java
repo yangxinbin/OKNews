@@ -2,12 +2,15 @@ package com.baihui.yangxb.oknews.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.baihui.yangxb.R;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsDetailPresenter;
@@ -33,10 +36,11 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     CollapsingToolbarLayout collapsing;
     @Bind(R.id.web_view)
     WebView webView;
-    @Bind(R.id.progress)
-    ProgressBar progress;
-    private SwipeBackLayout mSwipeBackLayout;
-    private String newsurl,newsimg;
+    @Bind(R.id.appBarLayout)
+    AppBarLayout appBarLayout;
+    @Bind(R.id.floatingActionButton)
+    FloatingActionButton floatingActionButton;
+    private String newsurl, newsimg;
     private ToutiaonewsDetailPresenter toutiaonewsDetailPresenter;
 
     @Override
@@ -45,22 +49,44 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
         setContentView(R.layout.activity_zhihunews_detail);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("新闻详情");
-        toolbar.setTitleTextColor(Color.WHITE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initView();
+        newsurl = (String) getIntent().getSerializableExtra("newsurl");
+        toutiaonewsDetailPresenter = new ToutiaonewsDetailPresenterImpl(getApplication(), this);
+        toutiaonewsDetailPresenter.loadNewsDetail(newsurl);
+
+    }
+
+    private void initView() {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
         });
-        mSwipeBackLayout = getSwipeBackLayout();
-        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);//滑动返回方向
-        newsurl = (String) getIntent().getSerializableExtra("newsurl");
         newsimg = (String) getIntent().getSerializableExtra("newsimg");
         Picasso.with(this).load(newsimg).into(ivWebImg);//图片就直接加载了
-        toutiaonewsDetailPresenter = new ToutiaonewsDetailPresenterImpl(getApplication(), this);
-        toutiaonewsDetailPresenter.loadNewsDetail(newsurl);
+        collapsing.setTitle("");
+        collapsing.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
+        collapsing.setExpandedTitleColor(getResources().getColor(R.color.white));
+        collapsing.setExpandedTitleColor(Color.TRANSPARENT);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if(Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()){
+                    toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+                    collapsing.setTitle("新闻详情");
+                }else{
+                    collapsing.setTitle("");
+                }
+            }
+        });
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //接入分享接口
+            }
+        });
 
     }
 
@@ -78,13 +104,12 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
 
     @Override
     public void showProgress() {
-        progress.setVisibility(View.VISIBLE);
 
     }
 
     @Override
     public void hideProgress() {
-        progress.setVisibility(View.GONE);
+
 
     }
 
