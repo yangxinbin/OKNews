@@ -311,6 +311,8 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
                     }.start();
                 }
                 break;
+            default:
+                break;
         }
     }
 }

@@ -194,7 +194,7 @@ public class StartActivity extends AppCompatActivity {
                             explode.setDuration(500);
                             getWindow().setExitTransition(explode);
                             getWindow().setEnterTransition(explode);
-                            ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(StartActivity.this);//去掉动画效果不好
+                          //  ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(StartActivity.this);//去掉动画效果不好
                             Intent i2 = new Intent(StartActivity.this, MainpageActivity.class);
                             startActivity(i2);
                             finish();
@@ -300,6 +300,8 @@ public class StartActivity extends AppCompatActivity {
                 fab.setLayoutParams(params_cv); //使layout更新
                 phoneCv.setVisibility(View.GONE);
                 break;
+            default:
+                break;
         }
     }
 
@@ -332,12 +334,12 @@ public class StartActivity extends AppCompatActivity {
                     break;
             }
             if (snackbar != null){
-                snackbarview = snackbar.getView();
-            }
+            snackbarview = snackbar.getView();
             snackbarview.setBackgroundColor(getResources().getColor(R.color.snackbar));
             TextView tvSnackbarText = (TextView) snackbarview.findViewById(android.support.design.R.id.snackbar_text);
             tvSnackbarText.setTextColor(Color.WHITE);
             snackbar.show();
+            }
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent intent) {
@@ -348,6 +350,9 @@ public class StartActivity extends AppCompatActivity {
                     uname = intent.getStringExtra("username");
                     etUsername.setText(uname);
                 }
+                break;
+            default:
+                break;
         }
     }
 
