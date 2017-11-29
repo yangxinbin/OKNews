@@ -1,20 +1,15 @@
 package com.baihui.yangxb.oknews.presenter;
 
 
-
 import android.content.Context;
-import android.util.Log;
 
 import com.baihui.yangxb.oknews.activity.ToutiaonewsFragment;
-import com.baihui.yangxb.oknews.cacher.ACache;
 import com.baihui.yangxb.oknews.entity.ToutiaonewsBean;
 import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsListListener;
 import com.baihui.yangxb.oknews.model.ToutiaonewsModel;
 import com.baihui.yangxb.oknews.model.ToutiaonewsModelImpl;
-import com.baihui.yangxb.oknews.utils.Urls;
 import com.baihui.yangxb.oknews.view.ToutiaonewsView;
-
-import org.json.JSONArray;
+import com.baihui.yangxb.tools.Urls;
 
 import java.util.List;
 
