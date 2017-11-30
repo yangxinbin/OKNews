@@ -24,7 +24,7 @@
     <color name="common_bg">#FAFAFA</color>
     <color name="content_bg">#F3F3F3</color>
     <color name="gray_deep">#5c5c5c</color>
-    <color name="alpha_gray">#CC646464</color>
+    <color name="alpha_gray">#cc838383</color>
     <color name="theme_gray">#646464</color>
     <color name="light_blue">#2793DC</color>
     <color name="deep_blue">#305395</color>

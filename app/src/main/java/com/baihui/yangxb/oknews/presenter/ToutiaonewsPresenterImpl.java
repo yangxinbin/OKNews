@@ -4,7 +4,9 @@ package com.baihui.yangxb.oknews.presenter;
 import android.content.Context;
 
 import com.baihui.yangxb.oknews.activity.ToutiaonewsFragment;
+import com.baihui.yangxb.oknews.entity.ToutiaoLoopnewsBean;
 import com.baihui.yangxb.oknews.entity.ToutiaonewsBean;
+import com.baihui.yangxb.oknews.listener.OnLoadToutiaoLoopnewsListListener;
 import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsListListener;
 import com.baihui.yangxb.oknews.model.ToutiaonewsModel;
 import com.baihui.yangxb.oknews.model.ToutiaonewsModelImpl;
@@ -17,7 +19,7 @@ import java.util.List;
  * Created by Administrator on 2016/11/29 0029.
  */
 
-public class ToutiaonewsPresenterImpl implements ToutiaonewsPresenter,OnLoadToutiaonewsListListener {
+public class ToutiaonewsPresenterImpl implements ToutiaonewsPresenter,OnLoadToutiaonewsListListener, OnLoadToutiaoLoopnewsListListener {
 
     private ToutiaonewsView toutiaonewsView;
     private ToutiaonewsModel toutiaonewsModel;
@@ -33,7 +35,9 @@ public class ToutiaonewsPresenterImpl implements ToutiaonewsPresenter,OnLoadTout
         String url = getUrl(type);
         //刷新的时候才显示刷新进度条
         //toutiaonewsView.showProgress();
+        String loopUrl = Urls.LOOPURL;
         toutiaonewsModel.loadNews(isRefresh,context,url, type, this);
+        toutiaonewsModel.loadLoopNews(isRefresh,context,loopUrl,type,this);
     }
 
 
@@ -80,13 +84,24 @@ public class ToutiaonewsPresenterImpl implements ToutiaonewsPresenter,OnLoadTout
 
     @Override
     public void onSuccess(List<ToutiaonewsBean> list) {
-
         toutiaonewsView.hideProgress();
         toutiaonewsView.addNews(list);
     }
 
     @Override
     public void onFailure(String msg, Exception e) {
+        toutiaonewsView.hideProgress();
+        toutiaonewsView.showLoadFailMsg();
+    }
+
+    @Override
+    public void onLoopNewSuccess(List<ToutiaoLoopnewsBean> list) {
+        toutiaonewsView.hideProgress();
+        toutiaonewsView.addLoopNews(list);
+    }
+
+    @Override
+    public void onLoopNewFailure(String msg, Exception e) {
         toutiaonewsView.hideProgress();
         toutiaonewsView.showLoadFailMsg();
     }

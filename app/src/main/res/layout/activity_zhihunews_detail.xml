@@ -5,9 +5,9 @@
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/appBarLayout">
+        android:layout_height="wrap_content">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing"
@@ -39,14 +39,15 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/nestedScrollView">
-            <WebView
-                android:id="@+id/web_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <WebView
+            android:id="@+id/web_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
@@ -54,12 +55,12 @@
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_gravity="bottom|center_horizontal"
-        android:clickable="true"
+        android:layout_marginBottom="30dp"
         android:layout_marginRight="30dp"
+        android:clickable="true"
         android:src="@mipmap/share"
         app:layout_anchor="@+id/nestedScrollView"
         app:layout_anchorGravity="bottom|right"
-        android:layout_marginBottom="30dp"
         app:layout_behavior="com.baihui.yangxb.oknews.utils.BehaviorDefault" />
 
 

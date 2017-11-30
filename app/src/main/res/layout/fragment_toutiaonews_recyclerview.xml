@@ -8,19 +8,11 @@
     app:srlPrimaryColor="@color/colorPrimary"
     app:srlAccentColor="@android:color/white"
     app:srlEnableLoadmore="false">
-<!--    <pl.droidsonroids.gif.GifImageView
-        android:layout_width="match_parent"
-        android:layout_height="73dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/lastnew"/>  -->
     <com.scwang.smartrefresh.header.PhoenixHeader
         android:layout_width="match_parent"
         android:layout_height="80dp" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
-
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 </com.scwang.smartrefresh.layout.SmartRefreshLayout>

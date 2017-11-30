@@ -6,7 +6,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.baihui.yangxb.oknews.cacher.ACache;
+import com.baihui.yangxb.oknews.entity.ToutiaoLoopnewsBean;
 import com.baihui.yangxb.oknews.entity.ToutiaonewsBean;
+import com.baihui.yangxb.oknews.listener.OnLoadToutiaoLoopnewsListListener;
 import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsDetailListener;
 import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsListListener;
 import com.baihui.yangxb.oknews.utils.NewsJsonUtils;
@@ -61,12 +63,44 @@ public class ToutiaonewsModelImpl implements ToutiaonewsModel {
     }
 
     @Override
-    public void loadNewsDetail(String url, OnLoadToutiaonewsDetailListener listener) {
-        listener.onSuccess(url);//判断网络加载URL
+    public void loadLoopNews(final Boolean isRefresh, Context context, String url, final int type, final OnLoadToutiaoLoopnewsListListener listener) {
+        if (type == 0){
+            final ACache mCache = ACache.get(context);
+            if (isRefresh){//刷新不读取缓存数据
+                String newString = mCache.getAsString("loop"+type);
+                if (newString != null) {
+                    Log.v("yxb","-------read-------");
+                    List<ToutiaoLoopnewsBean> newsBeanList1 = NewsJsonUtils.readJsonLoopNewsBeans(newString, "list");//data是json字段获得data的值即对象数组
+                    listener.onLoopNewSuccess(newsBeanList1);
+                    return;
+                }
+            }else {
+                mCache.remove(""+type);//刷新之后缓存也更新过来
+            }
+            final OkHttpUtils.ResultCallback<String> loadNewsCallback = new OkHttpUtils.ResultCallback<String>() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.v("yxb","-------Refresh-------");
+                    if (isRefresh) {
+                        mCache.put("loop" + type, response);
+                    }
+                    List<ToutiaoLoopnewsBean> newsBeanList = NewsJsonUtils.readJsonLoopNewsBeans(response, "list");//data是json字段获得data的值即对象数组
+                    listener.onLoopNewSuccess(newsBeanList);
+                }
 
+                @Override
+                public void onFailure(Exception e) {
+                    listener.onLoopNewFailure("load Loopnews list failure.", e);
+                }
+            };
+            OkHttpUtils.get(url, loadNewsCallback);
+        }
     }
 
-
+    @Override
+    public void loadNewsDetail(String url, OnLoadToutiaonewsDetailListener listener) {
+        listener.onSuccess(url);//判断网络加载URL
+    }
     /**
      * 获取ID
      * @param type
