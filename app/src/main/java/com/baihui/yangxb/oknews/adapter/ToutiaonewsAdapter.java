@@ -26,7 +26,10 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<ToutiaonewsBean> mData;
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
+    public static final int TYPE_HEADER = 2;
     private boolean mShowFooter = true;
+    private boolean mShowHeader = true;
+    private View mHeaderView;
 
     public Boolean isFooter(Boolean isfooter) {
         return this.mShowFooter = isfooter;
@@ -41,6 +44,10 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.mData = m;
 
         this.notifyDataSetChanged();
+    }
+
+    public void setHeaderView(View headerView) {//add header
+        mHeaderView = headerView;
     }
 
     /**
@@ -58,10 +65,13 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public int getItemViewType(int position) {
         // 最后一个item设置为footerView
+        if (position == 0) {
+            return TYPE_HEADER;//add header
+        }
         if (!mShowFooter) {
             return TYPE_ITEM;
         }
-        if (position + 1 == getItemCount()) {
+        if (position + 1 == getItemCount() || mHeaderView == null) {
             return TYPE_FOOTER;
         } else {
             return TYPE_ITEM;
@@ -70,6 +80,9 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (mHeaderView != null && viewType == TYPE_HEADER) {//add header
+            return new ItemViewHolder(mHeaderView);
+        }
         if (viewType == TYPE_ITEM) {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_news, parent, false);
@@ -86,32 +99,38 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if(getItemViewType(position) == TYPE_HEADER) return;//add header
+        final int pos = getRealPosition(holder);
         if (holder instanceof ItemViewHolder) {
-
-            ToutiaonewsBean news = mData.get(position);
+            ToutiaonewsBean news = mData.get(pos);//add header
             if (news == null) {
                 return;
             }
             if (((ItemViewHolder) holder) != null && ((ItemViewHolder) holder).mTitle != null) {
-                ((ItemViewHolder) holder).mTitle.setText(news.getResult().getData().get(position).getTitle());
-                ((ItemViewHolder) holder).mnew_from.setText("来自："+news.getResult().getData().get(position).getAuthor_name());
-                ((ItemViewHolder) holder).mnew_time.setText("时间："+news.getResult().getData().get(position).getDate());
-                if (news.getResult().getData().get(position).getThumbnail_pic_s().isEmpty()) {
+                ((ItemViewHolder) holder).mTitle.setText(news.getResult().getData().get(pos).getTitle());
+                ((ItemViewHolder) holder).mnew_from.setText("来自："+news.getResult().getData().get(pos).getAuthor_name());
+                ((ItemViewHolder) holder).mnew_time.setText("时间："+news.getResult().getData().get(pos).getDate());
+                if (news.getResult().getData().get(pos).getThumbnail_pic_s().isEmpty()) {
                     ((ItemViewHolder) holder).mNewsImg.setImageResource(R.drawable.defaultimage);
                 } else {
-                    Picasso.with(context).load(news.getResult().getData().get(position).getThumbnail_pic_s()).into(((ItemViewHolder) holder).mNewsImg);
+                    Picasso.with(context).load(news.getResult().getData().get(pos).getThumbnail_pic_s()).into(((ItemViewHolder) holder).mNewsImg);
                 }
             }
         }
     }
-
+    private int getRealPosition(RecyclerView.ViewHolder holder) {
+        int position = holder.getLayoutPosition();
+        return mHeaderView == null ? position : position - 1;
+    }
     @Override
     public int getItemCount() {
-        int begin = mShowFooter ? 1 : 0;
+        int isFooter = mShowFooter ? 1 : 0;
+        int isHeader = mShowHeader ? 1 : 0;
+
         if (mData == null) {
-            return begin;
+            return isFooter + isHeader;
         }
-        return mData.size() + begin;
+        return mData.size() + isFooter + isHeader;
     }
 
     public void isShowFooter(boolean showFooter) {
@@ -121,6 +140,14 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public boolean isShowFooter() {
         return this.mShowFooter;
     }
+
+    public void isShowHeader(boolean showHeader) {
+        this.mShowHeader = showHeader;
+    }
+
+/*    public boolean isShowHeader() {
+        return this.mShowHeader;
+    }*/
 
     public class FooterViewHolder extends RecyclerView.ViewHolder {
 
@@ -151,6 +178,8 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         public ItemViewHolder(View v) {
             super(v);
+            if(itemView == mHeaderView)
+                return;
             mTitle = (TextView) v.findViewById(R.id.item_news_title);
             mNewsImg = (ImageView) v.findViewById(R.id.item_news_img);
             mnew_from = (TextView) v.findViewById(R.id.new_from);

@@ -61,5 +61,6 @@ dependencies {
     compile 'cn.bmob.android:http-legacy:1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.youth.banner:banner:1.4.8'
     testCompile 'junit:junit:4.12'
 }

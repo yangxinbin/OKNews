@@ -16,22 +16,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baihui.yangxb.R;
 import com.baihui.yangxb.oknews.adapter.ToutiaonewsAdapter;
-import com.baihui.yangxb.oknews.entity.LoopBean;
 import com.baihui.yangxb.oknews.entity.ToutiaoLoopnewsBean;
 import com.baihui.yangxb.oknews.entity.ToutiaonewsBean;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsPresenter;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsPresenterImpl;
+import com.baihui.yangxb.oknews.utils.GlideImageLoader;
 import com.baihui.yangxb.oknews.view.ToutiaonewsView;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +52,9 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
     private ToutiaonewsAdapter adapter;
     private int newSize;
     private int lastVisibleItem;
+    Banner mBanner;
+    private List<String> loopUrl;
+    private List<String> loopTitles;
 
     public static ToutiaonewsRecyclerviewFragment newInstance(int type) {
         Bundle bundle = new Bundle();
@@ -83,6 +85,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         adapter = new ToutiaonewsAdapter(getActivity().getApplicationContext());
         adapter.setOnItemnewsClickListener(mOnItemClickListener);
         recycleView.removeAllViews();
+        initHeader();
         recycleView.setAdapter(adapter);
         recycleView.addOnScrollListener(mOnScrollListener);
         if (lastVisibleItem == (newSize - 2)) {//-2 多了footview
@@ -92,6 +95,20 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         }
         mNewsPresenter.loadNews(mType, getActivity(), true);//if is true 从缓存都数据 如果有
         return view;
+    }
+
+    private void initHeader() {
+        Log.v("yxb", "----initHeader------");
+        //渲染header布局
+        View header = LayoutInflater.from(getActivity()).inflate(R.layout.header, null);
+        mBanner = (Banner) header.findViewById(R.id.banner);
+        //设置banner的高度为手机屏幕的四分之一
+        mBanner.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 400));
+        //设置headerview
+        if (mType != 0) {
+            adapter.isShowHeader(false);
+        }
+        adapter.setHeaderView(mBanner);
     }
 
     private ToutiaonewsAdapter.OnItemnewsClickListener mOnItemClickListener = new ToutiaonewsAdapter.OnItemnewsClickListener() {
@@ -181,8 +198,25 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
 
     @Override
     public void addLoopNews(List<ToutiaoLoopnewsBean> loopnewsList) {
+        adapter.isShowHeader(true);
+        loopUrl = new ArrayList<String>();
+        loopTitles = new ArrayList<String>();
         // 轮播
-
+        for (int i = 0; i < loopnewsList.size(); i++){
+            loopUrl.add(i,loopnewsList.get(i).getResult().getList().get(i).getFirstImg());
+            Log.v("yxbbb","-------loopurl---"+loopnewsList.get(i).getResult().getList().get(i).getFirstImg());
+            loopTitles.add(i,loopnewsList.get(i).getResult().getList().get(i).getTitle());
+        }
+        if (mType == 0){
+            Log.v("yxb","------------"+loopUrl);
+            mBanner.setImages(loopUrl)
+                    .setBannerTitles(loopTitles)
+                    .setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE)
+                    .setImageLoader(new GlideImageLoader())
+                    .start();
+        }else {
+            adapter.isShowHeader(false);
+        }
     }
 
     @Override
