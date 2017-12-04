@@ -2,6 +2,7 @@ package com.baihui.yangxb.oknews.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +32,9 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private boolean mShowHeader = true;
     private View mHeaderView;
 
-    public Boolean isFooter(Boolean isfooter) {
+/*    public Boolean isFooter(Boolean isfooter) {
         return this.mShowFooter = isfooter;
-    }
+    }*/
 
     public void setmDate(List<ToutiaonewsBean> data) {
         this.mData = data;
@@ -65,11 +66,11 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public int getItemViewType(int position) {
         // 最后一个item设置为footerView
+        if (!mShowFooter && !mShowHeader) {
+            return TYPE_ITEM;
+        }
         if (position == 0) {
             return TYPE_HEADER;//add header
-        }
-        if (!mShowFooter) {
-            return TYPE_ITEM;
         }
         if (position + 1 == getItemCount() || mHeaderView == null) {
             return TYPE_FOOTER;
@@ -101,6 +102,8 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(getItemViewType(position) == TYPE_HEADER) return;//add header
         final int pos = getRealPosition(holder);
+        Log.v("yxb", "----pos------"+pos);
+
         if (holder instanceof ItemViewHolder) {
             ToutiaonewsBean news = mData.get(pos);//add header
             if (news == null) {
@@ -178,7 +181,7 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         public ItemViewHolder(View v) {
             super(v);
-            if(itemView == mHeaderView)
+            if(v == mHeaderView)
                 return;
             mTitle = (TextView) v.findViewById(R.id.item_news_title);
             mNewsImg = (ImageView) v.findViewById(R.id.item_news_img);

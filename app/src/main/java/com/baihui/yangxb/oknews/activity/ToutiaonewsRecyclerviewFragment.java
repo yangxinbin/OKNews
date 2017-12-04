@@ -106,7 +106,9 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         mBanner.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 400));
         //设置headerview
         if (mType != 0) {
-            adapter.isShowHeader(false);
+            Log.v("yxb", "----mType------"+mType);
+            mBanner.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
+            //adapter.isShowHeader(false);
         }
         adapter.setHeaderView(mBanner);
     }
@@ -114,6 +116,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
     private ToutiaonewsAdapter.OnItemnewsClickListener mOnItemClickListener = new ToutiaonewsAdapter.OnItemnewsClickListener() {
         @Override
         public void onItemClick(View view, int position) {
+            position = position - 1; //配对headerView
             if (mData.size() <= 0) {
                 return;
             }
@@ -150,7 +153,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
                 int i;
                 for (i = count; i < count + 5; i++) {
                     if (mDataall != null && i >= newSize) {//到最后
-                        adapter.isFooter(false);
+                        adapter.isShowFooter(false);
                         noMoreMsg();
                         break;
                     }
@@ -198,7 +201,6 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
 
     @Override
     public void addLoopNews(List<ToutiaoLoopnewsBean> loopnewsList) {
-        adapter.isShowHeader(true);
         loopUrl = new ArrayList<String>();
         loopTitles = new ArrayList<String>();
         // 轮播
@@ -208,6 +210,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
             loopTitles.add(i,loopnewsList.get(i).getResult().getList().get(i).getTitle());
         }
         if (mType == 0){
+            //adapter.isShowHeader(true);
             Log.v("yxb","------------"+loopUrl);
             mBanner.setImages(loopUrl)
                     .setBannerTitles(loopTitles)
@@ -215,7 +218,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
                     .setImageLoader(new GlideImageLoader())
                     .start();
         }else {
-            adapter.isShowHeader(false);
+            //adapter.isShowHeader(false);
         }
     }
 
