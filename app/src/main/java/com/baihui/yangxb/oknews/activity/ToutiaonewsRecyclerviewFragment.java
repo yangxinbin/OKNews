@@ -31,6 +31,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ToutiaonewsRecyclerviewFragment extends Fragment implements ToutiaonewsView, OnRefreshListener {
+public class ToutiaonewsRecyclerviewFragment extends Fragment implements ToutiaonewsView, OnRefreshListener,OnBannerClickListener {
 
     @Bind(R.id.recycle_view)
     RecyclerView recycleView;
@@ -53,8 +54,9 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
     private int newSize;
     private int lastVisibleItem;
     Banner mBanner;
-    private List<String> loopUrl;
+    private List<String> loopUrlImg;
     private List<String> loopTitles;
+    private List<String> loopUrl;
 
     public static ToutiaonewsRecyclerviewFragment newInstance(int type) {
         Bundle bundle = new Bundle();
@@ -108,7 +110,6 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         if (mType != 0) {
             Log.v("yxb", "----mType------"+mType);
             mBanner.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
-            //adapter.isShowHeader(false);
         }
         adapter.setHeaderView(mBanner);
     }
@@ -138,7 +139,6 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
             lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();//可见的最后一个item
-            Log.v("yxb", "------lastVisibleItem--------" + lastVisibleItem);
         }
 
         @Override
@@ -201,21 +201,24 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
 
     @Override
     public void addLoopNews(List<ToutiaoLoopnewsBean> loopnewsList) {
-        loopUrl = new ArrayList<String>();
+        loopUrlImg = new ArrayList<String>();
         loopTitles = new ArrayList<String>();
+        loopUrl = new ArrayList<String>();
         // 轮播
         for (int i = 0; i < loopnewsList.size(); i++){
-            loopUrl.add(i,loopnewsList.get(i).getResult().getList().get(i).getFirstImg());
+            loopUrlImg.add(i,loopnewsList.get(i).getResult().getList().get(i).getFirstImg());
             Log.v("yxbbb","-------loopurl---"+loopnewsList.get(i).getResult().getList().get(i).getFirstImg());
             loopTitles.add(i,loopnewsList.get(i).getResult().getList().get(i).getTitle());
+            loopUrl.add(i,loopnewsList.get(i).getResult().getList().get(i).getUrl());
         }
         if (mType == 0){
             //adapter.isShowHeader(true);
-            Log.v("yxb","------------"+loopUrl);
-            mBanner.setImages(loopUrl)
+            Log.v("yxb","------------"+loopUrlImg);
+            mBanner.setImages(loopUrlImg)
                     .setBannerTitles(loopTitles)
                     .setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE)
                     .setImageLoader(new GlideImageLoader())
+                    .setOnBannerClickListener(this)
                     .start();
         }else {
             //adapter.isShowHeader(false);
@@ -250,14 +253,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
             snackbarview.setBackgroundColor(getResources().getColor(R.color.snackbar));
             TextView tvSnackbarText = (TextView) snackbarview.findViewById(android.support.design.R.id.snackbar_text);
             tvSnackbarText.setTextColor(Color.WHITE);
-//            snackbar.setAction("click", new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    snackbar.dismiss();
-//                }
-//            });
             snackbar.show();
-            //adapter.isShowFooter(false);//关闭加载更多... 字符串
         }
     }
 
@@ -276,4 +272,17 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         mNewsPresenter.loadNews(mType, getActivity(), false);//刷新缓存重新写入
     }
 
+    @Override
+    public void OnBannerClick(int position) {
+        position = position - 1;
+        if (mData.size() <= 0) {
+            return;
+        }
+        String newsurl = loopUrl.get(position);
+        String newsimg = loopUrlImg.get(position);
+        Intent intent = new Intent(getActivity(), ToutiaonewsDetailActivity.class);
+        intent.putExtra("newsurl", newsurl);//传输内容
+        intent.putExtra("newsimg", newsimg);//传输图片
+        getActivity().startActivity(intent);
+    }
 }

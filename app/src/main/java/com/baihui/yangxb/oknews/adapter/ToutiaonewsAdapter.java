@@ -157,7 +157,6 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public FooterViewHolder(View view) {
             super(view);
         }
-
     }
 
     public ToutiaonewsBean getItem(int position) {

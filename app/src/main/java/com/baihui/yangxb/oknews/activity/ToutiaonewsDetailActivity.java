@@ -8,7 +8,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -99,7 +101,8 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     @Override
     public void showNewsDetialContent(String url) {
         webView.loadUrl(newsurl);
-
+        webView.setWebViewClient(new WebViewClient());
+        webView.setWebChromeClient(new WebChromeClient());
     }
 
     @Override
