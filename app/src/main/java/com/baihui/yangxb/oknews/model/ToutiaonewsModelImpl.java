@@ -75,7 +75,7 @@ public class ToutiaonewsModelImpl implements ToutiaonewsModel {
                     return;
                 }
             }else {
-                mCache.remove(""+type);//刷新之后缓存也更新过来
+                mCache.remove("loop"+type);//刷新之后缓存也更新过来
             }
             final OkHttpUtils.ResultCallback<String> loadNewsCallback = new OkHttpUtils.ResultCallback<String>() {
                 @Override
