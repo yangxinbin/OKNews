@@ -26,6 +26,6 @@ public class Urls {
     public static final String WEATHER_CITYNAME = "?cityname=";
     public static final String WEATHER_END = "&dtype=&key=3198ddb3e2701c280f50612cf02a01d7";
 
-    public static final String LOOPURL = "http://v.juhe.cn/weixin/query?pno=1&ps=4&dtype=&key=fb37341f8c48b4b1a5038cad2fa1516e";
+    public static final String LOOPURL = "http://v.juhe.cn/weixin/query?pno=1&ps=5&dtype=&key=fb37341f8c48b4b1a5038cad2fa1516e";//5个轮播动画
 
 }

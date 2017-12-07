@@ -72,7 +72,7 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (position == 0) {
             return TYPE_HEADER;//add header
         }
-        if (position + 1 == getItemCount() || mHeaderView == null) {
+        if ((position + 1 == getItemCount() || mHeaderView == null) && isShowFooter()) { //加载到最后不显示footter
             return TYPE_FOOTER;
         } else {
             return TYPE_ITEM;
@@ -103,7 +103,6 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if(getItemViewType(position) == TYPE_HEADER) return;//add header
         final int pos = getRealPosition(holder);
         Log.v("yxb", "----pos------"+pos);
-
         if (holder instanceof ItemViewHolder) {
             ToutiaonewsBean news = mData.get(pos);//add header
             if (news == null) {
@@ -133,6 +132,7 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (mData == null) {
             return isFooter + isHeader;
         }
+        Log.v("yxbbbb","-------getItemCount-------"+mData.size()+"=="+isFooter+"=="+isHeader);
         return mData.size() + isFooter + isHeader;
     }
 
