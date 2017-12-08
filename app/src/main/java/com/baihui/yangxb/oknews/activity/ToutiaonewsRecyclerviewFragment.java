@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -102,7 +103,9 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         View header = LayoutInflater.from(getActivity()).inflate(R.layout.header, null);
         mBanner = (Banner) header.findViewById(R.id.banner);
         //设置banner的高度为手机屏幕的四分之一
-        mBanner.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 400));
+        //mBanner.setLayoutParams(new Banner.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 800));
+        mBanner.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (getActivity().getResources().getDisplayMetrics().heightPixels) / 3));
+        Log.v("yxbb","=============="+(getActivity().getResources().getDisplayMetrics().heightPixels) / 3);
         //设置headerview
         if (mType != 0) {
             mBanner.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));//除top隐藏headerview
