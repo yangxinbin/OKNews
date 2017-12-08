@@ -78,7 +78,6 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_toutiaonews_recyclerview, null);
         ButterKnife.bind(this, view);
-        Log.v("yxb", "------onCreateView------");
         smartRefreshWidget.setOnRefreshListener(this);
         recycleView.setHasFixedSize(true);//固定宽高
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -93,14 +92,12 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         if (lastVisibleItem == (newSize - 2)) {//-2 多了footview
             mData.clear();
             mDataall.clear();//显示最新缓存里面最新消息
-            Log.v("yxb", "----clear------");//防止加了缓存越界报错
         }
         mNewsPresenter.loadNews(mType, getActivity(), true);//if is true 从缓存都数据 如果有
         return view;
     }
 
     private void initHeader() {
-        Log.v("yxb", "----initHeader------");
         //渲染header布局
         View header = LayoutInflater.from(getActivity()).inflate(R.layout.header, null);
         mBanner = (Banner) header.findViewById(R.id.banner);
@@ -108,8 +105,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         mBanner.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 400));
         //设置headerview
         if (mType != 0) {
-            Log.v("yxb", "----mType------"+mType);
-            mBanner.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
+            mBanner.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));//除top隐藏headerview
         }
         adapter.setHeaderView(mBanner);
     }
@@ -177,9 +173,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
 
     @Override
     public void addNews(List<ToutiaonewsBean> newsList) {
-        Log.v("yxb", "-----addNews------");
         newSize = newsList.size();
-        Log.v("yxb", "------newSize-------" + newSize + "***" + lastVisibleItem);
         if (newsList.size() == 0) {
             Toast.makeText(getActivity(), "服务器坑爹，只能请求100次", Toast.LENGTH_SHORT).show();
             return;
@@ -194,7 +188,6 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
             mData.add(mDataall.get(i));
         }
         if ((lastVisibleItem != (newSize - 2)) || (lastVisibleItem != (newSize - 1))) {
-            Log.v("yxb", "-------!=------");
             adapter.setmDate(mData);//防止加了缓存越界报错
         }
     }
@@ -207,13 +200,10 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         // 轮播
         for (int i = 0; i < loopnewsList.size(); i++){
             loopUrlImg.add(i,loopnewsList.get(i).getResult().getList().get(i).getFirstImg());
-            Log.v("yxbbb","-------loopurl---"+loopnewsList.get(i).getResult().getList().get(i).getFirstImg());
             loopTitles.add(i,loopnewsList.get(i).getResult().getList().get(i).getTitle());
             loopUrl.add(i,loopnewsList.get(i).getResult().getList().get(i).getUrl());
         }
         if (mType == 0){
-            //adapter.isShowHeader(true);
-            Log.v("yxb","------------"+loopUrlImg);
             mBanner.setImages(loopUrlImg)
                     .setBannerTitles(loopTitles)
                     .setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE)

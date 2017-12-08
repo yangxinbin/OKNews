@@ -35,7 +35,6 @@ public class ToutiaonewsModelImpl implements ToutiaonewsModel {
         if (isRefresh){//刷新不读取缓存数据
             String newString = mCache.getAsString(""+type);
             if (newString != null) {
-                Log.v("yxb","-------read-------");
                 List<ToutiaonewsBean> newsBeanList1 = NewsJsonUtils.readJsonNewsBeans(newString, "data", type);//data是json字段获得data的值即对象数组
                 listener.onSuccess(newsBeanList1);
                 return;
@@ -46,7 +45,6 @@ public class ToutiaonewsModelImpl implements ToutiaonewsModel {
         final OkHttpUtils.ResultCallback<String> loadNewsCallback = new OkHttpUtils.ResultCallback<String>() {
             @Override
             public void onSuccess(String response) {
-                Log.v("yxb","-------Refresh-------");
                 if (isRefresh) {
                     mCache.put("" + type, response);
                 }
@@ -69,7 +67,6 @@ public class ToutiaonewsModelImpl implements ToutiaonewsModel {
             if (isRefresh){//刷新不读取缓存数据
                 String newString = mCache.getAsString("loop"+type);
                 if (newString != null) {
-                    Log.v("yxb","-------read-------");
                     List<ToutiaoLoopnewsBean> newsBeanList1 = NewsJsonUtils.readJsonLoopNewsBeans(newString, "list");//data是json字段获得data的值即对象数组
                     listener.onLoopNewSuccess(newsBeanList1);
                     return;
@@ -80,7 +77,6 @@ public class ToutiaonewsModelImpl implements ToutiaonewsModel {
             final OkHttpUtils.ResultCallback<String> loadNewsCallback = new OkHttpUtils.ResultCallback<String>() {
                 @Override
                 public void onSuccess(String response) {
-                    Log.v("yxb","-------Refresh-------");
                     if (isRefresh) {
                         mCache.put("loop" + type, response);
                     }

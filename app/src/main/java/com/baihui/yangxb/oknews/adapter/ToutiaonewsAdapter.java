@@ -43,7 +43,6 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void reMove(){
         List<ToutiaonewsBean> m = new ArrayList<ToutiaonewsBean>();
         this.mData = m;
-
         this.notifyDataSetChanged();
     }
 
@@ -102,7 +101,6 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(getItemViewType(position) == TYPE_HEADER) return;//add header
         final int pos = getRealPosition(holder);
-        Log.v("yxb", "----pos------"+pos);
         if (holder instanceof ItemViewHolder) {
             ToutiaonewsBean news = mData.get(pos);//add header
             if (news == null) {
@@ -132,7 +130,6 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (mData == null) {
             return isFooter + isHeader;
         }
-        Log.v("yxbbbb","-------getItemCount-------"+mData.size()+"=="+isFooter+"=="+isHeader);
         return mData.size() + isFooter + isHeader;
     }
 
