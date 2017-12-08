@@ -104,7 +104,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         mBanner = (Banner) header.findViewById(R.id.banner);
         //设置banner的高度为手机屏幕的四分之一
         //mBanner.setLayoutParams(new Banner.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 800));
-        mBanner.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (getActivity().getResources().getDisplayMetrics().heightPixels) / 3));
+        mBanner.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (getActivity().getResources().getDisplayMetrics().heightPixels) / 3 - 30));
         Log.v("yxbb","=============="+(getActivity().getResources().getDisplayMetrics().heightPixels) / 3);
         //设置headerview
         if (mType != 0) {
