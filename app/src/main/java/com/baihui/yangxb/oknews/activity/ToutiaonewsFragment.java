@@ -127,7 +127,7 @@ public class ToutiaonewsFragment extends Fragment {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intentAuthor = new Intent(getActivity(), Author.class);
-            startActivityForResult(intentAuthor, 0);
+            getActivity().startActivityForResult(intentAuthor, 0);
             return true;
         }else if (id == R.id.action_exit){
             BmobUser.logOut();   //清除缓存用户对象
