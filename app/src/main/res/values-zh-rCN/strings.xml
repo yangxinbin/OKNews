@@ -43,6 +43,7 @@
     <string name="finish">完成</string>
     <string name="register">注册</string>
     <string name="mobilelogin">手机号码一键登录</string>
+    <string name="welcome">欢迎使用</string>
     <string name="phonenumber">手机号码</string>
     <string name="checknumber">验证码</string>
     <string name="getchecknumber">获取验证码</string>

@@ -43,6 +43,7 @@
     <string name="finish">FINISH</string>
     <string name="register">REGISTER</string>
     <string name="mobilelogin">MOBILE  LOGIN</string>
+    <string name="welcome">WELCOME</string>
     <string name="phonenumber">Phonenumber</string>
     <string name="checknumber">Checknumber</string>
     <string name="getchecknumber">GET NUMBER</string>

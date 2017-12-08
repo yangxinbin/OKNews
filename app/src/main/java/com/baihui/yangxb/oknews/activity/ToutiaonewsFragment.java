@@ -2,6 +2,7 @@ package com.baihui.yangxb.oknews.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.baihui.yangxb.R;
+import com.baihui.yangxb.authorMessage.Author;
+import com.baihui.yangxb.mainpage.activity.MainpageActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,6 +126,8 @@ public class ToutiaonewsFragment extends Fragment {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intentAuthor = new Intent(getActivity(), Author.class);
+            startActivityForResult(intentAuthor, 0);
             return true;
         }else if (id == R.id.action_exit){
             BmobUser.logOut();   //清除缓存用户对象
