@@ -172,17 +172,6 @@
 -keep class com.google.gson.** { *; }
 -keep class com.google.gson.stream.** { *; }
 
-#mob
--keep class android.net.http.SslError
--keep class android.webkit.**{*;}
--keep class cn.sharesdk.**{*;}
--keep class com.sina.**{*;}
--keep class m.framework.**{*;}
--keep class **.R$* {*;}
--keep class **.R{*;}
--dontwarn cn.sharesdk.**
--dontwarn **.R$*
-
 #butterknife
 -keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
@@ -199,8 +188,8 @@
 ######引用的其他Module可以直接在app的这个混淆文件里配置
 
 # 如果使用了Gson之类的工具要使被它解析的JavaBean类即实体类不被混淆。
--keep class com.matrix.app.entity.json.** { *; }
--keep class com.matrix.appsdk.network.model.** { *; }
+-keep class com.baihui.yangxb.oknews.entity.** { *; }
+-keep class com.baihui.yangxb.weathernews.entity.** { *; }
 
 #####混淆保护自己项目的部分代码以及引用的第三方jar包library#######
 #如果在当前的application module或者依赖的library module中使用了第三方的库，并不需要显式添加规则
@@ -210,14 +199,7 @@
 -keep class com.nineoldandroids.** { *; }
 -keep interface com.nineoldandroids.** { *; }
 -dontwarn com.nineoldandroids.**
-# 下拉刷新
--keep class in.srain.cube.** { *; }
--keep interface in.srain.cube.** { *; }
--dontwarn in.srain.cube.**
-# observablescrollview：tab fragment
--keep class com.github.ksoichiro.** { *; }
--keep interface com.github.ksoichiro.** { *; }
--dontwarn com.github.ksoichiro.**
+
 
 -ignorewarnings
 
