@@ -51,6 +51,7 @@
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
+        android:visibility="gone"
         android:id="@+id/floatingActionButton"
         android:layout_width="55dp"
         android:layout_height="55dp"
@@ -58,10 +59,11 @@
         android:layout_marginBottom="30dp"
         android:layout_marginRight="30dp"
         android:clickable="true"
-        android:src="@mipmap/share"
-        app:layout_anchor="@+id/nestedScrollView"
+        android:src="@mipmap/share"/>
+  <!--      app:layout_anchor="@+id/nestedScrollView"
         app:layout_anchorGravity="bottom|right"
-        app:layout_behavior="com.baihui.yangxb.oknews.utils.BehaviorDefault" />
+        app:layout_behavior="com.baihui.yangxb.oknews.utils.BehaviorDefault"   -->
+
 
 
 </android.support.design.widget.CoordinatorLayout>
