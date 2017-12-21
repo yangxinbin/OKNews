@@ -178,7 +178,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
     public void addNews(List<ToutiaonewsBean> newsList) {
         newSize = newsList.size();
         if (newsList.size() == 0) {
-            Toast.makeText(getActivity(), "服务器坑爹，只能请求100次", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "注意休息，明天再来阅读吧！", Toast.LENGTH_SHORT).show();
             return;
         }
         adapter.isShowFooter(true);//不能屏蔽 滑动监听条件，加载使用
