@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Baihui</string>
+    <string name="app_name">百汇</string>
     <string name="title_activity_news_detail">BaihuinewsDetailActivity</string>
     <string name="title_activity_meipai_detail">MeipaivideoDetailActivity</string>
     <string name="drawer_open">Open</string>
