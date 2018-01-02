@@ -63,4 +63,5 @@ dependencies {
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.youth.banner:banner:1.4.8'
     testCompile 'junit:junit:4.12'
+    compile project(':grav')
 }

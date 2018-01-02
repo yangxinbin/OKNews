@@ -48,7 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_bubbleregister);
         ButterKnife.bind(this);
         Bmob.initialize(this, "0004b86d65ce3ae4ffbbd043bb3ca832");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -171,7 +171,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void done(User user, BmobException e) {
                 if (e == null){
-                    showToast("注册成功---用户名："+bu.getUsername());
+                    showToast("用户名："+bu.getUsername()+" 注册成功!");
                     Intent intent = new Intent();
                     intent.putExtra("username",username);
                     intent.putExtra("passwork",password);
@@ -196,5 +196,10 @@ public class RegisterActivity extends AppCompatActivity {
             }
             mToast.show();
         }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
     }
 }

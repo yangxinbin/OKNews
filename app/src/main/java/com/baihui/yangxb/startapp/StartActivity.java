@@ -84,7 +84,7 @@ public class StartActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         cv.setVisibility(View.VISIBLE);
         phoneCv.setVisibility(View.GONE);
-        getSupportActionBar().hide();//隐藏掉整个ActionBar，包括下面的Tabs
+        //getSupportActionBar().hide();//隐藏掉整个ActionBar，包括下面的Tabs
         //第一：默认初始化
         Bmob.initialize(this, "0004b86d65ce3ae4ffbbd043bb3ca832");
         checkListen();
@@ -355,5 +355,9 @@ public class StartActivity extends AppCompatActivity {
                 break;
         }
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+    }
 }

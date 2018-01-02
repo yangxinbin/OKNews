@@ -315,4 +315,9 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
                 break;
         }
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+    }
 }

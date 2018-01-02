@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:background="@drawable/bubble_background"
+              android:orientation="vertical">
+
+  <TextView
+      android:layout_marginTop="80dp"
+      android:text="@string/login"
+      android:textSize="25sp"
+      android:textStyle="bold"
+      android:textColor="#cfffffff"
+      android:layout_centerHorizontal="true"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+  <LinearLayout
+      android:id="@+id/login"
+      android:layout_centerInParent="true"
+      android:orientation="vertical"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:background="#34ffffff"
+        android:layout_width="300dp"
+        android:layout_height="50dp">
+
+      <EditText
+          android:id="@+id/et_username"
+          android:hint="@string/Username"
+          android:layout_margin="10dp"
+          android:background="@android:color/transparent"
+          android:layout_width="match_parent"
+          android:textColor="#fff"
+          android:textColorHint="#a8ffffff"
+          android:inputType="textPersonName"
+          android:layout_height="wrap_content" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_marginTop="20dp"
+        android:background="#34ffffff"
+        android:layout_width="300dp"
+        android:layout_height="50dp">
+      <EditText
+          android:id="@+id/et_password"
+          android:hint="@string/Password"
+          android:inputType="textPassword"
+          android:layout_margin="10dp"
+          android:background="@android:color/transparent"
+          android:layout_width="match_parent"
+          android:textColorHint="#a8ffffff"
+          android:textColor="#fff"
+          android:layout_height="wrap_content" />
+    </FrameLayout>
+
+  </LinearLayout>
+  <LinearLayout
+      android:layout_marginTop="10dp"
+      android:layout_marginLeft="12dp"
+      android:layout_below="@id/login"
+      android:layout_width="match_parent"
+      android:layout_height="30dp"
+      android:orientation="horizontal">
+    <CheckBox
+        android:theme="@style/My_CheckBox"
+        android:layout_marginLeft="50dp"
+        android:id="@+id/checkBox_password"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:text="记住密码" />
+
+    <CheckBox
+        android:theme="@style/My_CheckBox"
+        android:id="@+id/checkBox_login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/white"
+        android:text="自动登录" />
+  </LinearLayout>
+
+  <FrameLayout
+      android:id="@+id/loginLayout"
+      android:layout_below="@id/login"
+      android:layout_centerHorizontal="true"
+      android:layout_width="300dp"
+      android:layout_marginTop="50dp"
+      android:background="@drawable/login_background"
+      android:layout_height="50dp" >
+
+    <TextView
+        android:textSize="18dp"
+        android:layout_gravity="center"
+        android:text="@string/go"
+        android:textColor="#c3ffffff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+  </FrameLayout>
+
+  <FrameLayout
+      android:id="@+id/registerLayout"
+      android:layout_below="@id/loginLayout"
+      android:layout_centerHorizontal="true"
+      android:layout_width="300dp"
+      android:layout_marginTop="20dp"
+      android:background="@drawable/login_background"
+      android:layout_height="50dp" >
+
+    <TextView
+        android:textSize="18dp"
+        android:layout_gravity="center"
+        android:text="@string/register"
+        android:textColor="#c3ffffff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+  </FrameLayout>
+  <LinearLayout
+      android:layout_below="@id/registerLayout"
+      android:layout_marginTop="1dp"
+      android:layout_width="match_parent"
+      android:gravity="center"
+      android:orientation="vertical"
+      android:layout_height="match_parent">
+    <TextView
+        android:layout_gravity="center_horizontal"
+        android:textColor="#fff"
+        android:layout_marginLeft="2dp"
+        android:textSize="18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/forgot_your_password"
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/mobilelogin"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/mobilelogin"
+        />
+  </LinearLayout>
+
+  <com.github.glomadrian.grav.GravView
+      android:id="@+id/grav"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_centerInParent="true"
+      app:colorGenerator="com.github.glomadrian.grav.generator.paint.ArrayColorGenerator"
+      app:array_colors="@array/bubble"
+      app:pointGenerator="com.github.glomadrian.grav.generator.point.RegularPointGenerator"
+      app:regular_cell_size="300"
+      app:regular_variance="200"
+      app:gravGenerator="com.github.glomadrian.grav.generator.grav.BallGenerator"
+      app:ball_from_size="10dp"
+      app:ball_to_size="20dp"
+      app:animationGenerators="@array/BubbleAnimations"
+      app:side_to_side_min_duration="10000"
+      app:side_to_side_max_duration="10000"
+      app:side_to_side_direction="leftToRight"
+      app:shake_direction="vertical"
+      app:shake_min_duration="10000"
+      app:shake_max_duration="20000"
+      app:shake_variance="500dp"
+      />
+
+
+</RelativeLayout>
