@@ -205,7 +205,7 @@ public class BubbleStartActivity extends AppCompatActivity {
                             isOk = getSharedPreferences("isOk", MODE_PRIVATE);
                             isOk.edit().putString("isOk", "yes")
                                     .commit();
-                            showToast("用户名：" + username+" 登录成功!");
+                            showToast("登录成功");
                             Explode explode = new Explode();
                             explode.setDuration(500);
                             getWindow().setExitTransition(explode);

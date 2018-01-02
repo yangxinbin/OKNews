@@ -171,7 +171,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void done(User user, BmobException e) {
                 if (e == null){
-                    showToast("用户名："+bu.getUsername()+" 注册成功!");
+                    showToast("注册成功");
                     Intent intent = new Intent();
                     intent.putExtra("username",username);
                     intent.putExtra("passwork",password);

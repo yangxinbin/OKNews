@@ -44,7 +44,7 @@ import cn.bmob.v3.listener.SaveListener;
 
 public class StartActivity extends AppCompatActivity {
 
-    @Bind(R.id.et_username)
+/*    @Bind(R.id.et_username)
     EditText etUsername;
     @Bind(R.id.et_password)
     EditText etPassword;
@@ -75,23 +75,23 @@ public class StartActivity extends AppCompatActivity {
     private String uname;
     private String phoneNum;
     private String phoneCode;
-    private SharedPreferences isOk;
+    private SharedPreferences isOk; */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.startapp_main);
-        ButterKnife.bind(this);
+        /*ButterKnife.bind(this);
         cv.setVisibility(View.VISIBLE);
         phoneCv.setVisibility(View.GONE);
         //getSupportActionBar().hide();//隐藏掉整个ActionBar，包括下面的Tabs
         //第一：默认初始化
         Bmob.initialize(this, "0004b86d65ce3ae4ffbbd043bb3ca832");
         checkListen();
-        chectFun();
+        chectFun(); */
     }
 
-    private void chectFun() {
+/*    private void chectFun() {
         //从配置文件中取用户名密码的键值对
         //若第一运行，则取出的键值对为所设置的默认值
         SharedPreferences settings = getSharedPreferences("Re_password",MODE_PRIVATE);
@@ -360,4 +360,6 @@ public class StartActivity extends AppCompatActivity {
         super.onDestroy();
         ButterKnife.unbind(this);
     }
+
+    */
 }
