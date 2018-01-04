@@ -21,9 +21,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- SD卡读取权限，用户写入离线定位数据 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+
     <!-- 文件读写权限 -->
-
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -48,25 +47,17 @@
             android:label="@string/select_city"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
-
-
         <activity
             android:name=".startapp.BubbleStartActivity"
             android:allowBackup="true"
             android:supportsRtl="true"
             android:theme="@style/StartAppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".startapp.StartActivity"
             android:allowBackup="true"
             android:supportsRtl="true"
-            android:theme="@style/StartAppTheme">
-        </activity>
+            android:theme="@style/StartAppTheme"></activity>
         <activity
             android:name=".startapp.RegisterActivity"
             android:theme="@style/Translucent" />
@@ -81,7 +72,17 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <activity android:name=".authorMessage.Author"></activity>
+        <activity android:name=".authorMessage.Author" />
+        <activity android:name=".startpage.StartPage"
+            android:allowBackup="true"
+            android:supportsRtl="true"
+            android:theme="@style/StartAppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
