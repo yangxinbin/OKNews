@@ -8,7 +8,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -19,6 +21,9 @@ import com.baihui.yangxb.oknews.presenter.ToutiaonewsDetailPresenter;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsDetailPresenterImpl;
 import com.baihui.yangxb.oknews.view.ToutiaonewsDetailView;
 import com.squareup.picasso.Picasso;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -36,14 +41,15 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     Toolbar toolbar;
     @Bind(R.id.collapsing)
     CollapsingToolbarLayout collapsing;
-    @Bind(R.id.web_view)
-    WebView webView;
+//    @Bind(R.id.web_view)
+//    WebView webView;
     @Bind(R.id.appBarLayout)
     AppBarLayout appBarLayout;
     @Bind(R.id.floatingActionButton)
     FloatingActionButton floatingActionButton;
     private String newsurl, newsimg;
     private ToutiaonewsDetailPresenter toutiaonewsDetailPresenter;
+   // private WebSettings mSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +62,25 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
         newsurl = (String) getIntent().getSerializableExtra("newsurl");
         toutiaonewsDetailPresenter = new ToutiaonewsDetailPresenterImpl(getApplication(), this);
         toutiaonewsDetailPresenter.loadNewsDetail(newsurl);
-
+//        urlToString();
     }
+
+/*    private void urlToString() {
+        mSetting = webView.getSettings();
+        mSetting.setJavaScriptEnabled(true);
+        webView.addJavascriptInterface(new InJavaScriptLocalObj(), "java_obj");
+
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                Toast.makeText(ToutiaonewsDetailActivity.this, "onPageFinished", Toast.LENGTH_SHORT).show();
+                view.loadUrl("javascript:window.java_obj.getSource(document.documentElement.outerHTML);void(0)");
+                super.onPageFinished(view, url);
+            }
+
+
+        });
+    }*/
 
     private void initView() {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -100,9 +123,9 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
 
     @Override
     public void showNewsDetialContent(String url) {
-        webView.loadUrl(newsurl);
+/*        webView.loadUrl(newsurl);
         webView.setWebViewClient(new WebViewClient());
-        webView.setWebChromeClient(new WebChromeClient());
+        webView.setWebChromeClient(new WebChromeClient());*/
     }
 
     @Override
@@ -112,8 +135,25 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
 
     @Override
     public void hideProgress() {
-
-
     }
+
+/*    //自己定义的类
+    public final class InJavaScriptLocalObj {
+        //一定也要加上这个注解,否则没有用
+        @JavascriptInterface
+        public void getSource(String html) {
+            //取出HTML中P标签的文本内容,利用正则表达式匹配.
+            Pattern pattern=Pattern.compile("<p class=\"section txt\">(.*?)</p>");
+            Matcher matcher = pattern.matcher(html);
+            StringBuffer sb=new StringBuffer();
+            while (matcher.find())
+            {
+                sb.append(matcher.group(2));
+            }
+            //mHtmlText = sb.toString();
+            Log.v("yxb", sb.toString());
+            Toast.makeText(ToutiaonewsDetailActivity.this,sb.toString(), Toast.LENGTH_LONG).show();
+        }
+    }*/
 
 }
