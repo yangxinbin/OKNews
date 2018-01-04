@@ -46,6 +46,7 @@ dependencies {
         exclude group: 'com.google.code.gson', module: 'gson'
     }
     compile files('libs/BaiduLBS_Android.jar')
+    compile files('libs/nineoldandroids-2.4.0.jar')
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:design:24.2.1'

@@ -46,9 +46,9 @@ public class BubbleStartActivity extends AppCompatActivity {
     @Bind(R.id.checkBox_login)
     CheckBox checkBoxLogin;
     @Bind(R.id.loginLayout)
-    FrameLayout loginLayout;
+    RippleView loginLayout;
     @Bind(R.id.registerLayout)
-    FrameLayout registerLayout;
+    RippleView registerLayout;
     @Bind(R.id.mobilelogin)
     TextView mobilelogin;
     @Bind(R.id.grav)

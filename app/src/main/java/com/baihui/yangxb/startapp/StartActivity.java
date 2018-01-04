@@ -19,6 +19,7 @@ import android.text.TextUtils;
 import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;

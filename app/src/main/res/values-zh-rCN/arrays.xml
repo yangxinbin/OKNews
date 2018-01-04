@@ -121,4 +121,9 @@
     <item>95</item>
     <item>30</item>
   </integer-array>
+  <declare-styleable name="RippleView">
+    <attr name="rippleColor" format="color" />
+    <attr name="alphaFactor" format="float" />
+    <attr name="hover" format="boolean" />
+  </declare-styleable>
 </resources>
