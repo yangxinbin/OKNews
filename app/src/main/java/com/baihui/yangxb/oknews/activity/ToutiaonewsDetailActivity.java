@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -17,9 +16,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.baihui.yangxb.R;
+import com.baihui.yangxb.oknews.entity.DetailNews;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsDetailPresenter;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsDetailPresenterImpl;
 import com.baihui.yangxb.oknews.view.ToutiaonewsDetailView;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.regex.Matcher;
@@ -122,7 +123,8 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     }
 
     @Override
-    public void showNewsDetialContent(String url) {
+    public void showNewsDetialContent(DetailNews detailnews) {
+
 /*        webView.loadUrl(newsurl);
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());*/

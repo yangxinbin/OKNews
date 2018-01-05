@@ -44,14 +44,14 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <WebView
+        <include layout="@layout/newscontent" />
+<!--        <WebView
             android:id="@+id/web_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" />-->
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
-        android:visibility="gone"
         android:id="@+id/floatingActionButton"
         android:layout_width="55dp"
         android:layout_height="55dp"

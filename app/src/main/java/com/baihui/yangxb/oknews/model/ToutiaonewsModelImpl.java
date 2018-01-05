@@ -93,10 +93,6 @@ public class ToutiaonewsModelImpl implements ToutiaonewsModel {
         }
     }
 
-    @Override
-    public void loadNewsDetail(String url, OnLoadToutiaonewsDetailListener listener) {
-        listener.onSuccess(url);//判断网络加载URL
-    }
     /**
      * 获取ID
      * @param type
