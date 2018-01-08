@@ -46,8 +46,8 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
 //    WebView webView;
     @Bind(R.id.appBarLayout)
     AppBarLayout appBarLayout;
-    @Bind(R.id.floatingActionButton)
-    FloatingActionButton floatingActionButton;
+/*    @Bind(R.id.floatingActionButton)
+    FloatingActionButton floatingActionButton;*/
     private String newsurl, newsimg;
     private ToutiaonewsDetailPresenter toutiaonewsDetailPresenter;
    // private WebSettings mSetting;
@@ -107,12 +107,12 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
                 }
             }
         });
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+/*        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //接入分享接口
             }
-        });
+        });*/
 
     }
 
