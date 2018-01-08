@@ -4,16 +4,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.baihui.yangxb.R;
 import com.baihui.yangxb.oknews.entity.DetailNews;
@@ -21,14 +16,13 @@ import com.baihui.yangxb.oknews.presenter.ToutiaonewsDetailPresenter;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsDetailPresenterImpl;
 import com.baihui.yangxb.oknews.view.ToutiaonewsDetailView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.squareup.picasso.Picasso;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 /**
@@ -42,15 +36,28 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     Toolbar toolbar;
     @Bind(R.id.collapsing)
     CollapsingToolbarLayout collapsing;
-//    @Bind(R.id.web_view)
-//    WebView webView;
     @Bind(R.id.appBarLayout)
     AppBarLayout appBarLayout;
-/*    @Bind(R.id.floatingActionButton)
-    FloatingActionButton floatingActionButton;*/
+    @Bind(R.id.fab_share)
+    FloatingActionButton fabShare;
+    @Bind(R.id.fab_read)
+    FloatingActionButton fabRead;
+    @Bind(R.id.titile)
+    TextView titile;
+    @Bind(R.id.texttime)
+    TextView texttime;
+    @Bind(R.id.textfrom)
+    TextView textfrom;
+    @Bind(R.id.textcontent)
+    TextView textcontent;
+    @Bind(R.id.fab_menu)
+    FloatingActionsMenu fabMenu;
+    @Bind(R.id.imageViewauthor)
+    CircleImageView imageViewauthor;
+    @Bind(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
     private String newsurl, newsimg;
     private ToutiaonewsDetailPresenter toutiaonewsDetailPresenter;
-   // private WebSettings mSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,25 +70,7 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
         newsurl = (String) getIntent().getSerializableExtra("newsurl");
         toutiaonewsDetailPresenter = new ToutiaonewsDetailPresenterImpl(getApplication(), this);
         toutiaonewsDetailPresenter.loadNewsDetail(newsurl);
-//        urlToString();
     }
-
-/*    private void urlToString() {
-        mSetting = webView.getSettings();
-        mSetting.setJavaScriptEnabled(true);
-        webView.addJavascriptInterface(new InJavaScriptLocalObj(), "java_obj");
-
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                Toast.makeText(ToutiaonewsDetailActivity.this, "onPageFinished", Toast.LENGTH_SHORT).show();
-                view.loadUrl("javascript:window.java_obj.getSource(document.documentElement.outerHTML);void(0)");
-                super.onPageFinished(view, url);
-            }
-
-
-        });
-    }*/
 
     private void initView() {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -99,10 +88,10 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if(Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()){
+                if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
                     toolbar.setTitleTextColor(getResources().getColor(R.color.white));
                     collapsing.setTitle("新闻详情");
-                }else{
+                } else {
                     collapsing.setTitle("");
                 }
             }
@@ -124,10 +113,13 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
 
     @Override
     public void showNewsDetialContent(DetailNews detailnews) {
-
-/*        webView.loadUrl(newsurl);
-        webView.setWebViewClient(new WebViewClient());
-        webView.setWebChromeClient(new WebChromeClient());*/
+        titile.setText(detailnews.getNewsTitle());
+        if (detailnews.getNewsAuthorImg() != null){
+      //      Picasso.with(this).load(detailnews.getNewsAuthorImg()).into(imageViewauthor);
+        }
+        textfrom.setText(detailnews.getNewsComefrom());
+        texttime.setText(detailnews.getNewsTime());
+        textcontent.setText(detailnews.getNewsContent());
     }
 
     @Override
@@ -139,23 +131,13 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     public void hideProgress() {
     }
 
-/*    //自己定义的类
-    public final class InJavaScriptLocalObj {
-        //一定也要加上这个注解,否则没有用
-        @JavascriptInterface
-        public void getSource(String html) {
-            //取出HTML中P标签的文本内容,利用正则表达式匹配.
-            Pattern pattern=Pattern.compile("<p class=\"section txt\">(.*?)</p>");
-            Matcher matcher = pattern.matcher(html);
-            StringBuffer sb=new StringBuffer();
-            while (matcher.find())
-            {
-                sb.append(matcher.group(2));
-            }
-            //mHtmlText = sb.toString();
-            Log.v("yxb", sb.toString());
-            Toast.makeText(ToutiaonewsDetailActivity.this,sb.toString(), Toast.LENGTH_LONG).show();
+    @OnClick({R.id.fab_share, R.id.fab_read})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.fab_share:
+                break;
+            case R.id.fab_read:
+                break;
         }
-    }*/
-
+    }
 }

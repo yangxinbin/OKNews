@@ -8,6 +8,7 @@ import java.util.List;
 
 public class DetailNews {
     private String newsTitle;   //新闻标题
+    private String newsAuthorImg;   //新闻作者图标
     private String newsTime;     //新闻时间
     private String newsComefrom;  //新闻来源
     private String newsContent;    //新闻内容
@@ -16,12 +17,21 @@ public class DetailNews {
     public DetailNews() {
     }
 
-    public DetailNews(String newsTitle, String newsTime, String newsComefrom, String newsContent, List<String> newsImages) {
+    public DetailNews(String newsTitle, String newsAuthorImg, String newsTime, String newsComefrom, String newsContent, List<String> newsImages) {
         this.newsTitle = newsTitle;
+        this.newsAuthorImg = newsAuthorImg;
         this.newsTime = newsTime;
         this.newsComefrom = newsComefrom;
         this.newsContent = newsContent;
         this.newsImages = newsImages;
+    }
+
+    public String getNewsAuthorImg() {
+        return newsAuthorImg;
+    }
+
+    public void setNewsAuthorImg(String newsAuthorImg) {
+        this.newsAuthorImg = newsAuthorImg;
     }
 
     public String getNewsTitle() {

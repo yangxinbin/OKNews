@@ -5,4 +5,62 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="15dp">
+
+    <TextView
+        android:id="@+id/titile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="25sp"/>
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginRight="8dp"
+            android:id="@+id/imageViewauthor"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/picture"/>
+        <TextView
+            android:textColor="@color/alpha_gray"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/texttime"
+            android:layout_marginRight="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="时间"
+            android:textSize="15sp"/>
+        <TextView
+            android:textColor="@color/alpha_gray"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/textfrom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="来自"
+            android:textSize="15sp"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_marginBottom="8dp"
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@color/alpha_gray" />
+
+    <TextView
+        android:textColor="@color/black"
+        android:id="@+id/textcontent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="18sp"/>
+
+
+
+
 </LinearLayout>
