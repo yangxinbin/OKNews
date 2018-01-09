@@ -5,5 +5,5 @@ package com.baihui.yangxb.oknews.presenter;
  */
 
 public interface ToutiaonewsDetailPresenter {
-    void loadNewsDetail(String url);
+    void loadNewsDetail(Boolean isWechar,String url);
 }

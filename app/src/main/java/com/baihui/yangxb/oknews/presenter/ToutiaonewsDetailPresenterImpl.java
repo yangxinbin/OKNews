@@ -28,9 +28,9 @@ public class ToutiaonewsDetailPresenterImpl implements ToutiaonewsDetailPresente
     }
 
     @Override
-    public void loadNewsDetail(String url) {
+    public void loadNewsDetail(Boolean isWechar,String url) {
         toutiaonewsDetailView.showProgress();
-        toutiaonewsModel.loadNewsDetail(url, this);
+        toutiaonewsModel.loadNewsDetail(isWechar,url, this);
     }
 
     @Override

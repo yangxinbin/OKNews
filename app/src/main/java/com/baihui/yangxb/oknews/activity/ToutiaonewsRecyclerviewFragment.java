@@ -276,6 +276,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         Intent intent = new Intent(getActivity(), ToutiaonewsDetailActivity.class);
         intent.putExtra("newsurl", newsurl);//传输内容
         intent.putExtra("newsimg", newsimg);//传输图片
+        intent.putExtra("iswechar",true);
         getActivity().startActivity(intent);
     }
 }

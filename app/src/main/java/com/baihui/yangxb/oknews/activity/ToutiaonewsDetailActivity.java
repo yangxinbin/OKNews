@@ -58,6 +58,7 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     NestedScrollView nestedScrollView;
     private String newsurl, newsimg;
     private ToutiaonewsDetailPresenter toutiaonewsDetailPresenter;
+    private Boolean isWechar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +69,9 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
         newsurl = (String) getIntent().getSerializableExtra("newsurl");
+        isWechar = getIntent().getBooleanExtra("iswechar",false);
         toutiaonewsDetailPresenter = new ToutiaonewsDetailPresenterImpl(getApplication(), this);
-        toutiaonewsDetailPresenter.loadNewsDetail(newsurl);
+        toutiaonewsDetailPresenter.loadNewsDetail(isWechar,newsurl);
     }
 
     private void initView() {
@@ -115,7 +117,10 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     public void showNewsDetialContent(DetailNews detailnews) {
         titile.setText(detailnews.getNewsTitle());
         if (detailnews.getNewsAuthorImg() != null){
+            imageViewauthor.setVisibility(View.VISIBLE);
       //      Picasso.with(this).load(detailnews.getNewsAuthorImg()).into(imageViewauthor);
+        }else {
+            imageViewauthor.setVisibility(View.GONE);
         }
         textfrom.setText(detailnews.getNewsComefrom());
         texttime.setText(detailnews.getNewsTime());

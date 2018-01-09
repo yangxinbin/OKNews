@@ -37,7 +37,7 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
     private String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36";
     private DetailNews detailnews;
     @Override
-    public void loadNewsDetail(final String url, final OnLoadToutiaonewsDetailListener listener) {
+    public void loadNewsDetail(final Boolean isWechar, final String url, final OnLoadToutiaonewsDetailListener listener) {
         final Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -46,9 +46,18 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
                 listener.onSuccess(detailnews);
             }
         };
-        Runnable runnable = new Runnable() {
+        final Runnable runnable = new Runnable() {
+
+            private StringBuffer contents;
+            private Elements elementsFrom;
+            private Elements elementsTime;
+            private Elements elementsAuthorImg;
+            private Elements elementsTitle;
+            private Elements elementsPages;
+
             @Override
             public void run() {
+                detailnews = new DetailNews();
                 Connection conn = Jsoup.connect(url);
                 // 修改http包中的header,伪装成浏览器进行抓取
                 conn.header("User-Agent", userAgent);
@@ -59,22 +68,37 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
                     e.printStackTrace();
                 }
                 // 获取页数的链接
-                Elements elementsPages = doc.getElementsByClass("J-article article");
-                Elements elementsTitle = doc.getElementsByClass("title");
-                Elements elementsAuthorImg = doc.getElementsByClass("dfh-img");
-                Elements elementsTime = doc.getElementsByClass("dfh-time");
-                Elements elementsFrom = doc.getElementsByClass("dfh-name");
-                Log.v("yxb","==============="+elementsPages);
-                StringBuffer contents = new StringBuffer();
-                Element elementcontent = doc.getElementById("content");
-                Elements allContents = elementcontent.getElementsByTag("p");
-                for (Element all : allContents) {
-                    contents.append("        "+all.text());
-                    contents.append("\n\n");
+                if (isWechar){
+                    //elementsPages = doc.getElementsByClass("J-article article");
+                    elementsTitle = doc.getElementsByClass("rich_media_title");
+                    //elementsAuthorImg = doc.getElementsByClass("dfh-img");
+                    elementsTime = doc.getElementsByClass("rich_media_meta rich_media_meta_text");
+                    elementsFrom = doc.getElementsByClass("rich_media_meta rich_media_meta_link rich_media_meta_nickname");
+                    Log.v("yxb",url+"==============="+ elementsTime + elementsAuthorImg);
+                    contents = new StringBuffer();
+                    Element elementcontent = doc.getElementById("js_content");
+                    Elements allContents = elementcontent.getElementsByTag("span");
+                    for (Element all : allContents) {
+                        contents.append("        "+all.text());
+                        contents.append("\n\n");
+                    }
+                }else {
+                    //elementsPages = doc.getElementsByClass("J-article article");
+                    elementsTitle = doc.getElementsByClass("title");
+                    elementsAuthorImg = doc.getElementsByClass("dfh-img");
+                    elementsTime = doc.getElementsByClass("dfh-information");
+                    elementsFrom = doc.getElementsByClass("dfh-name");
+                    Log.v("yxb",url+"==============="+ elementsTime + elementsAuthorImg);
+                    contents = new StringBuffer();
+                    Element elementcontent = doc.getElementById("content");
+                    Elements allContents = elementcontent.getElementsByTag("p");
+                    for (Element all : allContents) {
+                        contents.append("        "+all.text());
+                        contents.append("\n\n");
+                    }
+                    detailnews.setNewsAuthorImg(elementsAuthorImg.text());
                 }
-                detailnews = new DetailNews();
                 detailnews.setNewsTitle(elementsTitle.text());
-                detailnews.setNewsAuthorImg(elementsAuthorImg.text());
                 detailnews.setNewsComefrom(elementsFrom.text());
                 detailnews.setNewsTime(elementsTime.text());
                 detailnews.setNewsContent(contents.toString());
