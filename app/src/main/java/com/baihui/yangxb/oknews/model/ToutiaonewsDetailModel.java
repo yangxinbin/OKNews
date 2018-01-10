@@ -12,5 +12,5 @@ import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsListListener;
  */
 
 public interface ToutiaonewsDetailModel {
-    void loadNewsDetail(Boolean isWechar,String url, OnLoadToutiaonewsDetailListener listener);
+    void loadNewsDetail(Context context,Boolean isWechar,String url, OnLoadToutiaonewsDetailListener listener);
 }

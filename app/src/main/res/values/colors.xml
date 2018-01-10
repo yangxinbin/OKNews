@@ -8,6 +8,7 @@
     <color name="white">#ffffff</color>
     <color name="gray">#dad9d9</color>
     <color name="black">#262626</color>
+    <color name="textblack">#313131</color>
     <color name="circlerange">#95dcff</color>
     <color name="selected">#07a9fa</color>
     <color name="pressed">#95dafc</color>

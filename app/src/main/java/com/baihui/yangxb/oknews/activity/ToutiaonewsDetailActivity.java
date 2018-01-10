@@ -6,6 +6,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -71,7 +72,7 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
         newsurl = (String) getIntent().getSerializableExtra("newsurl");
         isWechar = getIntent().getBooleanExtra("iswechar",false);
         toutiaonewsDetailPresenter = new ToutiaonewsDetailPresenterImpl(getApplication(), this);
-        toutiaonewsDetailPresenter.loadNewsDetail(isWechar,newsurl);
+        toutiaonewsDetailPresenter.loadNewsDetail(this,isWechar,newsurl);
     }
 
     private void initView() {
@@ -115,16 +116,27 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
 
     @Override
     public void showNewsDetialContent(DetailNews detailnews) {
-        titile.setText(detailnews.getNewsTitle());
-        if (detailnews.getNewsAuthorImg() != null){
+        if (detailnews == null){
+            return;
+        }
+        if (detailnews.getNewsTitle() != null){
+            titile.setText(detailnews.getNewsTitle());
+        }
+/*        if (detailnews.getNewsAuthorImg() != null){
             imageViewauthor.setVisibility(View.VISIBLE);
       //      Picasso.with(this).load(detailnews.getNewsAuthorImg()).into(imageViewauthor);
         }else {
             imageViewauthor.setVisibility(View.GONE);
+        }*/
+        if (detailnews.getNewsComefrom() != null){
+            textfrom.setText(detailnews.getNewsComefrom());
         }
-        textfrom.setText(detailnews.getNewsComefrom());
-        texttime.setText(detailnews.getNewsTime());
-        textcontent.setText(detailnews.getNewsContent());
+        if (detailnews.getNewsTime() != null){
+            texttime.setText(detailnews.getNewsTime());
+        }
+        if (detailnews.getNewsContent() != null){
+            textcontent.setText(detailnews.getNewsContent());
+        }
     }
 
     @Override
