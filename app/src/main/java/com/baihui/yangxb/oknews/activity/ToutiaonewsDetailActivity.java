@@ -72,7 +72,7 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
         newsurl = (String) getIntent().getSerializableExtra("newsurl");
         isWechar = getIntent().getBooleanExtra("iswechar",false);
         toutiaonewsDetailPresenter = new ToutiaonewsDetailPresenterImpl(getApplication(), this);
-        toutiaonewsDetailPresenter.loadNewsDetail(this,isWechar,newsurl);
+        toutiaonewsDetailPresenter.loadNewsDetail(this,isWechar,newsurl);//yxb
     }
 
     private void initView() {

@@ -25,7 +25,7 @@ public class DetailNews {
         this.newsComefrom = newsComefrom;
         this.newsContent = newsContent;
         this.newsImages = newsImages;
-        this.newsContentAndImg = newsContentAndImg;
+        this.newsContentAndImg = newsContentAndImg;//yxb
     }
 
     public String getNewsContentAndImg() {

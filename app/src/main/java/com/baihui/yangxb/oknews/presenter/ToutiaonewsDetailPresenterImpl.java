@@ -30,7 +30,7 @@ public class ToutiaonewsDetailPresenterImpl implements ToutiaonewsDetailPresente
     @Override
     public void loadNewsDetail(Context context,Boolean isWechar,String url) {
         toutiaonewsDetailView.showProgress();
-        toutiaonewsModel.loadNewsDetail(context,isWechar,url, this);
+        toutiaonewsModel.loadNewsDetail(context,isWechar,url, this);//yxb
     }
 
     @Override

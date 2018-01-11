@@ -95,7 +95,7 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
                     }
                     title = elementsTitle.text();
                     timeAndFrom = elementsTime.text();
-                    detailnews.setNewsComefrom(elementsFrom.text());
+                    detailnews.setNewsComefrom(elementsFrom.text());//yxb
 /*                    doc.getAllElements();
                     // 返回所有的Element
                     Elements eles = doc.getElementsByTag("body");

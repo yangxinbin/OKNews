@@ -7,5 +7,5 @@ import android.content.Context;
  */
 
 public interface ToutiaonewsDetailPresenter {
-    void loadNewsDetail(Context context,Boolean isWechar, String url);
+    void loadNewsDetail(Context context,Boolean isWechar, String url);//yxb
 }
