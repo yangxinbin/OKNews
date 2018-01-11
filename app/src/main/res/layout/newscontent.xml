@@ -42,7 +42,6 @@
             android:id="@+id/textfrom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="来自"
             android:textSize="14sp"/>
     </LinearLayout>
 

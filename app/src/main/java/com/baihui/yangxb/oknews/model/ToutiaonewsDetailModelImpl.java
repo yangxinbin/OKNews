@@ -54,7 +54,7 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
         };
         final Runnable runnable = new Runnable() {
 
-            private String timeAndFrom;
+            private StringBuffer timeAndFrom;
             private String title;
             private StringBuffer contents;
             private Elements elementsFrom;
@@ -69,6 +69,7 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
                 detailnews = new DetailNews();
                 imagesList = new ArrayList<String>();
                 contents = new StringBuffer();
+                timeAndFrom = new StringBuffer();
                 Connection conn = Jsoup.connect(url);
                 // 修改http包中的header,伪装成浏览器进行抓取
                 conn.header("User-Agent", userAgent);
@@ -80,7 +81,7 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
                 }
                 // 获取页数的链接
                 if (isWechar){
-                    elementsTitle = doc.getElementsByClass("rich_media_title");
+/*                    elementsTitle = doc.getElementsByClass("rich_media_title");
                     //elementsAuthorImg = doc.getElementsByClass("dfh-img");
                     elementsTime = doc.getElementsByClass("rich_media_meta rich_media_meta_text");
                     elementsFrom = doc.getElementsByClass("rich_media_meta rich_media_meta_link rich_media_meta_nickname");
@@ -95,13 +96,19 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
                     }
                     title = elementsTitle.text();
                     timeAndFrom = elementsTime.text();
-                    detailnews.setNewsComefrom(elementsFrom.text());//yxb
-/*                    doc.getAllElements();
+                    detailnews.setNewsComefrom(elementsFrom.text());//yxb*/
+                    doc.getAllElements();
                     // 返回所有的Element
-                    Elements eles = doc.getElementsByTag("body");
+                    Elements eles = doc.getAllElements();
                     Log.v("yxb","=====all.text()====="+eles);
                     // 遍历所有的文档
                     for(Element ele : eles){
+                        if (ele.tagName() == "title"){
+                            title = ele.text();
+                        }
+                        if (ele.tagName() == "em"){
+                            timeAndFrom.append(ele.text()+"    ");
+                        }
                         if (ele.tagName() == "p"){
                             if (ele.text() == ""){
                                 continue;
@@ -109,15 +116,9 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
                             contents.append("        "+ele.text()+"\n\n");
                             ele.remove();
                         }
-                        if (ele.tagName() == "title"){
-                            title = ele.text();
-                        }
-                        if (ele.tagName() == "span"){
-                            timeAndFrom = ele.text();
-                        }
                         String tagName = ele.tagName();
                         //Log.v("yxb","=====tagName====="+tagName);
-                    }*/
+                    }
                 }else {
 /*                    elementsTitle = doc.getElementsByClass("title");
                     elementsTime = doc.getElementsByClass("src");
@@ -151,16 +152,16 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
                     Log.v("yxb","=====all.text()====="+eles);
                     // 遍历所有的文档
                     for(Element ele : eles){
-                        if (ele.tagName() == "p"){
-                                Log.v("yxb","=====all.text()====="+ele);
-                                contents.append("        "+ele.text()+"\n\n");
-                            ele.remove();
-                        }
                         if (ele.tagName() == "title"){
                             title = ele.text();
                         }
                         if (ele.tagName() == "span"){
-                            timeAndFrom = ele.text();
+                            timeAndFrom.append(ele.text()+"    ");
+                        }
+                        if (ele.tagName() == "p"){
+                                Log.v("yxb","=====all.text()====="+ele);
+                                contents.append("        "+ele.text()+"\n\n");
+                            ele.remove();
                         }
                         String tagName = ele.tagName();
                         Log.v("yxb","=====tagName====="+tagName);
@@ -168,7 +169,7 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
                 }
                 detailnews.setNewsTitle(title);
                 //detailnews.setNewsComefrom(timeAndFrom);
-                detailnews.setNewsTime(timeAndFrom);
+                detailnews.setNewsTime(timeAndFrom.toString());
                 detailnews.setNewsContent(contents.toString());
                 Message message = new Message();
                 handler.sendMessage(message);
