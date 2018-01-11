@@ -63,11 +63,13 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
             private Elements elementsTitle;
             private Elements elementsPages;
             private List<String> imagesList;
+            private List<String> textAndImg;
 
             @Override
             public void run() {
                 detailnews = new DetailNews();
                 imagesList = new ArrayList<String>();
+                textAndImg = new ArrayList<String>();
                 contents = new StringBuffer();
                 timeAndFrom = new StringBuffer();
                 Connection conn = Jsoup.connect(url);
@@ -159,9 +161,14 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
                             timeAndFrom.append(ele.text()+"    ");
                         }
                         if (ele.tagName() == "p"){
-                                Log.v("yxb","=====all.text()====="+ele);
-                                contents.append("        "+ele.text()+"\n\n");
+//                                Log.v("yxb","=====all.text()====="+ele);
+//                                contents.append("        "+ele.text()+"\n\n");
+                            textAndImg.add(ele.text());
                             ele.remove();
+                        }
+                        if (ele.tagName() == "figure"){
+                            Log.v("yxb","=====figure====="+ele.child(0).attr("abs:data-href"));
+                            textAndImg.add(ele.child(0).attr("abs:data-href"));
                         }
                         String tagName = ele.tagName();
                         Log.v("yxb","=====tagName====="+tagName);
@@ -170,7 +177,8 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
                 detailnews.setNewsTitle(title);
                 //detailnews.setNewsComefrom(timeAndFrom);
                 detailnews.setNewsTime(timeAndFrom.toString());
-                detailnews.setNewsContent(contents.toString());
+                //detailnews.setNewsContent(contents.toString());
+                detailnews.setNewsContentAndImg(textAndImg);
                 Message message = new Message();
                 handler.sendMessage(message);
             }

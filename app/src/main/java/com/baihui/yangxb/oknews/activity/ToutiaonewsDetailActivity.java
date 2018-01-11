@@ -1,14 +1,16 @@
 package com.baihui.yangxb.oknews.activity;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baihui.yangxb.R;
@@ -49,14 +51,16 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     TextView texttime;
     @Bind(R.id.textfrom)
     TextView textfrom;
-    @Bind(R.id.textcontent)
-    TextView textcontent;
+/*    @Bind(R.id.textcontent)
+    TextView textcontent;*/
     @Bind(R.id.fab_menu)
     FloatingActionsMenu fabMenu;
     @Bind(R.id.imageViewauthor)
     CircleImageView imageViewauthor;
     @Bind(R.id.nestedScrollView)
     NestedScrollView nestedScrollView;
+    @Bind(R.id.content)
+    LinearLayout content;
     private String newsurl, newsimg;
     private ToutiaonewsDetailPresenter toutiaonewsDetailPresenter;
     private Boolean isWechar;
@@ -70,9 +74,9 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
         newsurl = (String) getIntent().getSerializableExtra("newsurl");
-        isWechar = getIntent().getBooleanExtra("iswechar",false);
+        isWechar = getIntent().getBooleanExtra("iswechar", false);
         toutiaonewsDetailPresenter = new ToutiaonewsDetailPresenterImpl(getApplication(), this);
-        toutiaonewsDetailPresenter.loadNewsDetail(this,isWechar,newsurl);//yxb
+        toutiaonewsDetailPresenter.loadNewsDetail(this, isWechar, newsurl);//yxb
     }
 
     private void initView() {
@@ -116,10 +120,10 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
 
     @Override
     public void showNewsDetialContent(DetailNews detailnews) {
-        if (detailnews == null){
+        if (detailnews == null) {
             return;
         }
-        if (detailnews.getNewsTitle() != null){
+        if (detailnews.getNewsTitle() != null) {
             titile.setText(detailnews.getNewsTitle());
         }
 /*        if (detailnews.getNewsAuthorImg() != null){
@@ -128,14 +132,35 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
         }else {
             imageViewauthor.setVisibility(View.GONE);
         }*/
-        if (detailnews.getNewsComefrom() != null){
+        if (detailnews.getNewsComefrom() != null) {
             textfrom.setText(detailnews.getNewsComefrom());
         }
-        if (detailnews.getNewsTime() != null){
+        if (detailnews.getNewsTime() != null) {
             texttime.setText(detailnews.getNewsTime());
         }
-        if (detailnews.getNewsContent() != null){
+/*        if (detailnews.getNewsContent() != null) {
             textcontent.setText(detailnews.getNewsContent());
+        }*/
+        Resources resources = getResources();
+        int i;
+        for (i=0;i < detailnews.getNewsContentAndImg().size();i++){
+            if (detailnews.getNewsContentAndImg().get(i).endsWith(".jpeg") || detailnews.getNewsContentAndImg().get(i).endsWith(".jpg") || detailnews.getNewsContentAndImg().get(i).endsWith(".png")){
+                ImageView contentImg = new ImageView(this);
+/*                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(0,0,0,20);//4个参数按顺序分别是左上右下
+                contentImg.setLayoutParams(layoutParams);*/
+                Picasso.with(this).load(detailnews.getNewsContentAndImg().get(i)).into(contentImg);
+                content.addView(contentImg);
+                TextView textN = new TextView(this);
+                textN.setText("\n");
+                content.addView(textN);
+                continue;
+            }
+            TextView textContent = new TextView(this);
+            textContent.setTextColor(resources.getColor(R.color.textblack,null));
+            textContent.setTextSize(17);
+            textContent.setText("        "+detailnews.getNewsContentAndImg().get(i)+"\n");
+            content.addView(textContent);
         }
     }
 

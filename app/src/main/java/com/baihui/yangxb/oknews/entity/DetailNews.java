@@ -13,26 +13,27 @@ public class DetailNews {
     private String newsComefrom;  //新闻来源
     private String newsContent;    //新闻内容
     private List<String> newsImages;    //新闻图片
-    private String newsContentAndImg;    //新闻内容+图片
+    private List<String> newsContentAndImg;    //新闻内容+图片
 
     public DetailNews() {
     }
 
-    public DetailNews(String newsTitle, String newsAuthorImg, String newsTime, String newsComefrom, String newsContent, List<String> newsImages, String newsContentAndImg) {
+    public DetailNews(String newsTitle, String newsAuthorImg, String newsTime, String newsComefrom, String newsContent, List<String> newsImages, List<String> newsContentAndImg) {
         this.newsTitle = newsTitle;
         this.newsAuthorImg = newsAuthorImg;
         this.newsTime = newsTime;
         this.newsComefrom = newsComefrom;
+
         this.newsContent = newsContent;
         this.newsImages = newsImages;
-        this.newsContentAndImg = newsContentAndImg;//yxb
+        this.newsContentAndImg = newsContentAndImg;
     }
 
-    public String getNewsContentAndImg() {
+    public List<String> getNewsContentAndImg() {
         return newsContentAndImg;
     }
 
-    public void setNewsContentAndImg(String newsContentAndImg) {
+    public void setNewsContentAndImg(List<String> newsContentAndImg) {
         this.newsContentAndImg = newsContentAndImg;
     }
 
