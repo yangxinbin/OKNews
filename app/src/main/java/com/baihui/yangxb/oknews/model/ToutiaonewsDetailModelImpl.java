@@ -1,8 +1,6 @@
 package com.baihui.yangxb.oknews.model;
 
 
-
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -12,15 +10,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.baihui.yangxb.oknews.cacher.ACache;
 import com.baihui.yangxb.oknews.entity.DetailNews;
-import com.baihui.yangxb.oknews.entity.ToutiaoLoopnewsBean;
-import com.baihui.yangxb.oknews.entity.ToutiaonewsBean;
-import com.baihui.yangxb.oknews.listener.OnLoadToutiaoLoopnewsListListener;
 import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsDetailListener;
-import com.baihui.yangxb.oknews.listener.OnLoadToutiaonewsListListener;
-import com.baihui.yangxb.oknews.utils.NewsJsonUtils;
-import com.baihui.yangxb.tools.OkHttpUtils;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -30,9 +21,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Administrator on 2016/11/29 0029.
@@ -56,21 +45,13 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
 
             private StringBuffer timeAndFrom;
             private String title;
-            private StringBuffer contents;
-            private Elements elementsFrom;
-            private Elements elementsTime;
-            private Elements elementsAuthorImg;
-            private Elements elementsTitle;
-            private Elements elementsPages;
-            private List<String> imagesList;
             private List<String> textAndImg;
+            private Boolean firstImg = true;
 
             @Override
             public void run() {
                 detailnews = new DetailNews();
-                imagesList = new ArrayList<String>();
                 textAndImg = new ArrayList<String>();
-                contents = new StringBuffer();
                 timeAndFrom = new StringBuffer();
                 Connection conn = Jsoup.connect(url);
                 // 修改http包中的header,伪装成浏览器进行抓取
@@ -83,26 +64,9 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
                 }
                 // 获取页数的链接
                 if (isWechar){
-/*                    elementsTitle = doc.getElementsByClass("rich_media_title");
-                    //elementsAuthorImg = doc.getElementsByClass("dfh-img");
-                    elementsTime = doc.getElementsByClass("rich_media_meta rich_media_meta_text");
-                    elementsFrom = doc.getElementsByClass("rich_media_meta rich_media_meta_link rich_media_meta_nickname");
-                    Element elementcontent = doc.getElementById("js_content");
-                    Elements allContents = elementcontent.getElementsByTag("p");
-                    for (Element all : allContents) {
-                        if (all.text() == ""){
-                            continue;
-                        }
-                        contents.append("        "+all.text()+"\n\n");
-                        all.remove();
-                    }
-                    title = elementsTitle.text();
-                    timeAndFrom = elementsTime.text();
-                    detailnews.setNewsComefrom(elementsFrom.text());//yxb*/
                     doc.getAllElements();
                     // 返回所有的Element
                     Elements eles = doc.getAllElements();
-                    Log.v("yxb","=====all.text()====="+eles);
                     // 遍历所有的文档
                     for(Element ele : eles){
                         if (ele.tagName() == "title"){
@@ -115,43 +79,24 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
                             if (ele.text() == ""){
                                 continue;
                             }
-                            contents.append("        "+ele.text()+"\n\n");
+                            textAndImg.add(ele.text());
                             ele.remove();
                         }
-                        String tagName = ele.tagName();
-                        //Log.v("yxb","=====tagName====="+tagName);
+                        if (ele.tagName() == "img"){
+                            textAndImg.add(ele.attr("abs:data-src"));
+                        }
+                        if (ele.tagName() == "img"){
+                            if (firstImg && ele.attr("abs:src").startsWith("http")){
+                                firstImg = false;
+                                continue;
+                            }
+                            textAndImg.add(ele.attr("abs:src"));
+                        }
                     }
                 }else {
-/*                    elementsTitle = doc.getElementsByClass("title");
-                    elementsTime = doc.getElementsByClass("src");
-                    elementsFrom = doc.getElementsByClass("dfh-name");
-                    Log.v("yxb",url+"==============="+ elementsTime + elementsAuthorImg);
-                    contents = new StringBuffer();
-                    Element elementcontent = doc.getElementById("content");
-                    Elements allContents = elementcontent.getElementsByTag("p");
-                    for (Element all : allContents) {
-                        if (all.text() == ""){
-                            continue;
-                        }
-                        contents.append("        "+all.text());
-                        contents.append("\n\n");
-                        all.remove();
-                    }
-                    Elements jpgs=doc.select("img[src]"); //　查找扩展名是jpg的图片
-                    Log.v("yxb",url+"=======jpgs========"+jpgs);
-                    for(int i=0;i<jpgs.size();i++){
-                        Element jpg=jpgs.get(i);
-                        Log.v("yxb",url+"=======imagesList========"+ jpg.toString());
-                        imagesList.add(jpg.toString());
-                        detailnews.setNewsImages(imagesList);
-                        if(i==5){
-                            break;
-                        }
-                    }*/
                     doc.getAllElements();
                     // 返回所有的Element
                     Elements eles = doc.getAllElements();
-                    Log.v("yxb","=====all.text()====="+eles);
                     // 遍历所有的文档
                     for(Element ele : eles){
                         if (ele.tagName() == "title"){
@@ -161,23 +106,19 @@ public class ToutiaonewsDetailModelImpl implements ToutiaonewsDetailModel {
                             timeAndFrom.append(ele.text()+"    ");
                         }
                         if (ele.tagName() == "p"){
-//                                Log.v("yxb","=====all.text()====="+ele);
-//                                contents.append("        "+ele.text()+"\n\n");
+                            if (ele.text() == ""){
+                                continue;
+                            }
                             textAndImg.add(ele.text());
                             ele.remove();
                         }
                         if (ele.tagName() == "figure"){
-                            Log.v("yxb","=====figure====="+ele.child(0).attr("abs:data-href"));
                             textAndImg.add(ele.child(0).attr("abs:data-href"));
                         }
-                        String tagName = ele.tagName();
-                        Log.v("yxb","=====tagName====="+tagName);
                     }
                 }
                 detailnews.setNewsTitle(title);
-                //detailnews.setNewsComefrom(timeAndFrom);
                 detailnews.setNewsTime(timeAndFrom.toString());
-                //detailnews.setNewsContent(contents.toString());
                 detailnews.setNewsContentAndImg(textAndImg);
                 Message message = new Message();
                 handler.sendMessage(message);

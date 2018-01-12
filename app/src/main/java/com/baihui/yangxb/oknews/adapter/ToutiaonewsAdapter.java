@@ -2,7 +2,6 @@ package com.baihui.yangxb.oknews.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +10,7 @@ import android.widget.TextView;
 
 import com.baihui.yangxb.R;
 import com.baihui.yangxb.oknews.entity.ToutiaonewsBean;
-import com.squareup.picasso.Picasso;
-
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +111,11 @@ public class ToutiaonewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 if (news.getResult().getData().get(pos).getThumbnail_pic_s().isEmpty()) {
                     ((ItemViewHolder) holder).mNewsImg.setImageResource(R.drawable.defaultimage);
                 } else {
-                    Picasso.with(context).load(news.getResult().getData().get(pos).getThumbnail_pic_s()).into(((ItemViewHolder) holder).mNewsImg);
+                    Glide.with(context)
+                            .load(news.getResult().getData().get(pos).getThumbnail_pic_s())
+                            .placeholder(R.drawable.beginimg)//图片加载出来前，显示的图片
+                            .error(R.drawable.imgerror)//图片加载失败后，显示的图片
+                            .into(((ItemViewHolder) holder).mNewsImg);
                 }
             }
         }

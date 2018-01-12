@@ -2,9 +2,7 @@ package com.baihui.yangxb.authorMessage;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -25,7 +23,7 @@ import android.widget.TextView;
 
 import com.baihui.yangxb.R;
 import com.baihui.yangxb.startapp.User;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -88,7 +86,11 @@ public class Author extends AppCompatActivity {
             user.setText(userName);//获得当前用户名
         }
         if (bmobUser != null && userName != null && bmobUser.getAvatar() !=null){
-            Picasso.with(this).load(bmobUser.getAvatar().getFileUrl()).into(imageView);
+            Glide.with(Author.this)
+                    .load(bmobUser.getAvatar().getFileUrl())
+                    .placeholder(R.drawable.beginimg)//图片加载出来前，显示的图片
+                    .error(R.drawable.imgerror)//图片加载失败后，显示的图片
+                    .into(imageView);
         }else {
             //默认图片
             imageView.setImageResource(R.drawable.picture);

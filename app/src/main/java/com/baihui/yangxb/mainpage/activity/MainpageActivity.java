@@ -30,23 +30,21 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.baihui.yangxb.R;
 import com.baihui.yangxb.aboutauthor.AboutAuthor;
 import com.baihui.yangxb.authorMessage.Author;
 import com.baihui.yangxb.howtouser.HowToUser;
 import com.baihui.yangxb.mainpage.presenter.MainpagePresenter;
 import com.baihui.yangxb.mainpage.presenter.MainpagePresenterImpl;
 import com.baihui.yangxb.mainpage.view.MainpageView;
+import com.baihui.yangxb.oknews.activity.ToutiaonewsFragment;
+import com.baihui.yangxb.startapp.User;
+import com.baihui.yangxb.weathernews.activity.WeathernewsFragment;
+import com.bumptech.glide.Glide;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.bmob.v3.BmobUser;
-
-import com.baihui.yangxb.R;
-import com.baihui.yangxb.oknews.activity.ToutiaonewsFragment;
-import com.baihui.yangxb.oknews.adapter.ToutiaonewsAdapter;
-import com.baihui.yangxb.startapp.User;
-import com.baihui.yangxb.weathernews.activity.WeathernewsFragment;
-import com.squareup.picasso.Picasso;
 
 public class MainpageActivity extends AppCompatActivity implements MainpageView,View.OnClickListener {
 
@@ -112,7 +110,11 @@ public class MainpageActivity extends AppCompatActivity implements MainpageView,
             tName.setText(userName);//获得当前用户名
         }
         if (user != null && userName != null && user.getAvatar() !=null){
-            Picasso.with(this).load(user.getAvatar().getFileUrl()).into(mHeader_iv);
+            Glide.with(MainpageActivity.this)
+                    .load(user.getAvatar().getFileUrl())
+                    .placeholder(R.drawable.beginimg)//图片加载出来前，显示的图片
+                    .error(R.drawable.imgerror)//图片加载失败后，显示的图片
+                    .into(mHeader_iv);
         }else {
             //默认图片
             mHeader_iv.setImageResource(R.drawable.picture);

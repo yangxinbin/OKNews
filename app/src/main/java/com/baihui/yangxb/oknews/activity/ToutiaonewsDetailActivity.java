@@ -8,7 +8,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,9 +17,10 @@ import com.baihui.yangxb.oknews.entity.DetailNews;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsDetailPresenter;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsDetailPresenterImpl;
 import com.baihui.yangxb.oknews.view.ToutiaonewsDetailView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -51,8 +51,6 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     TextView texttime;
     @Bind(R.id.textfrom)
     TextView textfrom;
-/*    @Bind(R.id.textcontent)
-    TextView textcontent;*/
     @Bind(R.id.fab_menu)
     FloatingActionsMenu fabMenu;
     @Bind(R.id.imageViewauthor)
@@ -61,6 +59,8 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     NestedScrollView nestedScrollView;
     @Bind(R.id.content)
     LinearLayout content;
+    @Bind(R.id.imageView3)
+    ImageView imageView3;
     private String newsurl, newsimg;
     private ToutiaonewsDetailPresenter toutiaonewsDetailPresenter;
     private Boolean isWechar;
@@ -87,7 +87,10 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
             }
         });
         newsimg = (String) getIntent().getSerializableExtra("newsimg");
-        Picasso.with(this).load(newsimg).into(ivWebImg);//图片就直接加载了
+        Glide.with(ToutiaonewsDetailActivity.this)
+                .load(newsimg)
+                .placeholder(R.drawable.beginimg)//图片加载出来前，显示的图片
+                .into(ivWebImg);
         collapsing.setTitle("");
         collapsing.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
         collapsing.setExpandedTitleColor(getResources().getColor(R.color.white));
@@ -126,40 +129,48 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
         if (detailnews.getNewsTitle() != null) {
             titile.setText(detailnews.getNewsTitle());
         }
-/*        if (detailnews.getNewsAuthorImg() != null){
-            imageViewauthor.setVisibility(View.VISIBLE);
-      //      Picasso.with(this).load(detailnews.getNewsAuthorImg()).into(imageViewauthor);
-        }else {
-            imageViewauthor.setVisibility(View.GONE);
-        }*/
         if (detailnews.getNewsComefrom() != null) {
             textfrom.setText(detailnews.getNewsComefrom());
         }
         if (detailnews.getNewsTime() != null) {
             texttime.setText(detailnews.getNewsTime());
         }
-/*        if (detailnews.getNewsContent() != null) {
-            textcontent.setText(detailnews.getNewsContent());
-        }*/
+        imageView3.setVisibility(View.VISIBLE);//显示分割线
         Resources resources = getResources();
         int i;
-        for (i=0;i < detailnews.getNewsContentAndImg().size();i++){
-            if (detailnews.getNewsContentAndImg().get(i).endsWith(".jpeg") || detailnews.getNewsContentAndImg().get(i).endsWith(".jpg") || detailnews.getNewsContentAndImg().get(i).endsWith(".png")){
+        for (i = 0; i < detailnews.getNewsContentAndImg().size(); i++) {
+            if (detailnews.getNewsContentAndImg().get(i).startsWith("http") || detailnews.getNewsContentAndImg().get(i).endsWith("jpeg") || detailnews.getNewsContentAndImg().get(i).endsWith("jpg") || detailnews.getNewsContentAndImg().get(i).endsWith("png")) {
                 ImageView contentImg = new ImageView(this);
-/*                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(0,0,0,20);//4个参数按顺序分别是左上右下
-                contentImg.setLayoutParams(layoutParams);*/
-                Picasso.with(this).load(detailnews.getNewsContentAndImg().get(i)).into(contentImg);
+                Glide.with(ToutiaonewsDetailActivity.this)
+                        .load(detailnews.getNewsContentAndImg().get(i))
+                        .placeholder(R.drawable.beginimg)//图片加载出来前，显示的图片
+                        .error(R.drawable.imgerror)//图片加载失败后，显示的图片
+                        .into(contentImg);
                 content.addView(contentImg);
                 TextView textN = new TextView(this);
                 textN.setText("\n");
                 content.addView(textN);
                 continue;
             }
+            if (detailnews.getNewsContentAndImg().get(i).endsWith("gif")) {
+                ImageView gif = new ImageView(this);
+                Glide.with(ToutiaonewsDetailActivity.this)
+                        .load(detailnews.getNewsContentAndImg().get(i))
+                        .asGif()
+                        .placeholder(R.drawable.beginimg)//图片加载出来前，显示的图片
+                        .error(R.drawable.imgerror)//图片加载失败后，显示的图片
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .into(gif);
+                content.addView(gif);
+                TextView textN = new TextView(this);
+                textN.setText("\n");
+                content.addView(textN);
+                continue;
+            }
             TextView textContent = new TextView(this);
-            textContent.setTextColor(resources.getColor(R.color.textblack,null));
+            textContent.setTextColor(resources.getColor(R.color.textblack, null));
             textContent.setTextSize(17);
-            textContent.setText("        "+detailnews.getNewsContentAndImg().get(i)+"\n");
+            textContent.setText("        " + detailnews.getNewsContentAndImg().get(i) + "\n");
             content.addView(textContent);
         }
     }

@@ -11,7 +11,6 @@
         android:id="@+id/titile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="22sp"/>
@@ -35,7 +34,6 @@
             android:layout_marginRight="10sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="时间"
             android:textSize="14sp"/>
         <TextView
             android:textColor="@color/alpha_gray"
@@ -49,19 +47,10 @@
     <ImageView
         android:layout_marginBottom="8dp"
         android:id="@+id/imageView3"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:srcCompat="@color/alpha_gray" />
-
-<!--    <TextView
-        android:textColor="@color/black"
-        android:id="@+id/textcontent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="17sp"/>-->
-
-
 
 
 </LinearLayout>

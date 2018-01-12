@@ -3,7 +3,8 @@ package com.baihui.yangxb.oknews.utils;
 import android.content.Context;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
+import com.baihui.yangxb.R;
+import com.bumptech.glide.Glide;
 import com.youth.banner.loader.ImageLoader;
 
 
@@ -12,8 +13,10 @@ public class GlideImageLoader extends ImageLoader {
     public void displayImage(Context context, Object path, ImageView imageView) {
         //具体方法内容自己去选择，次方法是为了减少banner过多的依赖第三方包，所以将这个权限开放给使用者去选择
         if(path != null && !path.toString().isEmpty() && path.toString() != null) {
-            Picasso.with(context.getApplicationContext())
+            Glide.with(context)
                     .load(path.toString())
+                    .placeholder(R.drawable.beginimg)//图片加载出来前，显示的图片
+                    .error(R.drawable.imgerror)//图片加载失败后，显示的图片
                     .into(imageView);
         }
     }
