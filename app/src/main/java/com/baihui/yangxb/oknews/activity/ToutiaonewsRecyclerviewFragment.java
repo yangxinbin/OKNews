@@ -1,8 +1,13 @@
 package com.baihui.yangxb.oknews.activity;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -263,7 +268,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
             mDataall.clear();//一定要加上否则会报越界异常 不执行代码加载的if判断
             mData.clear();
         }
-        mNewsPresenter.loadNews(mType, getActivity(), false);//刷新缓存重新写入
+            mNewsPresenter.loadNews(mType, getActivity(), false);//刷新缓存重新写入
     }
 
     @Override
@@ -279,5 +284,35 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
         intent.putExtra("newsimg", newsimg);//传输图片
         intent.putExtra("iswechar",true);
         getActivity().startActivity(intent);
+    }
+    // 判断是否有可用的网络连接
+    public boolean isNetworkAvailable(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null)
+            return false;
+        else {   // 获取所有NetworkInfo对象
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Network[] networks = cm.getAllNetworks();
+                NetworkInfo networkInfo;
+                for (Network mNetwork : networks) {
+                    networkInfo = cm.getNetworkInfo(mNetwork);
+                    if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED)) {
+                        return true;
+                    }
+                }
+            }
+            else {
+                //否则调用旧版本方法
+                NetworkInfo[] info = cm.getAllNetworkInfo();
+                if (info != null) {
+                    for (NetworkInfo anInfo : info) {
+                        if (anInfo.getState() == NetworkInfo.State.CONNECTED) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
