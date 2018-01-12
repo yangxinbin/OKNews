@@ -41,8 +41,8 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     CollapsingToolbarLayout collapsing;
     @Bind(R.id.appBarLayout)
     AppBarLayout appBarLayout;
-    @Bind(R.id.fab_share)
-    FloatingActionButton fabShare;
+/*    @Bind(R.id.fab_share)
+    FloatingActionButton fabShare;*/
     @Bind(R.id.fab_read)
     FloatingActionButton fabRead;
     @Bind(R.id.titile)
@@ -184,12 +184,14 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     public void hideProgress() {
     }
 
-    @OnClick({R.id.fab_share, R.id.fab_read})
+    @OnClick({/*R.id.fab_share,*/ R.id.fab_read})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.fab_share:
-                break;
+            /*case R.id.fab_share:
+                break;*/
             case R.id.fab_read:
+                break;
+            default:
                 break;
         }
     }
