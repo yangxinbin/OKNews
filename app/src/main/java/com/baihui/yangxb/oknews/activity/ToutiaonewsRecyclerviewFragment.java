@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Network;
-import android.net.NetworkInfo;
+import android.net.NetworkInfo;//
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -233,7 +233,7 @@ public class SelectCityMainActivity extends AppCompatActivity implements View.On
             //String province = bdLocation.getProvince();    //获取省份
             //获取城市
             city = bdLocation.getCity();
-            Log.v("yxbbb","--------"+city);
+            Log.v("yxbbb","--------"+city);//
             String district = bdLocation.getDistrict();    //获取区县
             //String street = bdLocation.getStreet();    //获取街道信息
             String locationcity = StringUtils.extractLocation(city, district);
