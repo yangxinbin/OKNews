@@ -3,10 +3,13 @@ package com.baihui.yangxb.oknews.activity;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,6 +19,7 @@ import com.baihui.yangxb.R;
 import com.baihui.yangxb.oknews.entity.DetailNews;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsDetailPresenter;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsDetailPresenterImpl;
+import com.baihui.yangxb.oknews.utils.SpeechUtils;
 import com.baihui.yangxb.oknews.view.ToutiaonewsDetailView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -64,6 +68,8 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     private String newsurl, newsimg;
     private ToutiaonewsDetailPresenter toutiaonewsDetailPresenter;
     private Boolean isWechar;
+    private StringBuffer videoText;
+    private SpeechUtils speechUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +79,25 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
+        videoText = new StringBuffer();
+        Log.v("yxb","=======on======");
+        speechUtils = SpeechUtils.getInstance(ToutiaonewsDetailActivity.this);
         newsurl = (String) getIntent().getSerializableExtra("newsurl");
         isWechar = getIntent().getBooleanExtra("iswechar", false);
         toutiaonewsDetailPresenter = new ToutiaonewsDetailPresenterImpl(getApplication(), this);
         toutiaonewsDetailPresenter.loadNewsDetail(this, isWechar, newsurl);//yxb
     }
+    final Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            // 收到消息后执行handler
+            if (speechUtils != null){
+                Log.v("yxb","=======on======"+videoText);
+                speechUtils.speakText(videoText.toString());
+            }
+        }
+    };
 
     private void initView() {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -118,9 +138,10 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.v("yxb","=======onDestroy======");
+        speechUtils.reMOVETTL();
         ButterKnife.unbind(this);
     }
-
     @Override
     public void showNewsDetialContent(DetailNews detailnews) {
         if (detailnews == null) {
@@ -171,6 +192,7 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
             textContent.setTextColor(resources.getColor(R.color.textblack, null));
             textContent.setTextSize(17);
             textContent.setText("        " + detailnews.getNewsContentAndImg().get(i) + "\n");
+            videoText.append(detailnews.getNewsContentAndImg().get(i)+"    ");
             content.addView(textContent);
         }
     }
@@ -190,6 +212,15 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
             /*case R.id.fab_share:
                 break;*/
             case R.id.fab_read:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (videoText != null){
+                            Message message = new Message();
+                            handler.sendMessage(message);
+                        }
+                    }
+                }).start();
                 break;
             default:
                 break;
