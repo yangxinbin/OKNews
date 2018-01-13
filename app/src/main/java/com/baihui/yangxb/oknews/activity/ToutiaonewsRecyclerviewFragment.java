@@ -182,6 +182,7 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
 
     @Override
     public void addNews(List<ToutiaonewsBean> newsList) {
+
         newSize = newsList.size();
         if (newsList.size() == 0) {
             Toast.makeText(getActivity(), "注意休息，明天再来阅读吧！", Toast.LENGTH_SHORT).show();
@@ -268,7 +269,11 @@ public class ToutiaonewsRecyclerviewFragment extends Fragment implements Toutiao
             mDataall.clear();//一定要加上否则会报越界异常 不执行代码加载的if判断
             mData.clear();
         }
-            mNewsPresenter.loadNews(mType, getActivity(), false);//刷新缓存重新写入
+        if (isNetworkAvailable(getActivity())){
+             mNewsPresenter.loadNews(mType, getActivity(), false);//刷新缓存重新写入
+        }else {
+            mNewsPresenter.loadNews(mType, getActivity(), true);//没网刷新缓读缓存
+        }
     }
 
     @Override

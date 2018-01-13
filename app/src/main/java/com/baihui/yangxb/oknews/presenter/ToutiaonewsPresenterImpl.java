@@ -2,6 +2,7 @@ package com.baihui.yangxb.oknews.presenter;
 
 
 import android.content.Context;
+import android.util.Log;
 
 import com.baihui.yangxb.oknews.activity.ToutiaonewsFragment;
 import com.baihui.yangxb.oknews.entity.ToutiaoLoopnewsBean;

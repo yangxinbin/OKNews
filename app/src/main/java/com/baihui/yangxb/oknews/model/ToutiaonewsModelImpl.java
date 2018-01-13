@@ -34,9 +34,9 @@ public class ToutiaonewsModelImpl implements ToutiaonewsModel {
      * @param listener
      */
     @Override
-    public void loadNews(final Boolean isRefresh, Context context, final String url, final int type, final OnLoadToutiaonewsListListener listener) {
+    public void loadNews(final Boolean isNetworkAvailableBegin, Context context, final String url, final int type, final OnLoadToutiaonewsListListener listener) {
         final ACache mCache = ACache.get(context);
-        if (isRefresh){//刷新不读取缓存数据
+        if (isNetworkAvailableBegin){//刷新不读取缓存数据
             String newString = mCache.getAsString(""+type);
             if (newString != null) {
                 List<ToutiaonewsBean> newsBeanList1 = NewsJsonUtils.readJsonNewsBeans(newString, "data", type);//data是json字段获得data的值即对象数组
@@ -49,7 +49,7 @@ public class ToutiaonewsModelImpl implements ToutiaonewsModel {
         final OkHttpUtils.ResultCallback<String> loadNewsCallback = new OkHttpUtils.ResultCallback<String>() {
             @Override
             public void onSuccess(String response) {
-                if (isRefresh) {
+                if (isNetworkAvailableBegin) {
                     mCache.put("" + type, response);
                 }
                 List<ToutiaonewsBean> newsBeanList = NewsJsonUtils.readJsonNewsBeans(response, "data",type);//data是json字段获得data的值即对象数组
