@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -19,12 +21,13 @@ import com.baihui.yangxb.R;
 import com.baihui.yangxb.oknews.entity.DetailNews;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsDetailPresenter;
 import com.baihui.yangxb.oknews.presenter.ToutiaonewsDetailPresenterImpl;
-import com.baihui.yangxb.oknews.utils.SpeechUtils;
 import com.baihui.yangxb.oknews.view.ToutiaonewsDetailView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -69,7 +72,7 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     private ToutiaonewsDetailPresenter toutiaonewsDetailPresenter;
     private Boolean isWechar;
     private StringBuffer videoText;
-    private SpeechUtils speechUtils;
+    private TextToSpeech tts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,21 +83,66 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
         videoText = new StringBuffer();
-        Log.v("yxb","=======on======");
-        speechUtils = SpeechUtils.getInstance(ToutiaonewsDetailActivity.this);
         newsurl = (String) getIntent().getSerializableExtra("newsurl");
         isWechar = getIntent().getBooleanExtra("iswechar", false);
         toutiaonewsDetailPresenter = new ToutiaonewsDetailPresenterImpl(getApplication(), this);
         toutiaonewsDetailPresenter.loadNewsDetail(this, isWechar, newsurl);//yxb
+        initTTS();
     }
+
+    private void initTTS() {
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+
+                    //下面这句代码是主要的，设置语言，如果是英文的话，就用Locale.ENGLISH
+                    int result = tts.setLanguage(Locale.CHINA);
+                    if (result == TextToSpeech.LANG_MISSING_DATA
+                            || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Log.e("lanageTag", "not use");
+                    } else {
+                        tts.speak(videoText.toString(), TextToSpeech.QUEUE_FLUSH, null ,"read");
+                    }
+                }
+
+            }
+        });
+        //进度监听器，有点粗糙，但够用了，记得在done后将mpeech shutdown
+        tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+            @Override
+            public void onStart(String utteranceId) {
+            }
+
+            @Override
+            public void onError(String utteranceId) {
+
+            }
+
+            @Override
+            public void onDone(String utteranceId) {
+                //tts.shutdown();
+            }
+        });
+    }
+
     final Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            // 收到消息后执行handler
-            if (speechUtils != null){
-                Log.v("yxb","=======on======"+videoText);
-                speechUtils.speakText(videoText.toString());
+            switch (msg.what) {
+                case 0x116:
+                    //进入页面延迟1秒自动播放
+                    if (tts != null) {
+                        if (!tts.isSpeaking()) {//播报中
+                            tts.setPitch(1.2f);// 设置音调，值越大声音越尖（女生），值越小则变成男声,1.0是常规
+                            tts.setSpeechRate(0.9f);//调整语速
+                            tts.speak(videoText.toString(), TextToSpeech.QUEUE_FLUSH, null ,"read");
+                        }
+                    }
+                    break;
+                    default:
+                    break;
             }
         }
     };
@@ -138,9 +186,9 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.v("yxb","=======onDestroy======");
-        speechUtils.reMOVETTL();
         ButterKnife.unbind(this);
+        tts.stop(); // 不管是否正在朗读TTS都被打断
+        tts.shutdown(); // 关闭，释放资源
     }
     @Override
     public void showNewsDetialContent(DetailNews detailnews) {
@@ -212,15 +260,22 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
             /*case R.id.fab_share:
                 break;*/
             case R.id.fab_read:
-                new Thread(new Runnable() {
+        /*
+        * 开启一个线程，执行完之后立刻销毁
+        * 延迟1秒在播放语音。TextToSpeech的初始化需要时间
+        * */
+                new Thread() {
                     @Override
                     public void run() {
-                        if (videoText != null){
-                            Message message = new Message();
-                            handler.sendMessage(message);
+                        try {
+                            //延迟一秒，开始自动播放
+                            sleep(500);
+                            handler.sendEmptyMessage(0x116);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
-                }).start();
+                }.start();
                 break;
             default:
                 break;
