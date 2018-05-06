@@ -72,5 +72,7 @@
     <string name="save">SAVE</string>
     <string name="upload_fail">Upload failure!</string>
     <string name="upload_success">Upload successfully!</string>
+    <string name="sharenews">share</string>
+    <string name="webologin">webologin</string>
     <!-- select city -->
 </resources>

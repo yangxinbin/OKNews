@@ -28,10 +28,12 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.Locale;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
@@ -48,8 +50,8 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     CollapsingToolbarLayout collapsing;
     @Bind(R.id.appBarLayout)
     AppBarLayout appBarLayout;
-/*    @Bind(R.id.fab_share)
-    FloatingActionButton fabShare;*/
+    @Bind(R.id.fab_share)
+    FloatingActionButton fabShare;
     @Bind(R.id.fab_read)
     FloatingActionButton fabRead;
     @Bind(R.id.titile)
@@ -73,6 +75,7 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     private Boolean isWechar;
     private StringBuffer videoText;
     private TextToSpeech tts;
+    private String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,21 +90,22 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
         isWechar = getIntent().getBooleanExtra("iswechar", false);
         toutiaonewsDetailPresenter = new ToutiaonewsDetailPresenterImpl(getApplication(), this);
         toutiaonewsDetailPresenter.loadNewsDetail(this, isWechar, newsurl);//yxb
-        initTTS();
     }
 
     private void initTTS() {
+        ConcurrentLinkedQueue<String> mBufferedMessages=new ConcurrentLinkedQueue<String>();;//消息队列
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
-
+                    Log.v("yxbbb","---SUCCESS----");
                     //下面这句代码是主要的，设置语言，如果是英文的话，就用Locale.ENGLISH
                     int result = tts.setLanguage(Locale.CHINA);
                     if (result == TextToSpeech.LANG_MISSING_DATA
                             || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        Log.e("lanageTag", "not use");
+                        Log.e("yxbb", "not use");
                     } else {
+                        Log.e("yxbb", "speak use");
                         tts.speak(videoText.toString(), TextToSpeech.QUEUE_FLUSH, null ,"read");
                     }
                 }
@@ -112,16 +116,21 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
         tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
             @Override
             public void onStart(String utteranceId) {
+                Log.v("yxbbb","---onStart----");
             }
 
             @Override
             public void onError(String utteranceId) {
+                Log.v("yxbbb","---onError----");
 
             }
 
             @Override
             public void onDone(String utteranceId) {
-                //tts.shutdown();
+                Log.v("yxbbb","---onDone----");
+
+                tts.stop(); // 不管是否正在朗读TTS都被打断
+                tts.shutdown();
             }
         });
     }
@@ -133,10 +142,12 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
             switch (msg.what) {
                 case 0x116:
                     //进入页面延迟1秒自动播放
+                    initTTS();
                     if (tts != null) {
                         if (!tts.isSpeaking()) {//播报中
                             tts.setPitch(1.2f);// 设置音调，值越大声音越尖（女生），值越小则变成男声,1.0是常规
                             tts.setSpeechRate(0.9f);//调整语速
+                            Log.v("yxbbb","-------"+videoText.toString());
                             tts.speak(videoText.toString(), TextToSpeech.QUEUE_FLUSH, null ,"read");
                         }
                     }
@@ -187,8 +198,10 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
-        tts.stop(); // 不管是否正在朗读TTS都被打断
-        tts.shutdown(); // 关闭，释放资源
+        if (tts != null) {
+            tts.stop(); // 不管是否正在朗读TTS都被打断
+            tts.shutdown(); // 关闭，释放资源
+        }
     }
     @Override
     public void showNewsDetialContent(DetailNews detailnews) {
@@ -196,6 +209,7 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
             return;
         }
         if (detailnews.getNewsTitle() != null) {
+            title = detailnews.getNewsTitle();
             titile.setText(detailnews.getNewsTitle());
         }
         if (detailnews.getNewsComefrom() != null) {
@@ -254,31 +268,54 @@ public class ToutiaonewsDetailActivity extends SwipeBackActivity implements Tout
     public void hideProgress() {
     }
 
-    @OnClick({/*R.id.fab_share,*/ R.id.fab_read})
+    @OnClick({R.id.fab_share, R.id.fab_read})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            /*case R.id.fab_share:
-                break;*/
+            case R.id.fab_share:
+                newShare();
+                break;
             case R.id.fab_read:
+                handler.sendEmptyMessage(0x116);
         /*
         * 开启一个线程，执行完之后立刻销毁
         * 延迟1秒在播放语音。TextToSpeech的初始化需要时间
         * */
-                new Thread() {
+               /* new Thread() {
                     @Override
                     public void run() {
                         try {
                             //延迟一秒，开始自动播放
-                            sleep(500);
+                            sleep(1000);
                             handler.sendEmptyMessage(0x116);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
-                }.start();
+                }.start();*/
                 break;
             default:
                 break;
         }
+    }
+
+    private void newShare() {
+        OnekeyShare oks = new OnekeyShare();
+        //关闭sso授权
+        oks.disableSSOWhenAuthorize();
+
+        // title标题，微信、QQ和QQ空间等平台使用
+        //oks.setTitle(title);
+        // titleUrl QQ和QQ空间跳转链接
+        //oks.setTitleUrl(newsurl);
+        // text是分享文本，所有平台都需要这个字段
+        oks.setText(title);
+        // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+        oks.setImageUrl(newsimg);//确保SDcard下面存在此张图片
+        // url在微信、微博，Facebook等平台中使用
+        oks.setUrl(newsurl);
+        // comment是我对这条分享的评论，仅在人人网使用
+        oks.setComment("评论");
+        // 启动分享GUI
+        oks.show(this);
     }
 }

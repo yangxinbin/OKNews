@@ -15,7 +15,8 @@
       android:textColor="#cfffffff"
       android:layout_centerHorizontal="true"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content" />
+      android:layout_height="wrap_content"
+      android:id="@+id/textView6" />
   <LinearLayout
       android:id="@+id/login"
       android:layout_centerInParent="true"
@@ -150,7 +151,8 @@
       android:layout_width="match_parent"
       android:gravity="center"
       android:orientation="vertical"
-      android:layout_height="match_parent">
+      android:layout_height="match_parent"
+      android:id="@+id/linearLayout">
     <TextView
         android:layout_gravity="center_horizontal"
         android:textColor="#fff"
@@ -196,6 +198,16 @@
       app:shake_max_duration="20000"
       app:shake_variance="500dp"
       />
+
+  <TextView
+      android:id="@+id/textView7"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/webologin"
+      android:textColor="#fff"
+      android:layout_alignTop="@+id/linearLayout"
+      android:layout_centerHorizontal="true"
+      android:layout_marginTop="16dp" />
 
 
 </RelativeLayout>

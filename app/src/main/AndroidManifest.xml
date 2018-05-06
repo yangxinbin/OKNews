@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.baihui.yangxb">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -24,6 +25,8 @@
 
     <!-- 文件读写权限 -->
     <application
+        android:name = ".MyApplication"
+        tools:replace="android:name"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:supportsRtl="true"

@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 
+apply plugin: "com.mob.sdk"
+
 android {
     compileSdkVersion 24
     buildToolsVersion '25.0.0'
@@ -35,7 +37,25 @@ android {
         }
     }
 }
+MobSDK {
+    appKey "2547293192949"
+    appSecret "13535a4db60ac506a7a941b1d58f3e4c"
 
+    ShareSDK {
+        devInfo {
+            SinaWeibo {
+                appKey "13066033"
+                appSecret "28a9819282d352f9faa95ce28f5caa62"
+                callbackUri "http://www.sharesdk.cn"
+                shareByAppClient false
+            }
+            Wechat {
+                appId "wx4868b35061f87885"
+                appSecret "64020361b8ec4c99936c0e3999a9f249"
+            }
+        }
+    }
+}
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

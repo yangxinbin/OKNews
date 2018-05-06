@@ -37,8 +37,6 @@ import java.util.List;
 
 public class SelectCityMainActivity extends AppCompatActivity implements View.OnClickListener {
 
-
-
     private ListView mListview;
     private ListView mResultListView;
     private SlideBar mLetterBar;
